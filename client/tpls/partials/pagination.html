@@ -1,0 +1,23 @@
+    <ul class="page">
+        <li ng-click="selectPage(1)"
+               ng-class="{disabled:currentPage==1}">首页
+        </li>
+        <li ng-click="previousPage(currentPage-1)"
+               ng-class="{disabled:currentPage<=1 && start<=1}">前页
+        </li>
+       <!--  <li>
+            <a href ng-click="previousStage()" ng-hide="start<=1">...</a>
+        </li> -->
+        <li ng-repeat="page in pages track by $index"
+            ng-if="page+start>=start && page+start<start+paginationLength && page+start<=maxPage" ng-class="{active:currentPage==page+start}" ng-click="selectPage(page+start)">{{page+start}}
+        </li>
+       <!--  <li>
+            <a href ng-click="nextStage()" ng-hide="nextStageHide()">...</a>
+        </li> -->
+        <li ng-click="nextPage(currentPage+1)"
+               ng-class="{disabled:currentPage==maxPage}">后页
+        </li>
+        <li ng-click="selectPage(maxPage)"
+               ng-class="{disabled:currentPage==maxPage}">末页
+        </li>
+    </ul>

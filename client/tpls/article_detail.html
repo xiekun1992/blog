@@ -1,0 +1,20 @@
+<div class="article_details">
+    <a ui-sref="app.articles.article_list" class="btn btn-sm btn-info">返回</a>
+    <header>
+        <h3>{{article.title}}</h3>
+        <span>文章分类：{{article.category}}</span>
+        <span>发表时间：{{article.create_time}}</span>
+    </header>
+    <p class="article-body" ng-bind-html="article.content | htmlConverter">
+    </p>
+    <footer>
+    	<!-- 暂无评论
+    	<ul class="toolkit">
+    		<li emoji><a><i class="glyphicon glyphicon-plus-sign"></i>添加表情</a></li>
+    		<li ><a><i class="glyphicon glyphicon-pencil"></i>插入代码</a></li>
+    		<li alink><a><i class="glyphicon glyphicon-link"></i>添加链接</a></li>
+    	</ul>
+        <div id="comment" class="comment" contenteditable="true"></div>
+        <a href="javascript:void(0)" class="btn btn-sm btn-default">发表评论</a> -->
+    </footer>
+</div>

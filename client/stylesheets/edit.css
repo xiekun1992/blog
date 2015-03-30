@@ -1,0 +1,48 @@
+div.login-btn {
+    position: absolute;
+    top: 44px;
+    left: 539px;
+    cursor: pointer;
+    color: transparent;
+}
+
+.text-editor {
+    width: 700px;
+    display: block;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.editor-title {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #c9d8db;
+    outline: none;
+    font-size: 16px;
+    font-family: arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.editor-header {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.editor-btn {
+    margin-top: 20px;
+}
+
+.editor-category {
+    border: 1px solid #c9d8db;
+    font-size: 16px;
+    font-family: arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    outline: none;
+    width: 100%;
+    margin-bottom: 10px;
+    height: 40px;
+    padding-left: 15px;
+}

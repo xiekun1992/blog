@@ -16,22 +16,27 @@ angular.module('app.controller', [])
 					})
 					.success(function(data, status, headers, config) {
 						if (200 == data.status) {
-							userInfo.login = data.message;
+							$rootScope.user = data.message;
+							$rootScope.user.last_login_time=new Date($rootScope.user.last_login_time).toLocaleDateString();
 							$scope.return();
 							$scope.username = "";
 							$scope.password = "";
-							var start = 0;
-							var end = -360;
-							$rootScope.headInterval = setInterval(function() {
-								if (end == start + 1) {
-									angular.element('.head').css('-webkit-transform', 'rotateZ(-360deg)');
-									return;
-								}
-								if (start > 90) angular.element('.login-gui li:last-child').css('display', 'none');
-								var speed = Math.round((end - start) * 0.3);
-								angular.element('.head').css('-webkit-transform', 'rotateZ(' + (start + speed) + 'deg)');
-								start += speed;
-							}, 100);
+							$timeout(function(){
+								var leftPosition=460;
+								var rightPosition=80;
+								$rootScope.headInterval = setInterval(function() {
+									if(leftPosition>=360){
+										leftPosition-=3;
+									}
+									if(rightPosition<=285){
+										rightPosition+=6;
+									}else{
+										angular.element('.head-circle').css('display','inline-block');
+										angular.element('.head-panel').css('display','inline-block');
+									}
+									angular.element('.head').css('left',leftPosition+'px').css('width',rightPosition+'px');
+								}, 20);
+							},1000);
 						} else {
 							$scope.loginError = data.message;
 							$timeout(function() {

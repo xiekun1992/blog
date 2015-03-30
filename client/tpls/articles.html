@@ -3,9 +3,12 @@
         <li class="col-12" id="headboard">
             <div class="head">
                 <img src="images/psb.jpg" class="head-circle img-responsive" ng-click="transform()">
+                <span class="head-panel">
+                    <div>{{$root.user.username+'已登录'}}<a href="javascript:void(0)">退出</a></div>
+                    <div>{{'上次登录时间为'+$root.user.last_login_time}}</div></span>
                 <!-- <div class="login-btn" ng-click="transform()">登录</div> -->
             </div>
-            <div>我就做个小博客玩玩，别想多了！☺</div>
+            <div class="mood">我就做个小博客玩玩，别想多了！☺</div>
         </li>
         <li ng-controller="loginCtrl">
             <form name="form" ng-submit="login()">

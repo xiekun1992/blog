@@ -6,7 +6,7 @@ var crypto=require('crypto');
 
 /* GET users listing. */
 router.post('/login', function(req, res, next) {
-	console.log(req.body);
+	console.log(req.session);
 	var md5=crypto.createHash('md5');
 	md5.update(req.body.params.password);
 	User.find({

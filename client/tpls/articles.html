@@ -1,16 +1,16 @@
 <div class="articles-body">
-    <ul class="login-gui">
+    <ul class="login-gui" ng-controller="loginCtrl">
         <li class="col-12" id="headboard">
             <div class="head">
-                <img src="images/psb.jpg" class="head-circle img-responsive" ng-click="transform()">
+                <img src="images/head.jpg" class="head-circle img-responsive" ng-click="transform()">
                 <span class="head-panel">
-                    <div>{{$root.user.username+'已登录'}}<a href="javascript:void(0)">退出</a></div>
+                    <div>{{$root.user.username+'已登录'}}<a href="javascript:void(0)" ng-click="logout()">退出</a></div>
                     <div>{{'上次登录时间为'+$root.user.last_login_time}}</div></span>
                 <!-- <div class="login-btn" ng-click="transform()">登录</div> -->
             </div>
             <div class="mood">我就做个小博客玩玩，别想多了！☺</div>
         </li>
-        <li ng-controller="loginCtrl">
+        <li>
             <form name="form" ng-submit="login()">
                 <button type="button" class="btn btn-sm btn-default" ng-show="form.$invalid" ng-click="return()">返回</button>
                 <div class="login-input">

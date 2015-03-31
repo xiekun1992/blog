@@ -7,6 +7,31 @@ angular.module('app.controller', [])
 		function($scope, $rootScope, $http, userInfo, $timeout) {
 			$scope.username;
 			$scope.password;
+			$scope.logout=function(){
+				clearInterval($rootScope.head1Interval);
+				$timeout(function(){
+					var leftPosition=358;//358px 
+					var rightPosition=290;//290px
+					angular.element('.head-panel').css('display','none');
+							angular.element('.head-circle').css('display','block');
+					$rootScope.head2Interval = setInterval(function() {
+						if(leftPosition<460){
+							leftPosition+=3;
+						}else{
+							leftPosition=460;
+						}
+						if(rightPosition>80){
+							rightPosition-=6;
+						}else{
+							rightPosition=80;
+							return ;
+						}
+						console.log(rightPosition);
+						console.log(leftPosition);
+						angular.element('.head').css('left',leftPosition+'px').css('width',rightPosition+'px');
+					}, 20);
+				},1000);
+			}
 			$scope.login = function() {
 				$http.post('/user/login', {
 						params: {
@@ -21,10 +46,12 @@ angular.module('app.controller', [])
 							$scope.return();
 							$scope.username = "";
 							$scope.password = "";
+							$rootScope.$state.go('app.articles.edit');
+							clearInterval($rootScope.head2Interval);
 							$timeout(function(){
 								var leftPosition=460;
 								var rightPosition=80;
-								$rootScope.headInterval = setInterval(function() {
+								$rootScope.head1Interval = setInterval(function() {
 									if(leftPosition>=360){
 										leftPosition-=3;
 									}
@@ -33,6 +60,7 @@ angular.module('app.controller', [])
 									}else{
 										angular.element('.head-circle').css('display','inline-block');
 										angular.element('.head-panel').css('display','inline-block');
+										return;
 									}
 									angular.element('.head').css('left',leftPosition+'px').css('width',rightPosition+'px');
 								}, 20);

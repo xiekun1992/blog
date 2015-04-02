@@ -24,8 +24,9 @@
     </ul>
     <div class="col-2">
         <div class="articles-left">
-        <div class="search"><i class="glyphicon glyphicon-search"></i><input type="text" placeholder="请输入要搜索的关键词" ng-model="key" ng-keydown="search($event)"></div>
+            <div class="search"><i class="glyphicon glyphicon-search"></i><input type="text" placeholder="请输入要搜索的关键词" ng-model="key" ng-keydown="search($event)"></div>
             <ul class="articles-left-list">
+                <li ng-if="$root.user"><a ui-sref="app.articles.edit"><i class="glyphicon glyphicon-folder-close"></i>写文章</li>
                 <li><a ng-click="categoryLink('all')"><i class="glyphicon glyphicon-folder-close"></i>所有文章</a>
                 </li>
                 <li><a ng-click="categoryLink('Angular')"><i class="glyphicon glyphicon-folder-close"></i>Angular</a>

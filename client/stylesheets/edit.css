@@ -13,6 +13,10 @@ div.login-btn {
     margin-bottom: 20px;
 }
 
+.text-editor .simditor-body {
+    min-height: 660px;
+}
+
 .editor-title {
     margin-bottom: 10px;
     width: 100%;

@@ -237,7 +237,8 @@ angular.module('app.directive', [])
 					});
 				});
 				var editor=new Simditor({
-					textarea:element.find('#editor')
+					textarea:element.find('#editor'),
+					toolbarFloat:true
 				})
 			}
 		}

@@ -7,30 +7,42 @@ angular.module('app.controller', [])
 		function($scope, $rootScope, $http, userInfo, $timeout) {
 			$scope.username;
 			$scope.password;
+			if($rootScope.user){
+				angular.element('.head').css('left','358px').css('width','290px');
+				angular.element('.head-circle').css('display','inline-block');
+				angular.element('.head-panel').css('display','inline-block');
+			}
 			$scope.logout=function(){
-				clearInterval($rootScope.head1Interval);
-				$timeout(function(){
-					var leftPosition=358;//358px 
-					var rightPosition=290;//290px
-					angular.element('.head-panel').css('display','none');
+				$http.get('/user/logout',{params:{id:$rootScope.user._id}})
+				.success(function(data,status,headers,config){
+					if(200==data.status){
+						clearInterval($rootScope.head1Interval);
+						$rootScope.$state.go('app.articles.article_list');
+						$timeout(function(){
+							var leftPosition=358;//358px 
+							var rightPosition=290;//290px
+							angular.element('.head-panel').css('display','none');
 							angular.element('.head-circle').css('display','block');
-					$rootScope.head2Interval = setInterval(function() {
-						if(leftPosition<460){
-							leftPosition+=3;
-						}else{
-							leftPosition=460;
-						}
-						if(rightPosition>80){
-							rightPosition-=6;
-						}else{
-							rightPosition=80;
-							return ;
-						}
-						console.log(rightPosition);
-						console.log(leftPosition);
-						angular.element('.head').css('left',leftPosition+'px').css('width',rightPosition+'px');
-					}, 20);
-				},1000);
+							$rootScope.user=null;
+							$rootScope.head2Interval = setInterval(function() {
+								if(leftPosition<460){
+									leftPosition+=3;
+								}else{
+									leftPosition=460;
+								}
+								if(rightPosition>80){
+									rightPosition-=6;
+								}else{
+									rightPosition=80;
+									return ;
+								}
+								console.log(rightPosition);
+								console.log(leftPosition);
+								angular.element('.head').css('left',leftPosition+'px').css('width',rightPosition+'px');
+							}, 20);
+						},1000);
+					}
+				}).error(function(){});
 			}
 			$scope.login = function() {
 				$http.post('/user/login', {
@@ -46,7 +58,7 @@ angular.module('app.controller', [])
 							$scope.return();
 							$scope.username = "";
 							$scope.password = "";
-							$rootScope.$state.go('app.articles.edit');
+							$rootScope.$state.go('app.articles.article_list');
 							clearInterval($rootScope.head2Interval);
 							$timeout(function(){
 								var leftPosition=460;
@@ -82,7 +94,10 @@ angular.module('app.controller', [])
 						angular.element('.login-gui').css('-webkit-transform', 'rotateX(360deg)');
 						return;
 					}
-					if (start > 90) angular.element('.login-gui li:last-child').css('display', 'none');
+					if (start > 90){
+						angular.element('.login-gui li:first-child div').css('display', 'inline-block');
+						angular.element('.login-gui li:last-child').css('display', 'none');
+					}
 					var speed = Math.round((end - start) * 0.3);
 					angular.element('.login-gui').css('-webkit-transform', 'rotateX(' + (start + speed) + 'deg)');
 					start += speed;
@@ -96,11 +111,14 @@ angular.module('app.controller', [])
 			var start = 0;
 			var end = 180;
 			clearInterval($rootScope.returnInterval);
-			angular.element('.login-gui li:last-child').css('display', 'inline-block');
 			$rootScope.loginInterval = setInterval(function() {
 				if (end == start + 1) {
 					angular.element('.login-gui').css('-webkit-transform', 'rotateX(180deg)');
 					return;
+				}
+				if(start>10){
+					angular.element('.login-gui li:first-child div').css('display', 'none');
+					angular.element('.login-gui li:last-child').css('display', 'inline-block');
 				}
 				var speed = Math.round((end - start) * 0.3);
 				angular.element('.login-gui').css('-webkit-transform', 'rotateX(' + (start + speed) + 'deg)');

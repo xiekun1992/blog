@@ -29,17 +29,26 @@ angular.module('app',[
 		abstract:true,
 		url:'/articles',
 		templateUrl:'tpls/articles.html',
-		controller:'articlesCtrl'
+		controller:'articlesCtrl',
+		resolve:['getCurrentUser',function(getCurrentUser){
+			return getCurrentUser.query();
+		}]
 	})
 	.state('app.articles.article_list',{
 		url:'/article_list',
-		templateUrl:'tpls/article_list.html'
+		templateUrl:'tpls/article_list.html',
+		resolve:['getCurrentUser',function(getCurrentUser){
+			return getCurrentUser.query();
+		}]
 		// controller:'articleListCtrl'
 	})
 	.state('app.articles.article_detail',{
 		url:'/article_detail/{id}',
 		templateUrl:'tpls/article_detail.html',
-		controller:'articleDetailCtrl'
+		controller:'articleDetailCtrl',
+		resolve:['getCurrentUser',function(getCurrentUser){
+			return getCurrentUser.query();
+		}]
 	})
 	.state('app.articles.search',{
 		url:'/search/keyword={keyword}&p={p}',
@@ -50,7 +59,10 @@ angular.module('app',[
 	.state('app.articles.edit',{
 		url:'/edit',
 		templateUrl:'tpls/edit.html',
-		controller:'editCtrl'
+		controller:'editCtrl',
+		resolve:['getCurrentUser',function(getCurrentUser){
+			return getCurrentUser.query();
+		}]
 	})
 	.state('app.login',{
 		url:'/login',

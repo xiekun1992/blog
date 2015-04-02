@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose=require('mongoose');
+var session=require('express-session');
 var routes = require('./routes/index');
 var users = require('./routes/user');
 var articles=require('./routes/articles');
@@ -63,6 +64,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+    secret:'xiekun',
+    cookie:{maxAge:60*60*1000},
+    resave:true,
+    saveUninitialized:true
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'client')));
 app.use(express.static(path.join(__dirname, 'node_modules')));

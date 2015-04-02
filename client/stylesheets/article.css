@@ -1,6 +1,7 @@
 body {
     font-family: "微软雅黑";
-    background-image: -webkit-linear-gradient(top, lightblue, rgb(234, 156, 234));
+    background-image:-webkit-radial-gradient(bottom left, ellipse, rgba(170, 238, 179, 0.69), rgba(255, 153, 102, 0.73), rgba(30, 144, 255, 0.75)); 
+    /*-webkit-linear-gradient(top, lightblue, rgb(234, 156, 234));*/
     background-repeat: no-repeat;
 }
 
@@ -43,7 +44,7 @@ mark {
     display: none;
     -webkit-transform: rotateX(-180deg);
     -webkit-transform-origin: top;
-    background: #4949AA;
+    /*background: #4949AA;*/
     height: 120px;
     position: absolute;
     width: 100%;
@@ -95,7 +96,7 @@ mark {
 }
 
 .col-12 {
-    background-color: rgb(73, 73, 170);
+    /*background-color: rgb(73, 73, 170);*/
     /*margin-bottom: 10px;*/
     
     /*box-shadow: 0px 0px 4px;*/
@@ -130,7 +131,7 @@ mark {
     /*box-shadow: 0px 0px 4px;*/
     margin: 1px 0 40px 10px;
     padding-top: 20px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.47);
 }
 
 .articles-body {
@@ -141,7 +142,8 @@ mark {
 
 .articles-left {
     padding-top: 20px;
-    background-color: rgb(73, 73, 170);
+    background-color: rgba(255,255,255,0.47);
+    /*background-color: rgb(73, 73, 170);*/
     /*margin: 1px;*/
     
     /*border-radius: 0 0 4px 4px;*/
@@ -214,7 +216,7 @@ ul.articles-left-list li {
 .articles-left-list a:focus,
 .articles-left-list a {
     cursor: pointer;
-    color: #fff;
+    color: #888;
 }
 
 .user-setting {

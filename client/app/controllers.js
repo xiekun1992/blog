@@ -3,8 +3,8 @@ angular.module('app.controller', [])
 		$rootScope.animation = "login";
 
 	}])
-	.controller('loginCtrl', ['$scope', '$rootScope', '$http', 'userInfo', '$timeout',
-		function($scope, $rootScope, $http, userInfo, $timeout) {
+	.controller('loginCtrl', ['$scope', '$rootScope', '$http', '$timeout',
+		function($scope, $rootScope, $http,$timeout) {
 			$scope.username;
 			$scope.password;
 			if($rootScope.user){
@@ -94,7 +94,7 @@ angular.module('app.controller', [])
 						angular.element('.login-gui').css('-webkit-transform', 'rotateX(360deg)');
 						return;
 					}
-					if (start > 90){
+					if (start > 270){
 						angular.element('.login-gui li:first-child div').css('display', 'inline-block');
 						angular.element('.login-gui li:last-child').css('display', 'none');
 					}
@@ -108,6 +108,8 @@ angular.module('app.controller', [])
 	//文章的总结构
 	.controller('articlesCtrl', ['$scope', '$rootScope', '$http', '$location', '$timeout', function($scope, $rootScope, $http, $location, $timeout) {
 		$scope.transform = function() {
+			if($rootScope.user)
+				return ;
 			var start = 0;
 			var end = 180;
 			clearInterval($rootScope.returnInterval);
@@ -125,18 +127,21 @@ angular.module('app.controller', [])
 				start += speed;
 			}, 100);
 		}
+
+
+		//刚进入控制器
 		$http.get('/search?keyword=' + $rootScope.$state.params.keyword + '&p=' + $rootScope.$state.params.p)
 			.success(function(data) {
 				$scope.searchResults = data;
 			}).error(function() {});
 		$rootScope.animation = "articles";
 		$scope.key;
-		$rootScope.$on('$stateChangeSuccess', function() {
-			$http.get('/search?keyword=' + $rootScope.$state.params.keyword + '&p=' + $rootScope.$state.params.p)
-				.success(function(data) {
-					$scope.searchResults = data;
-				}).error(function() {});
-		});
+		// $rootScope.$on('$stateChangeSuccess', function() {
+		// 	$http.get('/search?keyword=' + $rootScope.$state.params.keyword + '&p=' + $rootScope.$state.params.p)
+		// 		.success(function(data) {
+		// 			$scope.searchResults = data;
+		// 		}).error(function() {});
+		// });
 		$scope.search = function(event) {
 			if (event.keyCode == 13) {
 				$http.get('/search?keyword=' + $scope.key + '&p=1')
@@ -162,32 +167,77 @@ angular.module('app.controller', [])
 		}
 	}])
 	//右侧文章列表
-	.controller('articleListCtrl', ['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {}])
+	.controller('articleListCtrl', ['$scope', '$rootScope', '$http','articleRest', function($scope, $rootScope, $http,articleRest) {
+		$scope.edit=function(id){
+			$rootScope.$state.go('app.articles.edit',{id:id});
+		}
+		$scope.delete=function(id){
+			console.log(id);
+			articleRest.remove({'id':id},function(data){
+				if(200==data.status){
+
+				}
+			});
+		}
+	}])
 	//右侧文章详情
 	.controller('articleDetailCtrl', ['$scope', '$rootScope', 'articleRest', function($scope, $rootScope, articleRest) {
 		//restful请求单条文章数据
 		articleRest.get({
 			'id': $rootScope.$stateParams.id
 		}, function(data) {
-			$scope.article = data;
+			if(200==data.status)
+				$scope.article = data.message;
 		});
 	}])
 	.controller('searchCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
 		$scope.execSearch;
 		$scope.searchResults;
 	}])
-	.controller('editCtrl', ['$scope', 'articleEditRest', function($scope, articleEditRest) {
+	.controller('editCtrl', ['$scope', 'articleRest','$rootScope', 
+		function($scope, articleRest,$rootScope) {
+		$scope.op=1;//1:发表，0:更新
+		$scope.data={title:'',category:'',content:''};
 		$scope.category = ['Angular', 'Node', 'MongoDB'];
-		$scope.publish = function(content, title, category) {
-			if (content && title) {
-				articleEditRest.put({
+		//发布文章
+		$scope.operate = function(content, title, category) {
+			if($scope.op){//新建文章
+				if (content && title) {
+					articleRest.save({
+						'title': title,
+						'content': content,
+						'category': category,
+						'create_time': new Date()
+					}, function(data) {
+						console.log(data);
+						if(200==data.status){
+							$scope.data={title:'',category:'',content:''};
+							window.scrollTo(0,0);
+						}
+					});
+				}
+			}else{//修改文章
+				articleRest.post({
+					'id':$rootScope.$stateParams.id,
 					'title': title,
 					'content': content,
-					'category': category,
-					'create_time': new Date()
-				}, function(data) {
-					console.log(data);
-				});
+					'category': category
+				},function(data){
+					if(200==data.status){
+						$rootScope.$state.go('app.articles.article_list');
+						$scope.data={title:'',category:'',content:''};
+					}
+			});
 			}
+			
+		}
+		//传入的id不为空则获取文章
+		if($rootScope.$stateParams.id){
+			$scope.op=0;
+			articleRest.get({'id':$rootScope.$stateParams.id},function(data){
+				if(200==data.status){
+					$scope.data=data.message;
+				}
+			});
 		}
 	}]);

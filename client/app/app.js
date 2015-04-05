@@ -31,23 +31,26 @@ angular.module('app',[
 		templateUrl:'tpls/articles.html',
 		controller:'articlesCtrl',
 		resolve:['getCurrentUser',function(getCurrentUser){
-			return getCurrentUser.query();
+			getCurrentUser.query();
+			return ;
 		}]
 	})
 	.state('app.articles.article_list',{
 		url:'/article_list',
 		templateUrl:'tpls/article_list.html',
 		resolve:['getCurrentUser',function(getCurrentUser){
-			return getCurrentUser.query();
-		}]
-		// controller:'articleListCtrl'
+			getCurrentUser.query();
+			return ;
+		}],
+		controller:'articleListCtrl'
 	})
 	.state('app.articles.article_detail',{
 		url:'/article_detail/{id}',
 		templateUrl:'tpls/article_detail.html',
 		controller:'articleDetailCtrl',
 		resolve:['getCurrentUser',function(getCurrentUser){
-			return getCurrentUser.query();
+			getCurrentUser.query();
+			return ;
 		}]
 	})
 	.state('app.articles.search',{
@@ -57,11 +60,18 @@ angular.module('app',[
 	})
 	// 登录后的路由
 	.state('app.articles.edit',{
-		url:'/edit',
+		url:'/edit/{id}',
 		templateUrl:'tpls/edit.html',
 		controller:'editCtrl',
-		resolve:['getCurrentUser',function(getCurrentUser){
-			return getCurrentUser.query();
+		resolve:['getCurrentUser','$rootScope',function(getCurrentUser,$rootScope){
+			getCurrentUser.query().then(function(data){
+				if(data.status !== 200){
+					$rootScope.$state.go('app.articles.article_list');
+				}
+			},function(data){
+				$rootScope.$state.go('app.articles.article_list');
+			});
+			return ;
 		}]
 	})
 	.state('app.login',{

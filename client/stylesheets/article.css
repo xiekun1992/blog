@@ -1,7 +1,8 @@
 body {
     font-family: "微软雅黑";
-    background-image:-webkit-radial-gradient(bottom left, ellipse, rgba(170, 238, 179, 0.69), rgba(255, 153, 102, 0.73), rgba(30, 144, 255, 0.75)); 
+    background-image: -webkit-radial-gradient(bottom left, ellipse, rgba(170, 238, 179, 0.69), rgba(255, 153, 102, 0.73), rgba(30, 144, 255, 0.75));
     /*-webkit-linear-gradient(top, lightblue, rgb(234, 156, 234));*/
+    
     background-repeat: no-repeat;
 }
 
@@ -33,6 +34,9 @@ mark {
     left: 335px;
     color: #aaa;
 }
+.glyphicon-search{
+    font-size: 12px;
+}
 
 .login-gui {
     list-style: none;
@@ -45,6 +49,7 @@ mark {
     -webkit-transform: rotateX(-180deg);
     -webkit-transform-origin: top;
     /*background: #4949AA;*/
+    
     height: 120px;
     position: absolute;
     width: 100%;
@@ -57,13 +62,14 @@ mark {
     /*background: #fff;*/
     
     height: 80px;
-    padding-top: 14px;
+    padding-top: 11px;
     padding-left: 25px;
     border-radius: 40px;
 }
 
 .login-input input {
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
+    height: 30px;
     width: 80%;
     border-radius: 16px;
     outline: 0;
@@ -98,8 +104,8 @@ mark {
 .col-12 {
     /*background-color: rgb(73, 73, 170);*/
     /*margin-bottom: 10px;*/
-    
     /*box-shadow: 0px 0px 4px;*/
+    
     height: 120px;
     text-align: center;
     /*background-image: -webkit-linear-gradient(top, rgb(85, 85, 160) 0%, rgb(92, 92, 197) 32%, #393994 100%);*/
@@ -111,6 +117,7 @@ mark {
 
 .col-2 {
     /*border-radius: 0 0 6px 6px;*/
+    
     float: left;
     width: 250px;
     margin: auto;
@@ -125,13 +132,15 @@ mark {
 }
 
 .col-10 {
+    float: right;
     min-height: 1000px;
     width: 740px;
     display: inline-block;
     /*box-shadow: 0px 0px 4px;*/
+    
     margin: 1px 0 40px 10px;
     padding-top: 20px;
-    background-color: rgba(255, 255, 255, 0.47);
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 .articles-body {
@@ -142,18 +151,31 @@ mark {
 
 .articles-left {
     padding-top: 20px;
-    background-color: rgba(255,255,255,0.47);
+    background-color: rgba(255, 255, 255, 0.15);
     /*background-color: rgb(73, 73, 170);*/
     /*margin: 1px;*/
-    
     /*border-radius: 0 0 4px 4px;*/
     /*border: 1px solid rgb(92, 194, 111);*/
 }
 
 .articles-right a,
 .articles-right a:hover {
+    display: inline-block;
     color: #000;
     font: 16px;
+}
+
+.articles-right a:nth-child(2):hover,
+.articles-right a:nth-child(3):hover {
+    color: #000;
+}
+
+.articles-right a:nth-child(2),
+.articles-right a:nth-child(3) {
+    float: right;
+    margin-left: 20px;
+    margin-top: 10px;
+    color: #888;
 }
 
 .head {
@@ -164,25 +186,36 @@ mark {
     top: 0px;
     left: 460px;
     width: 80px;
-    background: #fff;
+    background-color: rgba(255, 255, 255, 0.15);
     border-radius: 40px;
 }
-.head-panel{
+
+.head-panel {
     display: none;
     color: #000;
-width: 205px;
-height: 70px;
-text-align: left;
+    width: 205px;
+    height: 70px;
+    text-align: left;
+    font-size: 15px;
+font-weight: bold;
 }
 .head-panel div{
-  color: #000;
-display: inline;
+    color: #000;
+}
+.head-panel div:nth-child(2) {
+    color: #000;
+    display: inline;
+    font-size: 12px;
+}
+
+.head-panel div a {
+    margin: 0 50px;
 font-size: 12px;
+font-weight: normal;
+color: #000;
 }
-.head-panel div a{
-margin: 0 50px;
-}
-.mood{
+
+.mood {
     padding-top: 95px;
 }
 
@@ -227,8 +260,8 @@ ul.articles-left-list li {
     margin: 0px 20px;
     padding: 20px;
     border-radius: 1px;
-    background-color: #fff;
-    box-shadow: 0px 0px 4px rgba(206, 211, 207, 1);
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 4px rgba(206, 211, 207, 0.5);
 }
 
 .search {
@@ -253,12 +286,24 @@ ul.articles-left-list li {
     outline: none;
 }
 
-.article:hover {
-    background-color: #eee;
+.article:hover{
+    background-color: #fff;
+}
+a.hide-link{
+    display: none;
 }
 
-.article header {
+.article:hover a.hide-link,
+.article:hover a.hide-link {
     display: inline-block;
+}
+
+.article header h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 500px;
+    /*display: inline-block;*/
 }
 
 .article p {
@@ -303,7 +348,7 @@ ul li.disabled {
 }
 
 ul li.disabled:hover {
-    background-color: #fff;
+    background-color: transparent;
     color: #ccc;
 }
 /*article_details文章详情页样式*/

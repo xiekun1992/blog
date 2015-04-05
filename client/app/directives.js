@@ -226,20 +226,36 @@ angular.module('app.directive', [])
 		return {
 			restrict:'AE',
 			scope:{
-				publish:'&',
+				op:'=',
+				data:'=',
+				operate:'&',
 				category:'='
 			},
 			templateUrl:'tpls/partials/simditor.html',
 			link:function(scope,element,attrs){
-				element.find('button').bind('click',function(){
-					scope.$apply(function(){
-						scope.publish({content:element.find('#editor').val(),title:element.find('#title').val(),category:scope.type});
-					});
-				});
+				scope.$watch('data',function(newValue,oldValue){
+					element.find('.simditor-body')[0].innerHTML=newValue.content;
+					// element.find('#editor').val(newValue.content)
+				},true);
+				// element.find('button.btn').on('click',function(){
+					// console.log(1)
+					// scope.$apply(function(){
+						// console.log(2)
+				scope.submit=function(){
+					scope.operate({
+							content:element.find('#editor').val(),
+							title:scope.data.title,
+							category:scope.data.category
+						});
+				}
+						
+					// });
+				// });
 				var editor=new Simditor({
 					textarea:element.find('#editor'),
 					toolbarFloat:true
 				})
+				window.scrollTo(0, 0);
 			}
 		}
 	}]);

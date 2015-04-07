@@ -29,11 +29,7 @@ angular.module('app',[
 		abstract:true,
 		url:'/articles',
 		templateUrl:'tpls/articles.html',
-		controller:'articlesCtrl',
-		resolve:['getCurrentUser',function(getCurrentUser){
-			getCurrentUser.query();
-			return ;
-		}]
+		controller:'articlesCtrl'
 	})
 	.state('app.articles.article_list',{
 		url:'/article_list',
@@ -74,9 +70,4 @@ angular.module('app',[
 			return ;
 		}]
 	})
-	.state('app.login',{
-		url:'/login',
-		templateUrl:'tpls/login.html',
-		controller:'loginCtrl'
-	});
 }]);

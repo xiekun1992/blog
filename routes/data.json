@@ -1,34 +1,4 @@
-[	
-	{
-		"title": "视图返回刷新问题",
-		"content": "首先感谢中文社区给我们一个沟通的平台。最近正在拿mobile angularjsUI做个小例子，遇到点问题：比如现在route到视图1，视图1的数据比较多，滚动了很多页(动态改变了列表数据)以后查看了一条数据，界面现在route到视图2，视图2的navbar有个返回按钮我调用了history.back();界面转回到视图1，但是数据已经刷新，不能返回到刚才滚动的位置，也就是说又重新调用了一次controller，请问这个问题怎么破"
-	},
-	{
-		"title":"上海知名互联网上市公司诚聘前端开发人员",
-		"content":"【阿里旗下子公司】高级前端开发工程师/架构师【岗位职责】负责Web设计的前端开发工作，使用HTML/CSS/JavaScript开发PC和Mobile项目；与UI设计师沟通交互、视觉设计的相关问题；与后台工程师制定技术实现方案、服务接口等；4、优化产品，为用户提供更好的视觉操作体验。【任职要求】1、熟练掌握XHTML/HTML5/CSS/JavaScript等前端技术，具有3年以上JavaScript编程经验；2、熟练运用HTML+CSS来制作符合W3C标准的静态页面，兼容各大浏览器(IE6-IE10,Chrome,Safari,Firefox,Opera)；3、至少精通一种JS框架（如 jQuery/YUI/Mootools/Prototype/Kissy）,精通jQuery更佳；4、至少了解一门后端开发语言（Java/.NET/PHP/Python/Ruby）；5、熟悉Web前端与后端交互数据接口定义，前端Ajax实现Json、XML格式的数据发送与数据解析。薪资：15-25k地点：徐汇区桂平路有意向的朋友请发送简历到578156157@qq.com 或加我QQ578156157详聊~"
-	},
-	{
-		"title":"AngularJS系列之总结",
-		"content":"AngularJS深入的系列就是这九篇博客了，把我以前在项目中应用到的和自己学习的都总结在了里面。为了更方便的 看，把我写的AngularJS系列的博客都列到下面。之后就开始学习ionic：html5移动开发框架，它是基于AngularJS的移动 开发框架。希望大家多多关注我的博客，多多推荐。"
-	},
-	{
-		"title":"最难面试的IT公司ThoughtWorks招聘前端开发(北京/成都/西安/武汉）",
-		"content":"ThoughtWorks是一家全球软件设计与定制领袖企业。我们在澳大利亚、巴西、加拿大、中国、厄瓜多尔、德国、印度、新加坡、南非、乌干达、英国和美国 12个国家，建立了30间办公室，拥有超过3000名员工。"
-	},
-	{
-		"title":"我们是怎样赚钱的",
-		"content":"<p>1、交付：研发人员会为客户量身定制软件开发解决方案，同时也会直接为客户交付这些最具核心价值的软件。在开发过程中，很多客户为以被ThoughtWorks影响为荣，他们的CTO、技术高管会轮换在我们的办公室里一直和我们一起工作，紧密交流和沟通，共同交付。</p><p>2、咨询培训：咨询师会在客户现场，帮助改善企业的IT组织，改进软件开发方法，以软件带动企业业务发展。我们的咨询类型包括：IT组织优化- 技术咨询- 测试策略- 客户体验- 敏捷转型。</p><p>3、产品：从行业最火爆的O2O、互联网金融、金融大数据。到用户量过百万的表单工具金数据、差旅工具行易。未来产品业务的发展，期待更有想法的年轻人加入。</p>"
-	},
-	{
-		"title":"除了赚钱，我们还做什么？",
-		"content":"<p>1、组织、参与技术大会 我们热衷于技术分享交流，组织、参加各类技术大会和沙龙。QCon、TID、敏捷中国等都活跃着我们的身影。BQconf、CDconf、设计工作坊、BA workshop 我们持续经营着。各地的open party，汇聚了当地的技术爱好者。内部的技术讲座、workshop更是家常便饭。</p><p>2、积极参与开源http://www.thoughtworks.com/open-source 我们积极参与开源，开发了持续交付工具GO, web自动化测试工具Selenium，搭建模拟服务器的工具Moco, 视觉感知测试系统Viff , 移动开发开源框架Calatrava，我们持续贡献了开源医疗记录系统OpenMRS。</p><p>3、出版书籍、发布博客 我们翻译、出版书籍，发表文章，期望帮助推动行业发展。《重构》、《分析模式》、《企业应用架构模式》、《UML精粹》、《持续交付》都是。我们定期发布技术雷达、TW洞见、博客文章分享我们所学。</p><p>4、参与社会公益 我们开发了帮助聋人和普通人实时对话的app，参与了帮助弥补教育资源不均的阳光书屋项目、打破传统教育模式的开放课堂项目，帮助医生信息录入对抗埃博拉的平板应用项目，在线收集分析调研数据的联合国儿童基金会项目。我们期望用技术帮助更多人。</p>"
-	},
-	{
-		"title":"工程结构",
-		"content":"在 node.js 中模块分为核心模块和文件模块两种，核心模块是通过 require('xxxx') 导入的，文件模块是以 require('/xxxx') 或 require('./xxxx')、require('../xxxx') 形式导入的；核心模块是用c/c++编译的二进制模块，而文件模块是后缀为.js、.json、.node 的文件，在 node.js 中一个文件/文件夹也可以称之为一个模块。更多关于模块及模块加载顺序的信息请查阅官网：http://nodejs.org/api/all.html#all_modules 这里导入了 express、http、path 核心模块，routes 文件夹下的 index.js 和 user.js 文件模块。 因为 express 框架是依赖 connect 框架（Node的一个中间件框架）创建而成的，可查阅 connect 文档：http://www.senchalabs.org/connect/和 express 官方文档：http://expressjs.com/api.html了解更多内容。 app.set(name, value)：设置 name 的值为 value app.set('port', process.env.PORT || 3000)：设置端口为 process.env.PORT 或 3000 app.set('views', __dirname + '/views')：设置 views 文件夹为视图文件的目录，存放模板文件，__dirname 为全局变量，存储着当前正在执行脚本所在的目录名。 app.set('view engine', 'ejs')：设置视图模版引擎为 ejs app.use([path], function)：使用中间件 function，可选参数path默认为”/” app.use(express.favicon())：connect 内建的中间件，使用默认的 favicon 图标，如果想使用自己的图标，需改为 app.use(express.favicon(__dirname + '/public/images/favicon.ico')); 这里我们把自定义的 favicon.ico 放到了 public/images 文件夹下。 app.use(express.logger('dev'))：connect 内建的中间件，在开发环境下使用，在终端显示简单的不同颜色的日志，比如在启动 app.js 后访问 localhost:3000，终端会输出："
-	},
-	{
-		"title":"模板引擎",
-		"content":"什么是模板引擎 模板引擎（Template Engine）是一个将页面模板和要显示的数据结合起来生成 HTML 页面的工具。 如果说上面讲到的 express 中的路由控制方法相当于 MVC 中的控制器的话，那模板引擎就相当于 MVC 中的视图。 模板引擎的功能是将页面模板和要显示的数据结合起来生成 HTML 页面。它既可以运 行在服务器端又可以运行在客户端，大多数时候它都在服务器端直接被解析为 HTML，解析 完成后再传输给客户端，因此客户端甚至无法判断页面是否是模板引擎生成的。有时候模板 引擎也可以运行在客户端，即浏览器中，典型的代表就是 XSLT，它以 XML 为输入，在客 户端生成 HTML 页面。但是由于浏览器兼容性问题，XSLT 并不是很流行。目前的主流还是 由服务器运行模板引擎。 在 MVC 架构中，模板引擎包含在服务器端。控制器得到用户请求后，从模型获取数据， 调用模板引擎。模板引擎以数据和页面模板为输入，生成 HTML 页面，然后返回给控制器， 由控制器交回客户端。 ——《Node.js开发指南》 什么是 ejs ? ejs 是模板引擎的一种，也是我们这个教程中使用的模板引擎，因为它十分简单，而且与 Express 集成良好。"
-	}
-]
+{
+	"user":"840914927@qq.com",
+	"pass":"xiekun.1992.08.23"
+}

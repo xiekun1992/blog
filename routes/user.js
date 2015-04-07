@@ -2,10 +2,38 @@ var express = require('express');
 var User=require('./model/user');
 var parse=require('url').parse;
 var router = express.Router();
-
+var nodemailer=require('nodemailer');
 var crypto=require('crypto');
+var fs=require('fs');
+var data=fs.readFileSync('./routes/data.json','utf-8');
+data=JSON.parse(data);
 
-/* GET users listing. */
+router.get('/reset_password',function(req,res){
+	var transporter=nodemailer.createTransport({
+		service:'QQ',
+		auth:{
+			user:data.user,
+			pass:data.pass
+		}
+	});
+	var md5=crypto.createHash('sha1');
+	md5.update((new Date())+'xiekun');
+	var mailOptions={
+		from:'ordinary\'blog <840914927@qq.com>',
+		to:'xiekun@int-yt.com',
+		subject:'您的个人博客发送的密码重置链接',
+		html:'<a href="http://localhost:3000/app/user/password/"'+md5.digest()+' target="blank">请点击此链接</a>'
+	};
+	transporter.sendMail(mailOptions,function(err,info){
+		if(err){
+			console.log(err)
+			res.json({status:500,message:'Internal Error'});
+		}else{
+			console.log('mail sent success: '+info.response)
+			res.json({status:200,message:'mail sent'});
+		}
+	});
+});
 router.get('/current_user',function(req,res, next){
 	if(req.session.user){
 		res.json({status:200,message:req.session.user});

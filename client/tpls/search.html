@@ -6,7 +6,7 @@
         <p ng-bind-html="a.content | htmlConverter"></p>
         <footer>
             <span>文章分类：<span ng-bind-html="a.category | htmlConverter"></span></span>
-            <span>发表时间：{{a.create_time}}</span>
+            <span>发表时间：{{a.create_time | dateFormat}}</span>
         </footer>
     </div>
 </div>

@@ -7,10 +7,11 @@
         </header>
         <footer>
             <span>文章分类：{{a.category}}</span>
-            <span>发表时间：{{a.create_time}}</span>
+            <span>发表时间：{{a.create_time | dateFormat}}</span>
+            <span><i class="glyphicon glyphicon-thumbs-up"></i>{{10}}</span>
         </footer>
     </div>
 </div>
 <div class="articles-bottom">
-    <div page list="articles" request="request" no-result="noResult" exec-search="$root.execSearch"></div>
+    <div page list="articles" request="request" no-result="noResult" exec-search="execSearch"></div>
 </div>

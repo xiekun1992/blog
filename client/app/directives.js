@@ -108,11 +108,17 @@ angular.module('app.directive', [])
 				 * 根据相应的url,ajax获取当前页的数据
 				 */
 				scope.search = function() {
-					$http.get(scope.request + '&p=' + scope.currentPage, {})
+					var url;
+					if(scope.request.indexOf('&p=')>-1){
+						url=scope.request;
+					}else{
+						url=scope.request + '&p=' + scope.currentPage;
+					}
+					$http.get(url, {})
 						.success(function(data,status,headers,config) {
 							scope.list = data;
 							//返回的数据条数除以10上取整来确定最大页数
-							scope.maxPage = Math.ceil(headers('count') / 10);
+							scope.maxPage = Math.ceil(headers('count') / 10) || 1;
 							scope.noResult = "";
 							//回到页面最上方
 							window.scrollTo(0, 0);
@@ -123,7 +129,7 @@ angular.module('app.directive', [])
 							scope.noResult = "暂无数据";
 						});
 				}
-				scope.search();
+				// scope.search();
 				scope.$watch('execSearch',function(newValue,oldValue){
 					if(newValue){
 						scope.currentPage = 1;

@@ -3,7 +3,7 @@
     <header>
         <h3>{{article.title}}</h3>
         <span>文章分类：{{article.category}}</span>
-        <span>发表时间：{{article.create_time}}</span>
+        <span>发表时间：{{article.create_time | dateFormat}}</span>
     </header>
     <p class="article-body" ng-bind-html="article.content | htmlConverter">
     </p>

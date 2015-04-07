@@ -8,14 +8,14 @@
                     <div>{{'上次登录时间为'+$root.user.last_login_time}}</div></span>
                 <!-- <div class="login-btn" ng-click="transform()">登录</div> -->
             </div>
-            <div class="mood">我就做个小博客玩玩，别想多了！☺</div>
+            <div class="mood">我就做个小博客玩玩☺</div>
         </li>
         <li>
             <form name="form" ng-submit="login()">
                 <button type="button" class="btn btn-sm btn-default" ng-show="form.$invalid" ng-click="return()">返回</button>
                 <div class="login-input">
                     <i class="glyphicon glyphicon-user"></i><input type="text" autofocus placeholder="用户名" ng-model="username" required>
-                    <i class="glyphicon glyphicon-lock"></i><input type="password" placeholder="密码" ng-model="password" required>
+                    <i class="glyphicon glyphicon-lock" title="忘记密码" ng-click="forgetPwd()"></i><input type="{{pwd}}" placeholder="密码" ng-model="password" required><i class="glyphicon {{eyeIcon}}" title="{{mention}}" ng-click="eye()"></i>
                 </div>
                 <span class="login-error">{{loginError}}</span>
                 <button class="btn btn-sm btn-default" ng-hide="form.$invalid" type="submit">登录</button>

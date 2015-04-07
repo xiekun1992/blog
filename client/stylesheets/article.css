@@ -7,6 +7,7 @@ body {
 }
 
 mark {
+    padding:0;
     color: red;
     background-color: transparent;
 }
@@ -33,9 +34,19 @@ mark {
     top: 68px;
     left: 335px;
     color: #aaa;
+    cursor: pointer;
 }
 .glyphicon-search{
     font-size: 12px;
+}
+.glyphicon-thumbs-up{
+    color: red;
+}
+.glyphicon-eye-open,.glyphicon-eye-close{
+    position: absolute;
+    top: 68px;
+    left: 500px;
+    cursor: pointer;
 }
 
 .login-gui {
@@ -45,6 +56,7 @@ mark {
 }
 
 .login-gui li:last-child {
+    -webkit-user-select:none;
     display: none;
     -webkit-transform: rotateX(-180deg);
     -webkit-transform-origin: top;
@@ -74,7 +86,7 @@ mark {
     border-radius: 16px;
     outline: 0;
     border: 1px solid #ccc;
-    padding: 1px 30px;
+    padding: 1px 50px 1px 30px;
 }
 
 .login-gui li:last-child form button:first-child {
@@ -133,7 +145,7 @@ mark {
 
 .col-10 {
     float: right;
-    min-height: 1000px;
+    /*max-height: 1000px;*/
     width: 740px;
     display: inline-block;
     /*box-shadow: 0px 0px 4px;*/
@@ -263,7 +275,9 @@ ul.articles-left-list li {
     background-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0px 0px 4px rgba(206, 211, 207, 0.5);
 }
-
+.article footer>span{
+    margin-right: 40px;
+}
 .search {
     display: inline-block;
     border: 1px solid #ccc;
@@ -306,7 +320,7 @@ a.hide-link{
     /*display: inline-block;*/
 }
 
-.article p {
+.article>p {
     text-indent: 20px;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
@@ -366,8 +380,8 @@ ul li.disabled:hover {
 
 .article-body {
     padding: 20px;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
 }
 /*评论样式*/
 

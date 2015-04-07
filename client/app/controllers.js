@@ -128,26 +128,28 @@ angular.module('app.controller', [])
 			}, 100);
 		}
 
-
-		//刚进入控制器
-		$http.get('/search?keyword=' + $rootScope.$state.params.keyword + '&p=' + $rootScope.$state.params.p)
-			.success(function(data) {
-				$scope.searchResults = data;
-			}).error(function() {});
 		$rootScope.animation = "articles";
 		$scope.key;
-		// $rootScope.$on('$stateChangeSuccess', function() {
-		// 	$http.get('/search?keyword=' + $rootScope.$state.params.keyword + '&p=' + $rootScope.$state.params.p)
-		// 		.success(function(data) {
-		// 			$scope.searchResults = data;
-		// 		}).error(function() {});
-		// });
+		$scope.pwd="password";
+		$scope.eyeIcon="glyphicon-eye-open";
+		$scope.mention="显示密码";
+		$scope.eye=function(){
+			if($scope.pwd=="password"){
+				$scope.pwd="text"
+				$scope.eyeIcon="glyphicon-eye-close";
+				$scope.mention="隐藏密码";
+			}else{
+				$scope.pwd="password"
+				$scope.eyeIcon="glyphicon-eye-open";
+				$scope.mention="显示密码";
+			}
+		}
+		$scope.forgetPwd=function(){
+			$http.get('/user/reset_password');
+		}
+		
 		$scope.search = function(event) {
 			if (event.keyCode == 13) {
-				$http.get('/search?keyword=' + $scope.key + '&p=1')
-					.success(function(data) {
-						$scope.searchResults = data;
-					}).error(function() {});
 				$rootScope.$state.go('app.articles.search', {
 					keyword: $scope.key,
 					p: 1
@@ -155,10 +157,6 @@ angular.module('app.controller', [])
 			}
 		}
 
-		$scope.articles;
-		$scope.request = '/article_list?1=1';
-		$scope.noResult;
-		$rootScope.execSearch = false;
 		//文章分类链接
 		$scope.categoryLink = function(category) {
 			$scope.request = '/article_list?category=' + category;
@@ -168,6 +166,10 @@ angular.module('app.controller', [])
 	}])
 	//右侧文章列表
 	.controller('articleListCtrl', ['$scope', '$rootScope', '$http','articleRest', function($scope, $rootScope, $http,articleRest) {
+		$scope.articles;
+		$scope.request = '/article_list?';
+		$scope.noResult;
+		$scope.execSearch = true;
 		$scope.edit=function(id){
 			$rootScope.$state.go('app.articles.edit',{id:id});
 		}
@@ -190,9 +192,16 @@ angular.module('app.controller', [])
 				$scope.article = data.message;
 		});
 	}])
-	.controller('searchCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
-		$scope.execSearch;
+	.controller('searchCtrl', ['$scope', '$rootScope','$http', function($scope, $rootScope,$http) {
 		$scope.searchResults;
+		$scope.request='/search?keyword=' + $rootScope.$state.params.keyword+ '&p=' + $rootScope.$state.params.p;
+		$scope.execSearch=true;
+		// $rootScope.$on('$stateChangeSuccess', function() {
+		// 	$http.get('/search?keyword=' + $rootScope.$state.params.keyword + '&p=' + $rootScope.$state.params.p)
+		// 		.success(function(data) {
+		// 			$scope.searchResults = data;
+		// 		}).error(function() {});
+		// });
 	}])
 	.controller('editCtrl', ['$scope', 'articleRest','$rootScope', 
 		function($scope, articleRest,$rootScope) {

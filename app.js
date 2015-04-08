@@ -66,7 +66,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
     secret:'xiekun',
-    cookie:{maxAge:60*60*1000},
+    cookie:{maxAge:60*60*1000*10},
     resave:true,
     saveUninitialized:true
 }));

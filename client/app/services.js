@@ -1,18 +1,15 @@
 angular.module('app.service',['ngResource'])
 .service('articleRest',['$resource',function($resource){
 	return $resource(
-		'/article_detail/:id',
-		{id:'@id'});
-}])
-.service('articleEditRest',['$resource',function($resource){
-	return $resource(
-		'/article_edit/:id',
+		'/article_op/:id',
 		{id:'@id'},
-		{put:{method:'PUT',isArray:false}});
+		{post:{method:'POST',isArray:false},save:{method:'PUT',isArray:false}}
+		);
 }])
-.service('userInfo',[function(){
-	var info={'login':''};
-	return info;
+.service('search',['$http',function($http){
+	return {
+
+	}
 }])
 .service('getCurrentUser',['$q','$http','$rootScope',function($q,$http,$rootScope){
 	return {
@@ -26,11 +23,12 @@ angular.module('app.service',['ngResource'])
 					defer.resolve(data);
 				}else{
 					$rootScope.user=null;
-					defer.reject();
+					defer.reject('no user online');
 				}
 			}).error(function(){
 				defer.reject();
 			});
+			return defer.promise;
 		}
 	}
 }]);

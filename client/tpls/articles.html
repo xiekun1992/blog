@@ -8,41 +8,42 @@
                     <div>{{'上次登录时间为'+$root.user.last_login_time}}</div></span>
                 <!-- <div class="login-btn" ng-click="transform()">登录</div> -->
             </div>
-            <div class="mood">我就做个小博客玩玩，别想多了！☺</div>
+            <div class="mood">我就做个小博客玩玩☺</div>
         </li>
         <li>
             <form name="form" ng-submit="login()">
                 <button type="button" class="btn btn-sm btn-default" ng-show="form.$invalid" ng-click="return()">返回</button>
                 <div class="login-input">
                     <i class="glyphicon glyphicon-user"></i><input type="text" autofocus placeholder="用户名" ng-model="username" required>
-                    <i class="glyphicon glyphicon-lock"></i><input type="password" placeholder="密码" ng-model="password" required>
+                    <i class="glyphicon glyphicon-lock" title="忘记密码" ng-click="forgetPwd()"></i><input type="{{pwd}}" placeholder="密码" ng-model="password" required><i class="glyphicon {{eyeIcon}}" title="{{mention}}" ng-click="eye()"></i>
                 </div>
                 <span class="login-error">{{loginError}}</span>
                 <button class="btn btn-sm btn-default" ng-hide="form.$invalid" type="submit">登录</button>
             </form>
         </li>
     </ul>
-    <div class="col-2">
-        <div class="articles-left">
-            <div class="search"><i class="glyphicon glyphicon-search"></i><input type="text" placeholder="请输入要搜索的关键词" ng-model="key" ng-keydown="search($event)"></div>
-            <ul class="articles-left-list">
-                <li ng-if="$root.user"><a ui-sref="app.articles.edit"><i class="glyphicon glyphicon-folder-close"></i>写文章</li>
-                <li><a ng-click="categoryLink('all')"><i class="glyphicon glyphicon-folder-close"></i>所有文章</a>
-                </li>
-                <li><a ng-click="categoryLink('Angular')"><i class="glyphicon glyphicon-folder-close"></i>Angular</a>
-                </li>
-                <li><a ng-click="categoryLink('Node')"><i class="glyphicon glyphicon-folder-close"></i>Node</a>
-                </li>
-                <li><a ng-click="categoryLink('MongoDB')"><i class="glyphicon glyphicon-folder-close"></i>MongoDB</a>
-                </li>
-            </ul>
-            <div class="user-setting">
-                <!-- to be expanded -->
+    <div>
+        <div class="col-2">
+            <div class="articles-left">
+                <div class="search"><i class="glyphicon glyphicon-search"></i><input type="text" placeholder="请输入要搜索的关键词" ng-model="key" ng-keydown="search($event)"></div>
+                <ul class="articles-left-list">
+                    <li ng-if="$root.user"><a ui-sref="app.articles.edit"><i class="glyphicon glyphicon-folder-close"></i>写文章</li>
+                    <li><a ng-click="categoryLink('all')"><i class="glyphicon glyphicon-folder-close"></i>所有文章</a>
+                    </li>
+                    <li><a ng-click="categoryLink('Angular')"><i class="glyphicon glyphicon-folder-close"></i>Angular</a>
+                    </li>
+                    <li><a ng-click="categoryLink('Node')"><i class="glyphicon glyphicon-folder-close"></i>Node</a>
+                    </li>
+                    <li><a ng-click="categoryLink('MongoDB')"><i class="glyphicon glyphicon-folder-close"></i>MongoDB</a>
+                    </li>
+                </ul>
+                <div class="user-setting">
+                    <!-- to be expanded -->
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-10">
-        
-        <div ui-view></div>
+        <div class="col-10">
+            <div ui-view></div>
+        </div>
     </div>
 </div>

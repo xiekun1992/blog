@@ -1,7 +1,8 @@
-<input type="text" id="title" autofocus="true" class="editor-title" placeholder="在这里输入标题">
-<select class="editor-category" ng-model="type">
+<input type="text" id="title" ng-model="data.title" autofocus="true" class="editor-title" placeholder="在这里输入标题">
+<select class="editor-category" ng-model="data.category">
 	<option value="" selected disabled>请选择分类</option>
 	<option value="{{c}}" ng-repeat="c in category track by $index">{{c}}</option>
 </select>
-<textarea id="editor" placeholder="在这里输入内容"></textarea>
-<button class="btn btn-md btn-default editor-btn">发表</button>
+<textarea id="editor" ></textarea>
+<button class="btn btn-md btn-default editor-btn" ng-click="submit()" ng-if="op">发表</button>
+<button class="btn btn-md btn-default editor-btn" ng-click="submit()" ng-if="!op">更新</button>

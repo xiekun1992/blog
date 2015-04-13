@@ -264,4 +264,160 @@ angular.module('app.directive', [])
 				window.scrollTo(0, 0);
 			}
 		}
+	}])
+	.directive('loginInterface', ['$timeout','$rootScope', function ($timeout,$rootScope) {
+		return {
+			restrict: 'AE',
+            scope:{
+                login:'=',
+                logout:'=',
+                response:'=',
+                signIn:'&',
+                signOut:'&',
+                username:'=',
+                password:'='
+            },
+            templateUrl:'tpls/partials/login.html',
+			link: function (scope, element, attrs) {
+                scope.error="blog-error";
+                scope.errorInfo;
+                //登录操作后返回的数据，涉及到使用提示信息
+                scope.$watch('login',function(newValue,oldValue){
+                    if(200==newValue.status){
+                        scope.return();
+                        scope.username = "";
+                        scope.password = "";
+                        clearInterval($rootScope.head2Interval);
+                        $timeout(function(){
+                            var leftPosition=493;
+                            var rightPosition=80;
+                            $rootScope.head1Interval = setInterval(function() {
+                                if(leftPosition>=360){
+                                    leftPosition-=3;
+                                }
+                                if(rightPosition<=285){
+                                    rightPosition+=6;
+                                }else{
+                                    element.find('.head-circle').css('display','inline-block');
+                                    element.find('.head-panel').css('display','inline-block');
+                                    return;
+                                }
+                                element.find('.head').css('left',leftPosition+'px').css('width',rightPosition+'px');
+                            }, 20);
+                        },1000);
+                    }else{
+                        scope.errorInfo = newValue.message;
+                        scope.error="blog-error";
+                        $timeout(function() {
+                            scope.errorInfo = "";
+                        }, 2000);
+                    }
+//                    scope.login=false;
+                });
+                //退出操作后返回的数据，涉及到使用提示信息
+                scope.$watch('logout',function(newValue,oldValue){
+                    if(200==newValue.status){
+                        clearInterval($rootScope.head1Interval);
+                        $timeout(function(){
+                            var leftPosition=388;//358px
+                            var rightPosition=290;//290px
+                            element.find('.head-panel').css('display','none');
+                            element.find('.head-circle').css('display','block');
+                            $rootScope.user=null;
+                            $rootScope.head2Interval = setInterval(function() {
+                                if(leftPosition<493){
+                                    leftPosition+=3;
+                                }else{
+                                    leftPosition=493;
+                                }
+                                if(rightPosition>80){
+                                    rightPosition-=6;
+                                }else{
+                                    rightPosition=80;
+                                    return ;
+                                }
+                                element.find('.head').css('left',leftPosition+'px').css('width',rightPosition+'px');
+                            }, 20);
+                        },1000);
+                    }else{
+                        scope.errorInfo = newValue.message;
+                        scope.error="blog-error";
+                        $timeout(function() {
+                            scope.errorInfo = "";
+                        }, 2000);
+                    }
+                });
+                //监视密码重置链接的返回值
+                scope.$watch('response',function(newValue,oldValue){
+                    if(newValue){
+                        scope.errorInfo=scope.response.message;
+                        scope.error=(scope.response.status==200?"blog-success":"blog-error");
+                        $timeout(function() {
+                            scope.errorInfo = "";
+                        }, 2000);
+                    }
+                });
+                //如果用户登录则展开头像
+                if($rootScope.user){
+                    element.find('.head').css('left','358px').css('width','290px');
+                    element.find('.head-circle').css('display','inline-block');
+                    element.find('.head-panel').css('display','inline-block');
+                }
+                //控制密码显隐
+                scope.pwd="password";
+                scope.eyeIcon="glyphicon-eye-open";
+                scope.mention="显示密码";
+                scope.eye=function(){
+                    if(scope.pwd=="password"){
+                        scope.pwd="text"
+                        scope.eyeIcon="glyphicon-eye-close";
+                        scope.mention="隐藏密码";
+                    }else{
+                        scope.pwd="password"
+                        scope.eyeIcon="glyphicon-eye-open";
+                        scope.mention="显示密码";
+                    }
+                }
+                //让头像翻转到登录框
+                scope.transform = function() {
+                    if($rootScope.user)
+                        return ;
+                    var start = 0;
+                    var end = 180;
+                    clearInterval($rootScope.returnInterval);
+                    $rootScope.loginInterval = setInterval(function() {
+                        if (end == start + 1) {
+                            element.find('.login-gui').css('-webkit-transform', 'rotateX(180deg)');
+                            return;
+                        }
+                        if(start>10){
+                            element.find('.login-gui li:first-child div').css('display', 'none');
+                            element.find('.login-gui li:last-child').css('display', 'inline-block');
+                        }
+                        var speed = Math.round((end - start) * 0.3);
+                        element.find('.login-gui').css('-webkit-transform', 'rotateX(' + (start + speed) + 'deg)');
+                        start += speed;
+                    }, 100);
+                }
+                //让登录框翻转到头像
+                scope.return = function() {
+                    clearInterval($rootScope.loginInterval);
+                    var start = 180;
+                    var end = 360;
+                    $rootScope.returnInterval = setInterval(function() {
+                        if (end == start + 1) {
+                            element.find('.login-gui').css('-webkit-transform', 'rotateX(360deg)');
+                            return;
+                        }
+                        if (start > 270){
+                            element.find('.login-gui li:first-child div').css('display', 'inline-block');
+                            element.find('.login-gui li:last-child').css('display', 'none');
+                        }
+                        var speed = Math.round((end - start) * 0.3);
+                        element.find('.login-gui').css('-webkit-transform', 'rotateX(' + (start + speed) + 'deg)');
+                        start += speed;
+                    }, 100);
+                }
+			}
+		};
 	}]);

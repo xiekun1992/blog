@@ -1,9 +1,9 @@
 body {
     font-family: "微软雅黑";
-    background-image: -webkit-radial-gradient(bottom left, ellipse, rgba(170, 238, 179, 0.69), rgba(255, 153, 102, 0.73), rgba(30, 144, 255, 0.75));
+/*    background-image: -webkit-radial-gradient(bottom left, ellipse, rgba(170, 238, 179, 0.69), rgba(255, 153, 102, 0.73), rgba(30, 144, 255, 0.75));*/
     /*-webkit-linear-gradient(top, lightblue, rgb(234, 156, 234));*/
-    
-    background-repeat: no-repeat;
+    background-color: #eee;
+    /*background-repeat: no-repeat;*/
 }
 
 mark {
@@ -12,7 +12,7 @@ mark {
     background-color: transparent;
 }
 
-.login-error {
+.blog-error {
     display: block;
     text-align: center;
     width: 320px;
@@ -21,18 +21,27 @@ mark {
     font-size: medium;
     margin-top: -4px;
 }
+.blog-success {
+    display: block;
+    text-align: center;
+    width: 320px;
+    color: #45DF87;
+    font-weight: bold;
+    font-size: medium;
+    margin-top: -4px;
+}
 
 .glyphicon-user {
     position: absolute;
     top: 39px;
-    left: 335px;
+    left: 436px;
     color: #aaa;
 }
 
 .glyphicon-lock {
     position: absolute;
     top: 68px;
-    left: 335px;
+    left: 436px;
     color: #aaa;
     cursor: pointer;
 }
@@ -45,7 +54,7 @@ mark {
 .glyphicon-eye-open,.glyphicon-eye-close{
     position: absolute;
     top: 68px;
-    left: 500px;
+    left: 602px;
     cursor: pointer;
 }
 
@@ -61,11 +70,12 @@ mark {
     -webkit-transform: rotateX(-180deg);
     -webkit-transform-origin: top;
     /*background: #4949AA;*/
+    background: rgb(73, 145, 207);
     
     height: 120px;
     position: absolute;
     width: 100%;
-    padding: 20px 300px;
+    padding: 20px 300px 20px 400px;
 }
 
 .login-input {
@@ -96,7 +106,7 @@ mark {
     border-radius: 50%;
     border: 1px solid #ccc;
     top: 25px;
-    left: 522px;
+    left: 624px;
     outline: none;
     font-size: 17px;
 }
@@ -109,7 +119,7 @@ mark {
     border-radius: 50%;
     border: 1px solid #ccc;
     top: 25px;
-    left: 522px;
+    left: 624px;
     outline: none;
 }
 
@@ -118,6 +128,7 @@ mark {
     /*margin-bottom: 10px;*/
     /*box-shadow: 0px 0px 4px;*/
     
+    background: rgb(73, 145, 207);
     height: 120px;
     text-align: center;
     /*background-image: -webkit-linear-gradient(top, rgb(85, 85, 160) 0%, rgb(92, 92, 197) 32%, #393994 100%);*/
@@ -131,7 +142,7 @@ mark {
     /*border-radius: 0 0 6px 6px;*/
     
     float: left;
-    width: 250px;
+    width: 24%;
     margin: auto;
     /*box-shadow: 0px 0px 4px;*/
     /* padding-top: 20px; */
@@ -146,13 +157,13 @@ mark {
 .col-10 {
     float: right;
     /*max-height: 1000px;*/
-    width: 740px;
+    width: 75%;
     display: inline-block;
     /*box-shadow: 0px 0px 4px;*/
     
     margin: 1px 0 40px 10px;
     padding-top: 20px;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 1);
 }
 
 .articles-body {
@@ -163,7 +174,7 @@ mark {
 
 .articles-left {
     padding-top: 20px;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 1);
     /*background-color: rgb(73, 73, 170);*/
     /*margin: 1px;*/
     /*border-radius: 0 0 4px 4px;*/
@@ -196,9 +207,9 @@ mark {
     display: inline-block;
     position: absolute;
     top: 0px;
-    left: 460px;
+    left: 493px;
     width: 80px;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 1);
     border-radius: 40px;
 }
 
@@ -279,12 +290,11 @@ ul.articles-left-list li {
     margin-right: 40px;
 }
 .search {
-    display: inline-block;
     border: 1px solid #ccc;
     border-radius: 40px;
     width: 221px;
     padding: 0 15px;
-    margin: 0 0 10px 11px;
+    margin:auto;
     background: #fff;
 }
 

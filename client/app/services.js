@@ -6,11 +6,6 @@ angular.module('app.service',['ngResource'])
 		{post:{method:'POST',isArray:false},save:{method:'PUT',isArray:false}}
 		);
 }])
-.service('search',['$http',function($http){
-	return {
-
-	}
-}])
 .service('getCurrentUser',['$q','$http','$rootScope',function($q,$http,$rootScope){
 	return {
 		query:function(){

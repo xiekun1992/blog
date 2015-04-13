@@ -22,14 +22,23 @@ angular.module('app',[
 	.state('app',{
 		abstract:true,
 		url:'/app',
-		template:'<div ui-view></div>',
-		controller:'appCtrl'
+		templateUrl:'tpls/app.html'
 	})
 	.state('app.articles',{
 		abstract:true,
 		url:'/articles',
 		templateUrl:'tpls/articles.html',
 		controller:'articlesCtrl'
+	})
+	.state('app.user',{
+		abstract:true,
+		url:'/user',
+		template:'<div ui-view></div>'
+	})
+	.state('app.user.password',{
+		url:'/password/{token}',
+		templateUrl:'tpls/password.html',
+		controller:'passwordCtrl'
 	})
 	.state('app.articles.article_list',{
 		url:'/article_list',

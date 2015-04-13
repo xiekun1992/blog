@@ -91,14 +91,15 @@ angular.module('app.directive', [])
 				list: '=',
 				request: '=',
 				noResult: '=',
-				execSearch: '='
+				execSearch: '=',
+                currentPage:'='
 			},
 			templateUrl: "tpls/partials/pagination.html",
 			link: function(scope, element, attrs) {
 				//每次变化一级时发生改变,确定所在一级的起始页号,每5个按钮为一级,末页所在一级不论按钮个数
 				scope.start = 1;
 				//当前的页数
-				scope.currentPage = 1;
+				scope.currentPage = scope.currentPage || 1;
 				//分页长度,5个按钮与scope.pages对应
 				scope.paginationLength = 5;
 				scope.pages = [0, 1, 2, 3, 4];
@@ -130,10 +131,19 @@ angular.module('app.directive', [])
 						});
 				}
 				// scope.search();
+                //根据当前的页数，计算当前所在一级的起始页
+                function calculateStart(page){
+                    if(page/10!=0){
+                        scope.start=Math.floor(page/5)*scope.paginationLength+1;
+                    }else{//整十的数
+                        scope.start=(page/5-1)*scope.paginationLength+1;
+                    }
+                }
+                //让外部可以调用内部搜索函数
 				scope.$watch('execSearch',function(newValue,oldValue){
 					if(newValue){
-						scope.currentPage = 1;
-						scope.start = 1;
+//						scope.currentPage = 1;
+                        calculateStart(scope.currentPage);
 						scope.search();
 					}
 					scope.execSearch=false;

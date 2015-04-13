@@ -77,11 +77,22 @@ angular.module('app.controller', [])
 		}
 	}])
 	//右侧文章列表
-	.controller('articleListCtrl', ['$scope', '$rootScope', '$http','articleRest', function($scope, $rootScope, $http,articleRest) {
+	.controller('articleListCtrl', ['$scope', '$rootScope', '$http','articleRest','routeState', function($scope, $rootScope, $http,articleRest,routeState) {
 		$scope.articles;
 		$scope.request = '/article_list?';
+        $scope.currentPage=$rootScope.$stateParams.page || 1;
 		$scope.noResult;
 		$scope.execSearch = true;
+        //跳转到文章详情
+        $scope.toDetail=function(obj){
+            //保存跳转前的状态
+//            routeState.page=$scope.currentPage;
+
+        }
+        //喜欢文章
+        $scope.favor=function(){
+
+        }
         //修改文章
 		$scope.edit=function(id){
 			$rootScope.$state.go('app.articles.edit',{id:id});
@@ -109,6 +120,9 @@ angular.module('app.controller', [])
 			if(200==data.status)
 				$scope.article = data.message;
 		});
+        $scope.back=function(){
+            $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page});
+        }
 	}])
     //搜索
 	.controller('searchCtrl', ['$scope', '$rootScope','$http', function($scope, $rootScope,$http) {

@@ -125,11 +125,11 @@ router.post('/login', function(req, res) {
 			result.last_login_time=new Date();
 			result.save(function(err,user){
 				if(user){
-					user.key=user.key_generate_time=user.password='';
+                    result.key=result.key_generate_time=result.password='';
 					//write session
 					if(!req.session.user){
-						req.session.user=user;
-		  				res.json({status:200,message:user});
+						req.session.user=result;
+		  				res.json({status:200,message:result});
 					}else if(req.session.user._id==user._id){
 		  				res.json({status:200,message:'User Already Online'});
 					}

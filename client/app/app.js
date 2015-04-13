@@ -16,7 +16,7 @@ angular.module('app',[
 		// $httpProvider.responseInterceptors.push('htmlInterceptor');
 
 	$urlRouterProvider
-	.otherwise('/app/articles/article_list');
+	.otherwise('/app/articles/article_list/1');
 
 	$stateProvider
 	.state('app',{
@@ -41,7 +41,7 @@ angular.module('app',[
 		controller:'passwordCtrl'
 	})
 	.state('app.articles.article_list',{
-		url:'/article_list',
+		url:'/article_list/{page}',
 		templateUrl:'tpls/article_list.html',
 		resolve:['getCurrentUser',function(getCurrentUser){
 			getCurrentUser.query();
@@ -50,7 +50,7 @@ angular.module('app',[
 		controller:'articleListCtrl'
 	})
 	.state('app.articles.article_detail',{
-		url:'/article_detail/{id}',
+		url:'/article_detail/{page}/{id}',
 		templateUrl:'tpls/article_detail.html',
 		controller:'articleDetailCtrl',
 		resolve:['getCurrentUser',function(getCurrentUser){

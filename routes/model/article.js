@@ -3,7 +3,8 @@ var articleSchema=mongoose.Schema({
 	'title':String,
 	'content':String,
 	'create_time':Date,
-	'category':String
+	'category':String,
+    'favor':Number
 });
 
 var article=mongoose.model('Article',articleSchema);

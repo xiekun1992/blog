@@ -357,12 +357,12 @@ a.hide-link{
     border-bottom: 1px solid #ccc;
     cursor: pointer;
     display: inline;
-    color: rgb(85, 85, 158);
+    color: rgb(73, 145, 207);
 }
 
 .page li:hover,
 li.active {
-    background-color: rgb(85, 86, 158);
+    background-color: rgb(73, 145, 207);
     color: #fff;
 }
 

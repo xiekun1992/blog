@@ -358,11 +358,17 @@ angular.module('app.directive', [])
                     }
                 });
                 //如果用户登录则展开头像
-                if($rootScope.user){
-                    element.find('.head').css('left','358px').css('width','290px');
-                    element.find('.head-circle').css('display','inline-block');
-                    element.find('.head-panel').css('display','inline-block');
-                }
+                scope.$watch('$rootScope.user',function(newValue,oldValue){
+                    if(!$rootScope.user){
+                        element.find('.head').css('left','493px').css('width','80px');
+                        element.find('.head-circle').css('display','block');
+                        element.find('.head-panel').css('display','none');
+                    }else{
+                        element.find('.head').css('left','388px').css('width','290px');
+                        element.find('.head-circle').css('display','inline-block');
+                        element.find('.head-panel').css('display','inline-block');
+                    }
+                });
                 //控制密码显隐
                 scope.pwd="password";
                 scope.eyeIcon="glyphicon-eye-open";

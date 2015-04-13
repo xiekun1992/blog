@@ -82,14 +82,20 @@ angular.module('app.controller', [])
 		$scope.request = '/article_list?';
 		$scope.noResult;
 		$scope.execSearch = true;
+        //修改文章
 		$scope.edit=function(id){
 			$rootScope.$state.go('app.articles.edit',{id:id});
 		}
+        //删除文章
 		$scope.delete=function(id){
-			console.log(id);
 			articleRest.remove({'id':id},function(data){
 				if(200==data.status){
-
+                    angular.forEach($scope.articles,function(a,key){
+                        if(a._id==id){
+                            $scope.articles.splice(key,1);
+                            return;
+                        }
+                    });
 				}
 			});
 		}

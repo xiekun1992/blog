@@ -7,9 +7,9 @@ div.login-btn {
 }
 
 .text-editor {
-    width: 700px;
+    /*width: 700px;*/
     display: block;
-    margin: auto;
+    /*margin: auto;*/
     margin-bottom: 20px;
 }
 
@@ -25,12 +25,13 @@ div.login-btn {
     outline: none;
     font-size: 16px;
     font-family: arial, sans-serif;
-    line-height: 1.6;
+    line-height: 17px;
     color: #333;
 }
 
 .editor-header {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    margin-top: 0px;
     text-align: center;
 }
 
@@ -49,4 +50,8 @@ div.login-btn {
     margin-bottom: 10px;
     height: 40px;
     padding-left: 15px;
+}
+.editor-frame{
+    background-color: #fff;
+    padding: 20px;
 }

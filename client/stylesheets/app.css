@@ -111,12 +111,22 @@
     /*-webkit-transform:rotateX(60deg)*/
     /*-webkit-transform-origin:top;*/
 }
-@-webkit-keyframes circle{
+@-webkit-keyframes circleForward{
     from{
-        -webkit-transform:translateX(0) rotateZ(0deg);
+        -webkit-transform: rotateX(0deg);
     }
     to{
-        -webkit-transform:translateX(-100%) rotateZ(-360deg);
+        -webkit-transform: rotateX(180deg);
+
+    }
+}
+@-webkit-keyframes circleBackward{
+    from{
+        -webkit-transform: rotateX(180deg);
+    }
+    to{
+        -webkit-transform: rotateX(0deg);
+
     }
 }
 .ng-enter {

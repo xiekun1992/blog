@@ -238,6 +238,9 @@ angular.module('app.directive', [])
 		}
 
 	})
+    /**
+     * simditor
+     */
 	.directive('textEditor',[function(){
 		return {
 			restrict:'AE',
@@ -245,36 +248,44 @@ angular.module('app.directive', [])
 				op:'=',
 				data:'=',
 				operate:'&',
-				category:'='
+				category:'=',
+                result:'='
 			},
 			templateUrl:'tpls/partials/simditor.html',
 			link:function(scope,element,attrs){
-				scope.$watch('data',function(newValue,oldValue){
-					element.find('.simditor-body')[0].innerHTML=newValue.content;
-					// element.find('#editor').val(newValue.content)
-				},true);
-				// element.find('button.btn').on('click',function(){
-					// console.log(1)
-					// scope.$apply(function(){
-						// console.log(2)
-				scope.submit=function(){
-					scope.operate({
-							content:element.find('#editor').val(),
-							title:scope.data.title,
-							category:scope.data.category
-						});
-				}
-						
-					// });
-				// });
-				var editor=new Simditor({
-					textarea:element.find('#editor'),
-					toolbarFloat:true
-				})
+                var editor=new Simditor({
+                    textarea:element.find('#editor'),
+                    toolbarFloat:true
+                })
+                //编辑文章传入文章内容
+                scope.$watch('data.content',function(newValue,oldValue){
+                    if(newValue){
+                        element.find('.simditor-body')[0].innerHTML = scope.data.content;
+                    }
+                });
+
+				//用户在发表或更新成功后置空内容
+                scope.$watch('result',function(newValue,oldValue){
+                    if(newValue){
+                        element.find('.simditor-body')[0].innerHTML='';
+                        scope.data.title=scope.data.category=null;
+                        scope.result=false;
+                    }
+                });
+                scope.submit=function(){
+                    scope.operate({
+                        content:element.find('#editor').val(),
+                        title:scope.data.title,
+                        category:scope.data.category
+                    });
+                }
 				window.scrollTo(0, 0);
 			}
 		}
 	}])
+    /**
+     * 登录界面
+     */
 	.directive('loginInterface', ['$timeout','$rootScope', function ($timeout,$rootScope) {
 		return {
 			restrict: 'AE',
@@ -284,6 +295,7 @@ angular.module('app.directive', [])
                 response:'=',
                 signIn:'&',
                 signOut:'&',
+                forgetPwd:'&',
                 username:'=',
                 password:'='
             },
@@ -436,4 +448,33 @@ angular.module('app.directive', [])
                 }
 			}
 		};
-	}]);
+	}])
+    /**
+     * 右边工具栏
+     */
+    .directive('rightSideToolBar',[function(){
+        return {
+            restrict:'AE',
+            scope:{},
+            template:'<div id="goToTop" class="toolbar-no-hover"></div>',
+            link:function(scope,element,attrs){
+                this.minHeight=100;//工具栏的定位高度
+                element.find("#goToTop").click(function(){
+                    angular.element("html,body").animate({scrollTop:0},700);
+                }).hover(function(){
+                    element.find("#goToTop").removeClass("toolbar-no-hover").addClass("toolbar-hover")
+                        .addClass("glyphicon glyphicon-save");
+                },function(){
+                    element.find("#goToTop").removeClass("toolbar-hover glyphicon glyphicon-save").addClass("toolbar-no-hover");
+                });
+                angular.element(window).scroll(function(){
+                    var s=angular.element(window).scrollTop();
+                    if(s>this.minHeight){
+                        angular.element("#goToTop").fadeIn(100);
+                    }else{
+                        angular.element("#goToTop").fadeOut(200);
+                    }
+                });
+            }
+        }
+    }]);

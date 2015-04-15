@@ -83,12 +83,7 @@ angular.module('app.controller', [])
         $scope.currentPage=$rootScope.$stateParams.page || 1;
 		$scope.noResult;
 		$scope.execSearch = true;
-        //跳转到文章详情
-        $scope.toDetail=function(obj){
-            //保存跳转前的状态
-//            routeState.page=$scope.currentPage;
 
-        }
         //喜欢文章
         $scope.favor=function(){
 
@@ -136,6 +131,7 @@ angular.module('app.controller', [])
 		$scope.op=1;//1:发表，0:更新
 		$scope.data={title:'',category:'',content:''};
 		$scope.category = ['Angular', 'Node', 'MongoDB'];
+        $scope.result=false;
 		//发布文章
 		$scope.operate = function(content, title, category) {
 			if($scope.op){//新建文章
@@ -146,9 +142,8 @@ angular.module('app.controller', [])
 						'category': category,
 						'create_time': new Date()
 					}, function(data) {
-						console.log(data);
 						if(200==data.status){
-							$scope.data={title:'',category:'',content:''};
+							$scope.result=true;
 							window.scrollTo(0,0);
 						}
 					});

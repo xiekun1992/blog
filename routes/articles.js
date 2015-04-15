@@ -3,8 +3,31 @@ var express = require('express');
 var parse=require('url').parse;
 var router = express.Router();
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   res.sendFile('client/index.html');
+});
+//喜欢文章------限制点赞频率未做
+router.get('/article_favor',function(req,res){
+    var query=parse(req.url,true).query;
+    console.log(query)
+    if(query.id){
+        Article.findOne({_id:query.id},function(err,article){
+            if(article){
+                article.favor++;
+                article.save(function(err,a){
+                    if(err){
+                        console.log(err);
+                    }else{
+                        res.json({status:200,message:'Favor Success'});
+                    }
+                });
+            }else{
+                res.json({status:400,message:'Article Not Found'});
+            }
+        });
+    }else{
+        res.json({status:400,message:'id Required'});
+    }
 });
 //新建文章
 router.put('/article_op',function(req,res){
@@ -66,7 +89,7 @@ router.get('/article_list',function(req,res,next){
 		condition={};
 	}
 	// console.log(condition);
-	Article.find(condition,'title create_time category').sort('filed -create_time').skip((p-1)*10).limit(10).exec(function(err,results){
+	Article.find(condition,'title create_time category favor').sort('filed -create_time').skip((p-1)*10).limit(10).exec(function(err,results){
 		err && console.log(err);
 		Article.count(condition,function(err,result){
 			err && console.log(err);

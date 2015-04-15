@@ -4,7 +4,7 @@ var articleSchema=mongoose.Schema({
 	'content':String,
 	'create_time':Date,
 	'category':String,
-    'favor':Number
+    'favor':{type:Number, default:0}
 });
 
 var article=mongoose.model('Article',articleSchema);

@@ -77,16 +77,19 @@ angular.module('app.controller', [])
 		}
 	}])
 	//右侧文章列表
-	.controller('articleListCtrl', ['$scope', '$rootScope', '$http','articleRest','routeState', function($scope, $rootScope, $http,articleRest,routeState) {
-		$scope.articles;
+	.controller('articleListCtrl', ['$scope', '$rootScope', '$http','articleRest','articleFavor',
+        function($scope, $rootScope, $http,articleRest,articleFavor) {
+		$scope.articles=[];
 		$scope.request = '/article_list?';
         $scope.currentPage=$rootScope.$stateParams.page || 1;
 		$scope.noResult;
 		$scope.execSearch = true;
 
         //喜欢文章
-        $scope.favor=function(){
-
+        $scope.favor=function(obj){
+            articleFavor(obj._id).then(function(){
+                obj.favor++;
+            });
         }
         //修改文章
 		$scope.edit=function(id){
@@ -106,8 +109,9 @@ angular.module('app.controller', [])
 			});
 		}
 	}])
-	//右侧文章详情
-	.controller('articleDetailCtrl', ['$scope', '$rootScope', 'articleRest', function($scope, $rootScope, articleRest) {
+	//右侧文章详情页
+	.controller('articleDetailCtrl', ['$scope', '$rootScope', 'articleRest','articleFavor',
+        function($scope, $rootScope, articleRest, articleFavor) {
 		//restful请求单条文章数据
 		articleRest.get({
 			'id': $rootScope.$stateParams.id
@@ -115,8 +119,33 @@ angular.module('app.controller', [])
 			if(200==data.status)
 				$scope.article = data.message;
 		});
+        //返回到文章列表页
         $scope.back=function(){
             $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page});
+        }
+        //喜欢文章
+        $scope.favor=function(obj){
+            articleFavor(obj._id).then(function(){
+                obj.favor++;
+            });
+        }
+        //修改文章
+        $scope.edit=function(id){
+            $rootScope.$state.go('app.articles.edit',{id:id});
+        }
+        //删除文章
+        $scope.delete=function(id){
+            articleRest.remove({'id':id},function(data){
+                if(200==data.status){
+                    angular.forEach($scope.articles,function(a,key){
+                        if(a._id==id){
+                            $scope.articles.splice(key,1);
+                            return;
+                        }
+                    });
+                    $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page});
+                }
+            });
         }
 	}])
     //搜索
@@ -129,7 +158,7 @@ angular.module('app.controller', [])
 	.controller('editCtrl', ['$scope', 'articleRest','$rootScope', 
 		function($scope, articleRest,$rootScope) {
 		$scope.op=1;//1:发表，0:更新
-		$scope.data={title:'',category:'',content:''};
+//		$scope.data={title:'',category:'',content:''};
 		$scope.category = ['Angular', 'Node', 'MongoDB'];
         $scope.result=false;
 		//发布文章
@@ -157,9 +186,9 @@ angular.module('app.controller', [])
 				},function(data){
 					if(200==data.status){
 						$rootScope.$state.go('app.articles.article_list');
-						$scope.data={title:'',category:'',content:''};
+                        $scope.result=true;
 					}
-			});
+			    });
 			}
 			
 		}

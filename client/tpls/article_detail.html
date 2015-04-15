@@ -2,13 +2,14 @@
     <div class="article-details-op">
         <!--<a ui-sref="app.articles.article_list" class="btn btn-sm btn-info">返回</a>-->
         <a href="javascript:void(0)" ng-click="back()"><i class="glyphicon glyphicon-share-alt icon-flip"></i>返回</a>
-        <a href="javascript:void(0)" ng-if="$root.user" ng-click="edit(a._id)"><i class="glyphicon glyphicon-edit"></i>编辑</a>
-        <a href="javascript:void(0)" ng-if="$root.user" ng-click="delete(a._id)"><i class="glyphicon glyphicon-remove-circle"></i>删除</a>
+        <a href="javascript:void(0)" ng-if="$root.user" ng-click="edit(article._id)" title="编辑此文章"><i class="glyphicon glyphicon-edit"></i>编辑</a>
+        <a href="javascript:void(0)" ng-if="$root.user" ng-click="delete(article._id)" title="删除此文章"><i class="glyphicon glyphicon-remove-circle"></i>删除</a>
     </div>
     <header>
         <h3>{{article.title}}</h3>
         <span>文章分类：{{article.category}}</span>
         <span>发表时间：{{article.create_time | dateFormat}}</span>
+        <span title="赞一个" class="article-favor" ng-click="favor(article)"><i class="glyphicon glyphicon-thumbs-up"></i> {{article.favor}}</span>
     </header>
     <p class="article-body" ng-bind-html="article.content | htmlConverter">
     </p>

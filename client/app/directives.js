@@ -259,11 +259,10 @@ angular.module('app.directive', [])
                 })
                 //编辑文章传入文章内容
                 scope.$watch('data.content',function(newValue,oldValue){
-                    if(newValue){
-                        element.find('.simditor-body')[0].innerHTML = scope.data.content;
+                    if(newValue && newValue.length>0){
+                        element.find('.simditor-body')[0].innerHTML = newValue;
                     }
                 });
-
 				//用户在发表或更新成功后置空内容
                 scope.$watch('result',function(newValue,oldValue){
                     if(newValue){
@@ -273,8 +272,9 @@ angular.module('app.directive', [])
                     }
                 });
                 scope.submit=function(){
+//                    console.log(element.find('.simditor-body')[0].innerHTML)
                     scope.operate({
-                        content:element.find('#editor').val(),
+                        content:element.find('.simditor-body')[0].innerHTML,
                         title:scope.data.title,
                         category:scope.data.category
                     });
@@ -452,13 +452,19 @@ angular.module('app.directive', [])
     /**
      * 右边工具栏
      */
-    .directive('rightSideToolBar',[function(){
+    .directive('rightSideToolBar',['$rootScope',function($rootScope){
         return {
             restrict:'AE',
             scope:{},
-            template:'<div id="goToTop" class="toolbar-no-hover"></div>',
+            template:'<ul class="right-side-bar" id="rightSideBar"><li id="previousArticle">上一篇</li><li id="nextArticle">下一篇</li><li id="goToTop" class="toolbar-no-hover"></li></ul>',
             link:function(scope,element,attrs){
-                this.minHeight=100;//工具栏的定位高度
+                //监视当前路由是否为文章详情页的路由
+                $rootScope.$on('$stateChangeSuccess',function(event,toState,toParams,fromState,fromParams){
+                    if($rootScope.$state.is('app.articles.article_detail')){
+
+                    }
+                });
+                this.minHeight=80;//工具栏的定位高度
                 element.find("#goToTop").click(function(){
                     angular.element("html,body").animate({scrollTop:0},700);
                 }).hover(function(){

@@ -11,18 +11,27 @@ data=JSON.parse(data);
 router.post('/password/new',function(req,res){
 	var md5=crypto.createHash('md5');
 	if(req.body.params.p && req.body.params.key){
-		md5.update(req.body.params.p);
-		User.findOneAndUpdate({key:req.body.params.key},{password:md5.digest('hex')},function(err,user){
-			if(err){
-				console.log(err);
-				res.json({status:500,message:'Internal Error'});
-			}else if(user){
-				console.log(user)
-				res.json({status:200,message:'New Password Avalible Now'});
-			}else{
-				res.json({status:400,message:'Fail to Modify Old Password'});
-			}
-		});
+        User.findOne({key:req.body.params.key},function(err,user_key){
+            if(err){
+                console.log(err);
+                res.json({status:500,message:'Internal Error'});
+            }else if(user_key){
+                md5.update(req.body.params.p);
+                User.findOneAndUpdate({key:req.body.params.key},{key:'',password:md5.digest('hex')},function(err,user){
+                    if(err){
+                        console.log(err);
+                        res.json({status:500,message:'Internal Error'});
+                    }else if(user){
+                        console.log(user)
+                        res.json({status:200,message:'New Password Avalible Now'});
+                    }else{
+                        res.json({status:400,message:'Fail to Modify Old Password'});
+                    }
+                });
+            }else{
+                res.json({status:400,message:'Token Is Out of Date'});
+            }
+        });
 	}else{
 		res.json({status:400,message:'Fail to Modify Old Password'});
 	}
@@ -122,9 +131,11 @@ router.post('/login', function(req, res) {
 		if(err){
 			console.log(err);
 		}else if(result){
+            var tmp=result.last_login_time;
 			result.last_login_time=new Date();
 			result.save(function(err,user){
 				if(user){
+                    result.last_login_time=tmp;
                     result.key=result.key_generate_time=result.password='';
 					//write session
 					if(!req.session.user){
@@ -134,7 +145,7 @@ router.post('/login', function(req, res) {
 		  				res.json({status:200,message:'User Already Online'});
 					}
 				}else{
-					res.json({status:401,message:'Username or Password Error!'});
+					res.json({status:500,message:'Internal Error!'});
 				}
 			});
 		}else{

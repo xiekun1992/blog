@@ -1,8 +1,8 @@
 angular.module('app.service', ['ngResource'])
     .service('articleRest', ['$resource', function ($resource) {
         return $resource(
-            '/article_op/:id',
-            {id: '@id'},
+            '/article_op/:id/:flip/:position',
+            {id: '@id',flip:'@index',position:'@position'},
             {post: {method: 'POST', isArray: false}, save: {method: 'PUT', isArray: false}}
         );
     }])
@@ -18,6 +18,31 @@ angular.module('app.service', ['ngResource'])
             }).error(function(){deferred.reject(data.message);});
             return deferred.promise;
         }
+    }])
+    .service('getSpecificArticle',['articleRest','$rootScope',function(articleRest,$rootScope){
+        return function (op) {//true为上一篇，false为下一篇
+                var index=0;//0本文,1下一篇,-1上一篇
+                index=(op?index-1:index+1);
+                //请求指定的文章
+                articleRest.get({id: $rootScope.$stateParams.id,flip:index,'position':$rootScope.$stateParams.position},function(data){
+                    $rootScope.$emit('turnPage',data);
+                    if(200==data.status){
+                        if(data.message.length>0){
+                            var page=parseInt($rootScope.$stateParams.page);
+                            var position=data.position;
+                            if(data.position>10){
+                                position=1;
+                                page++;
+                            }else if(data.position<1){
+                                position=10;
+                                page--;
+                            }
+                            $rootScope.$state.go('app.articles.article_detail',{id:data.message[0]._id,page:page,'position':position});
+                            return ;
+                        }
+                    }
+                });
+            }
     }])
     .service('getCurrentUser', ['$q', '$http', '$rootScope', function ($q, $http, $rootScope) {
         return {

@@ -53,8 +53,10 @@ angular.module('app.controller', [])
 			.success(function(data){
 				if(200==data.status){
 					$scope.p1=$scope.p2=null;
-				}
-				$scope.alert=true;
+                    $scope.alert=true;
+				}else{
+                    $scope.alert=false;
+                }
 				$scope.msg=data.message;
 			}).error(function(){});
 		}
@@ -114,8 +116,9 @@ angular.module('app.controller', [])
         function($scope, $rootScope, articleRest, articleFavor) {
 		//restful请求单条文章数据
 		articleRest.get({
-			'id': $rootScope.$stateParams.id
+			'id': $rootScope.$stateParams.id,'flip':0,'position':$rootScope.$stateParams.position
 		}, function(data) {
+            $rootScope.$emit('turnPage',data);
 			if(200==data.status)
 				$scope.article = data.message;
 		});

@@ -1,7 +1,7 @@
 <div class="articles-right">
     <div class="article" ng-repeat="a in articles track by $index">
         <header>
-            <a ui-sref="app.articles.article_detail({page:currentPage,id:a._id})" title="{{a.title}}"><h4>{{a.title}}</h4></a>
+            <a ui-sref="app.articles.article_detail({page:currentPage,id:a._id,position:$index+1})" title="{{a.title}}"><h4>{{a.title}}</h4></a>
             <a href="javascript:void(0)" ng-if="$root.user" class="hide-link" ng-click="edit(a._id)" title="编辑此文章"><i class="glyphicon glyphicon-edit"></i>编辑</a>
             <a href="javascript:void(0)" ng-if="$root.user" class="hide-link" ng-click="delete(a._id)" title="删除此文章"><i class="glyphicon glyphicon-remove-circle"></i>删除</a>
         </header>

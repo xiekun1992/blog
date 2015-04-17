@@ -69,7 +69,7 @@ router.post('/article_op/:id',function(req,res){
 //删除文章
 router.delete('/article_op/:id',function(req,res){
 	var id=req.url.substr(12);
-	Article.findOneAndRemove({_id:id},function(err,result){
+	Article.findOneAndUpdate({_id:id},{delete:1},function(err,result){
 		if(result){
 			res.json({status:200,message:'Remove Success'});
 		}else{
@@ -89,7 +89,7 @@ router.get('/article_list',function(req,res,next){
 		condition={};
 	}
 	// console.log(condition);
-	Article.find(condition,'title create_time category favor').sort('filed -create_time').skip((p-1)*10).limit(10).exec(function(err,results){
+	Article.find(condition,'title create_time category favor').sort('-create_time').skip((p-1)*10).limit(10).exec(function(err,results){
 		err && console.log(err);
 		Article.count(condition,function(err,result){
 			err && console.log(err);
@@ -99,12 +99,76 @@ router.get('/article_list',function(req,res,next){
 	});
 });
 //根据id获取具体文章
-router.get('/article_op/:id',function(req,res){
+router.get('/article_op/:id/:flip/:position',function(req,res){
 	console.log(req.params.id);
+	console.log(req.params.flip);
 	if(req.params.id){
 		Article.findOne({'_id':req.params.id},function(err,result){
-			err && console.log(err);
-			res.json({status:200,message:result});			
+			if(err){
+                console.log(err);
+            }else if(result){//根据_id找到文章
+                var first_id,last_id,end=0;
+                Article.find().select('_id').exec(function(err,allA){
+                    if(err){
+                        console.log(err);
+                        res.send({status:500,message:'Internal Error'});
+                    }else{
+                        first_id=allA[0]._id;
+                        last_id=allA[allA.length-1]._id;
+                    }
+                    if(req.params.flip==1){
+                        //查下一篇，即发布时间离现在远的，并返回_id
+                        Article.find().where('create_time').sort('-create_time').lt(result.create_time).limit(1).select('_id').exec(function(err,preA){
+                            if(err){
+                                console.log(err);
+                                res.send({status:500,message:'Internal Error'});
+                            }else if(preA.length>0){
+                                if(preA._id==first_id.toString()){
+                                    end=-1;
+                                }else if(preA._id==last_id.toString()){
+                                    end=1;
+                                }else{
+                                    end=0;
+                                }
+                                res.json({status:200,message:preA,position:parseInt(req.params.position)+1,end:end});
+                            }else{
+                                res.json({status:404,message:'Article Not Found'});
+                            }
+                        });
+                    }else if(req.params.flip==-1){
+                        //查上一篇，即发布时间离现在近的，并返回_id
+                        Article.find().where('create_time').sort('create_time').gt(result.create_time).limit(1).select('_id').exec(function(err,nextA){
+                            if(err){
+                                console.log(err);
+                                res.send({status:500,message:'Internal Error'});
+                            }else if(nextA.length>0){
+                                if(nextA[0]._id==first_id.toString()){
+                                    end=-1;
+                                }else if(nextA[0]._id==last_id.toString()){
+                                    end=1;
+                                }else{
+                                    end=0;
+                                }
+                                res.json({status:200,message:nextA,position:parseInt(req.params.position)-1,end:end});
+                            }else{
+                                res.json({status:404,message:'Article Not Found'});
+                            }
+                        });
+                    }else{//查选定id的文章
+                        if(result._id==first_id.toString()){
+                            end=-1;
+                        }else if(result._id==last_id.toString()){
+                            end=1;
+                        }else{
+                            end=0;
+                        }
+                        res.json({status:200,message:result,end:end});
+                    }
+                });
+
+            }else{//根据_id未找到文章
+                res.json({status:404,message:'Article Not Found'});
+            }
 		});
 	}else{
 		res.json({status:400,message:'Require id'});

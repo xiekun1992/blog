@@ -591,70 +591,60 @@ ul.right-side-bar li{
     height: 40px;
     background-color: rgb(73, 145, 207);
 }
-#nextArticle{
-    /*position: fixed;*/
-    /*top: 72%;*/
-    /*left: 55%;*/
-    /*cursor: pointer;*/
-    /*margin-top: -50px;*/
-    /*margin-left: 520px;*/
-    padding: 9px 4px;
-    color: #fff;
-    /*width: 100px;*/
-    /*height: 40px;*/
-    /*text-align: center;*/
-    /*border: 1px solid #e0e0e0;*/
-    /*background: #fff;*/
-}
-#previousArticle{
-    /*display: none;*/
-    /*position: fixed;*/
-    /*top: 81%;*/
-    /*left: 55%;*/
-    /*cursor: pointer;*/
-    /*margin-top: -50px;*/
-    /*margin-left: 520px;*/
-    padding: 9px 4px;
-    color: #fff;
-    /*width: 100px;*/
-    /*height: 40px;*/
-    /*text-align: center;*/
-    /*border: 1px solid #e0e0e0;*/
-    /*background: #fff;*/
-}
-/*默认样式，主要是position:fixed实现屏幕绝对定位*/
-/*#goToTop {*/
-    /*display: none;*/
-    /*position: fixed;*/
-    /*top: 90%;*/
-    /*left: 55%;*/
-    /*cursor: pointer;*/
-    /*margin-top: -50px;*/
-    /*margin-left: 520px;*/
-    /*padding: 9px 4px;*/
-    /*width: 100px;*/
-    /*height: 40px;*/
-    /*text-align: center;*/
-    /*border: 1px solid #e0e0e0;*/
-    /*background: #fff;*/
-/*}*/
+
 #rightSideBar {
-    /*display: none;*/
     position: fixed;
     top: 70%;
     left: 55%;
     cursor: pointer;
     margin-top: -50px;
     margin-left: 520px;
-    /*padding: 9px 4px;*/
     width: 100px;
-    /*height: 40px;*/
     text-align: center;
-    border: 1px solid #e0e0e0;
-    /*background: #fff;*/
-    background-color: rgb(73, 145, 207);
+    background: transparent;
 }
 
+#nextArticle.toolbar-next-no-hover{
+    margin-bottom: 1px;
+    display: none;
+    padding: 9px 4px;
+    color: #fff;
+    width: 100%;
+}
+#nextArticle.toolbar-next-no-hover:before{
+    content: '下一篇';
+}
+#nextArticle.toolbar-next-hover{
+    font-size: 23px;
+    color: #fff;
+    padding: 8px 0px;
+    width: 100%;
+    margin-top: -1px;
+    margin-bottom: 2px;
+}
+
+#previousArticle.toolbar-pre-no-hover{
+    margin-bottom: 1px;
+    display: none;
+    padding: 9px 4px;
+    color: #fff;
+    width: 100%;
+}
+#previousArticle.toolbar-pre-no-hover:before{
+    content: '上一篇';
+}
+#previousArticle.toolbar-pre-hover{
+    font-size: 23px;
+    color: #fff;
+    padding: 8px 0px;
+    width: 100%;
+    margin-top: -1px;
+    margin-bottom: 2px;
+}
+/*默认样式，主要是position:fixed实现屏幕绝对定位*/
+#goToTop {
+    display: none;
+}
 /*用CSS表达式(expression)来实现ie6下position:fixed效果*/
 #goToTop {
     _position: absolute;
@@ -662,26 +652,18 @@ ul.right-side-bar li{
 }
 
 /*鼠标进入的反馈效果*/
-#goToTop.toolbar-hover {
-    /*-webkit-animation: circleForward 1.2s ease-in;*/
-    /*-webkit-transform:rotateX(180deg);*/
-    -webkit-transform: scale(1,-1);
+#goToTop.toolbar-top-hover {
     font-size: 23px;
-    background: rgb(73, 145, 207);
     color: #fff;
-    text-decoration: none;
     padding: 8px 0px;
-    height: 39px;
     width: 100%;
+    margin-top: -1px;
 }
-#goToTop.toolbar-no-hover:before{
+#goToTop.toolbar-top-no-hover:before{
     content: '返回顶部';
 }
-#goToTop.toolbar-no-hover {
-    /*-webkit-animation: circleBackward 1.2s ease-in;*/
-    /*-webkit-transform:rotateX(0deg);*/
+#goToTop.toolbar-top-no-hover {
     background: rgb(73, 145, 207);
     color: #fff;
-    text-decoration: none;
     padding: 10px 6px;
 }

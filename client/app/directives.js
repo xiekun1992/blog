@@ -409,8 +409,11 @@ angular.module('app.directive', [])
                         scope.mention = "显示密码";
                     }
                 }
+                scope.turnToLogin=false;
                 //让头像翻转到登录框
                 scope.transform = function () {
+                    scope.turnToLogin=true;
+                    scope.turnToHead=false;
                     if ($rootScope.user)
                         return;
                     var start = 0;
@@ -430,8 +433,11 @@ angular.module('app.directive', [])
                         start += speed;
                     }, 100);
                 }
+                scope.turnToHead=false;
                 //让登录框翻转到头像
                 scope.return = function () {
+                    scope.turnToLogin=false;
+                    scope.turnToHead=true;
                     clearInterval($rootScope.loginInterval);
                     var start = 180;
                     var end = 360;
@@ -449,6 +455,13 @@ angular.module('app.directive', [])
                         start += speed;
                     }, 100);
                 }
+                $rootScope.$on('$stateChangeSuccess',function(){
+                    if($rootScope.$state.is('app.user.password')){
+                        if(!scope.turnToHead){
+                            scope.return();
+                        }
+                    }
+                });
             }
         };
     }])

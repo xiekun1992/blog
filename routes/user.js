@@ -11,7 +11,7 @@ data=JSON.parse(data);
 router.post('/password/new',function(req,res){
 	var md5=crypto.createHash('md5');
 	if(req.body.params.p && req.body.params.key){
-        User.findOne({key:req.body.params.key},function(err,user_key){
+        User.findOne({key:req.body.params.key},function(err,user_key){//检查key值是否存在
             if(err){
                 console.log(err);
                 res.json({status:500,message:'Internal Error'});
@@ -28,7 +28,7 @@ router.post('/password/new',function(req,res){
                         res.json({status:400,message:'Fail to Modify Old Password'});
                     }
                 });
-            }else{
+            }else{//key值不存在
                 res.json({status:400,message:'Token Is Out of Date'});
             }
         });

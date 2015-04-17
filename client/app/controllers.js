@@ -32,7 +32,7 @@ angular.module('app.controller', [])
 		}
 	])
     //密码重置
-	.controller('passwordCtrl', ['$scope','$rootScope','$http', function ($scope,$rootScope,$http) {
+	.controller('passwordCtrl', ['$scope','$rootScope','$http','$timeout', function ($scope,$rootScope,$http,$timeout) {
 		//密码
 		$scope.p1
 		$scope.p2
@@ -46,6 +46,7 @@ angular.module('app.controller', [])
 			$rootScope.$state.go('app.articles.article_list');
 		});
 		//重置为新密码
+        var jumpCounter;
 		$scope.reset=function(){
 			$scope.alert=false;
 			$scope.p1=hex_md5($scope.p1)
@@ -53,13 +54,27 @@ angular.module('app.controller', [])
 			.success(function(data){
 				if(200==data.status){
 					$scope.p1=$scope.p2=null;
+                    $scope.alertWarning=false;
                     $scope.alert=true;
-				}else{
+                    $scope.counter=5;
+                    jumpCounter=setInterval(function(){
+                        $scope.$apply($scope.counter=$scope.counter-1);//更新页面上的值
+                        if($scope.counter<=0) {
+                            $rootScope.$state.go('app.articles.article_list',{page:1});
+                            clearInterval(jumpCounter);
+                        }
+                    },1000);
+                }else{
                     $scope.alert=false;
+                    $scope.alertWarning=true;
                 }
-				$scope.msg=data.message;
+                $scope.msg=data.message;
 			}).error(function(){});
 		}
+        $scope.jumpToIndex=function(){
+            clearInterval(jumpCounter);
+            $rootScope.$state.go('app.articles.article_list');
+        }
 	}])
 	//文章的总结构
 	.controller('articlesCtrl', ['$scope', '$rootScope', '$http', '$location', '$timeout', function($scope, $rootScope, $http, $location, $timeout) {

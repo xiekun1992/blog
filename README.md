@@ -1,2 +1,2 @@
 # blog
-a personal blog for graduate design
+一个个人博客

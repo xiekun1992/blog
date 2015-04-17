@@ -410,8 +410,10 @@ angular.module('app.directive', [])
                     }
                 }
                 scope.turnToLogin=false;
+                var isPasswordPage=false;//当处于重置密码页时，控制当前页不可登录
                 //让头像翻转到登录框
                 scope.transform = function () {
+                    if(isPasswordPage)return;
                     scope.turnToLogin=true;
                     scope.turnToHead=false;
                     if ($rootScope.user)
@@ -457,9 +459,12 @@ angular.module('app.directive', [])
                 }
                 $rootScope.$on('$stateChangeSuccess',function(){
                     if($rootScope.$state.is('app.user.password')){
+                        isPasswordPage=true;
                         if(!scope.turnToHead){
                             scope.return();
                         }
+                    }else{
+                        isPasswordPage=false;
                     }
                 });
             }

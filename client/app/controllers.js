@@ -213,7 +213,7 @@ angular.module('app.controller', [])
 		//传入的id不为空则获取文章
 		if($rootScope.$stateParams.id){
 			$scope.op=0;
-			articleRest.get({'id':$rootScope.$stateParams.id},function(data){
+			articleRest.get({'id':$rootScope.$stateParams.id,'flip':0,position:$rootScope.$stateParams.position},function(data){
 				if(200==data.status){
 					$scope.data=data.message;
 				}

@@ -86,7 +86,7 @@ router.get('/reset_password',function(req,res){
 			res.json({status:500,message:'Mail Fail to Sent'});
 		}else{
 			console.log('Mail Sent Success: '+info.response)
-			User.findOne({username:'xiekun'},function(err,result){
+			User.findOne({username:'xiekun'},function(err,result){//多次发送邮件以最后一次成功的key为准
 				if(err){
 					console.log(err);
 				}else{

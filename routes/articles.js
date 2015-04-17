@@ -69,7 +69,7 @@ router.post('/article_op/:id',function(req,res){
 //删除文章
 router.delete('/article_op/:id',function(req,res){
 	var id=req.url.substr(12);
-	Article.findOneAndUpdate({_id:id},{delete:1},function(err,result){
+	Article.findOneAndUpdate({_id:id},{delete:1},function(err,result){//删除文章只是将标识位置为1
 		if(result){
 			res.json({status:200,message:'Remove Success'});
 		}else{
@@ -82,14 +82,14 @@ router.get('/article_list',function(req,res,next){
 	// console.log(parse(req.url,true).query);
 	var query=parse(req.url,true).query;
 	var p=query.p || 1;
-	var condition={};
+	var condition={'delete':0};
 	if(query.category && query.category!='all'){
-		condition={'category':query.category};
+		condition={'category':query.category,'delete':0};
 	}else{
-		condition={};
+		condition={'delete':0};
 	}
 	// console.log(condition);
-	Article.find(condition,'title create_time category favor').sort('-create_time').skip((p-1)*10).limit(10).exec(function(err,results){
+	Article.find(condition,'title create_time category favor').sort('-create_time').where('delete').equals(0).skip((p-1)*10).limit(10).exec(function(err,results){
 		err && console.log(err);
 		Article.count(condition,function(err,result){
 			err && console.log(err);
@@ -108,7 +108,7 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                 console.log(err);
             }else if(result){//根据_id找到文章
                 var first_id,last_id,end=0;
-                Article.find().select('_id').exec(function(err,allA){
+                Article.find({'delete':0}).select('_id').exec(function(err,allA){
                     if(err){
                         console.log(err);
                         res.send({status:500,message:'Internal Error'});
@@ -118,7 +118,7 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                     }
                     if(req.params.flip==1){
                         //查下一篇，即发布时间离现在远的，并返回_id
-                        Article.find().where('create_time').sort('-create_time').lt(result.create_time).limit(1).select('_id').exec(function(err,preA){
+                        Article.find({'delete':0}).where('create_time').sort('-create_time').lt(result.create_time).limit(1).select('_id').exec(function(err,preA){
                             if(err){
                                 console.log(err);
                                 res.send({status:500,message:'Internal Error'});
@@ -137,7 +137,7 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                         });
                     }else if(req.params.flip==-1){
                         //查上一篇，即发布时间离现在近的，并返回_id
-                        Article.find().where('create_time').sort('create_time').gt(result.create_time).limit(1).select('_id').exec(function(err,nextA){
+                        Article.find({'delete':0}).where('create_time').sort('create_time').gt(result.create_time).limit(1).select('_id').exec(function(err,nextA){
                             if(err){
                                 console.log(err);
                                 res.send({status:500,message:'Internal Error'});

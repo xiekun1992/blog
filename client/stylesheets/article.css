@@ -603,44 +603,37 @@ ul.right-side-bar li{
     text-align: center;
     background: transparent;
 }
-
-#nextArticle.toolbar-next-no-hover{
+.toolbar-no-hover{
     margin-bottom: 1px;
     display: none;
     padding: 9px 4px;
     color: #fff;
     width: 100%;
 }
-#nextArticle.toolbar-next-no-hover:before{
+#publish.toolbar-no-hover:before{
+    content: '发表文章';
+}
+.toolbar-hover{
+    font-size: 23px;
+    color: #fff;
+    padding: 8px 0px;
+    width: 100%;
+    margin-top: -1px;
+    margin-bottom: 2px;
+}
+
+#update.toolbar-no-hover:before{
+    content: '更新文章';
+}
+
+#nextArticle.toolbar-no-hover:before{
     content: '下一篇';
 }
-#nextArticle.toolbar-next-hover{
-    font-size: 23px;
-    color: #fff;
-    padding: 8px 0px;
-    width: 100%;
-    margin-top: -1px;
-    margin-bottom: 2px;
-}
 
-#previousArticle.toolbar-pre-no-hover{
-    margin-bottom: 1px;
-    display: none;
-    padding: 9px 4px;
-    color: #fff;
-    width: 100%;
-}
-#previousArticle.toolbar-pre-no-hover:before{
+#previousArticle.toolbar-no-hover:before{
     content: '上一篇';
 }
-#previousArticle.toolbar-pre-hover{
-    font-size: 23px;
-    color: #fff;
-    padding: 8px 0px;
-    width: 100%;
-    margin-top: -1px;
-    margin-bottom: 2px;
-}
+
 /*默认样式，主要是position:fixed实现屏幕绝对定位*/
 #goToTop {
     display: none;

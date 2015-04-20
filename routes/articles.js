@@ -102,13 +102,13 @@ router.get('/article_list',function(req,res,next){
 router.get('/article_op/:id/:flip/:position',function(req,res){
 	console.log(req.params.id);
 	console.log(req.params.flip);
-	if(req.params.id){
+	if(req.params.id && req.params.id.length==24){
 		Article.findOne({'_id':req.params.id},function(err,result){
 			if(err){
                 console.log(err);
             }else if(result){//根据_id找到文章
                 var first_id,last_id,end=0;
-                Article.find({'delete':0}).select('_id').exec(function(err,allA){
+                Article.find({'delete':0}).sort('create_time').select('_id').exec(function(err,allA){
                     if(err){
                         console.log(err);
                         res.send({status:500,message:'Internal Error'});

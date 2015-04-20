@@ -55,3 +55,8 @@ div.login-btn {
     background-color: #fff;
     padding: 20px;
 }
+.editor-span{
+    width: 100%;
+    float: left;
+    text-align: center;
+}

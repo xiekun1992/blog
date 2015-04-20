@@ -86,7 +86,7 @@ angular.module('app.directive', [])
  * @param {scope} no-result 当请求不到数据时,显示该变量的值("暂无数据")
  * @param {scope} show-last boolean是否显示末页按钮
  */
-    .directive('page', function ($http) {
+    .directive('page', function ($http,$rootScope) {
         return {
             restrict: "AE",
             scope: {
@@ -180,7 +180,8 @@ angular.module('app.directive', [])
                     } else if (scope.maxPage == number) { //末页
                         startPosition();
                     }
-                    scope.search();
+//                    scope.search();
+                    $rootScope.$state.go('app.articles.article_list',{page:parseInt(scope.currentPage)});
                 }
                 /**
                  * 上一页,当前页没有上页时不跳转,翻页够一级后确定所在一级的起始编号
@@ -216,7 +217,7 @@ angular.module('app.directive', [])
                         scope.start = 1;
                     }
                     scope.currentPage = scope.start + scope.paginationLength - 1;
-                    scope.search();
+//                    scope.search();
                 }
                 /**
                  * 下一级,每次增加一个分页长度且确定当前级的第一个按钮为当前页
@@ -224,7 +225,7 @@ angular.module('app.directive', [])
                 scope.nextStage = function () {
                     scope.start += scope.paginationLength;
                     scope.currentPage = scope.start;
-                    scope.search();
+//                    scope.search();
                 }
                 /**
                  * 隐藏或显示下一级按钮,当达到最大页所在一级时隐藏
@@ -244,7 +245,7 @@ angular.module('app.directive', [])
 /**
  * simditor
  */
-    .directive('textEditor', [function () {
+    .directive('textEditor', ['$rootScope','$timeout',function ($rootScope,$timeout) {
         return {
             restrict: 'AE',
             scope: {
@@ -267,22 +268,49 @@ angular.module('app.directive', [])
                     }
                 });
                 //用户在发表或更新成功后置空内容
+                var timerSuccess;
                 scope.$watch('result', function (newValue, oldValue) {
                     if (newValue) {
                         element.find('.simditor-body')[0].innerHTML = '';
                         scope.data.title = scope.data.category = null;
+                        scope.success='文章发表成功';
+                        timerSuccess=$timeout(function(){scope.success='';},1500);
                         scope.result = false;
                     }
                 });
-                scope.submit = function () {
-//                    console.log(element.find('.simditor-body')[0].innerHTML)
-                    scope.operate({
-                        content: element.find('.simditor-body')[0].innerHTML,
-                        title: scope.data.title,
-                        category: scope.data.category
-                    });
+                var timerError;
+                scope.submit = function (op) {
+                    scope.$apply(function(){scope.error=''});
+                    if(!scope.data.title || !scope.data.title.trim()){
+                        scope.$apply(function(){scope.error='标题不能为空'});
+                    }else if(!scope.data.category || !scope.data.category.trim()){
+                        scope.$apply(function(){scope.error='分类不能为空'});
+                    }else if(element.find('.simditor-body')[0].innerHTML=='<p><br></p>' || !element.find('.simditor-body')[0].innerHTML.trim()){
+                        scope.$apply(function(){scope.error='内容不能为空'});
+                    }else{
+                        console.log(scope.data)
+                        console.log(element.find('.simditor-body')[0].innerHTML)
+                        scope.$apply(function(){scope.error=''});
+                        scope.operate({
+                            op:op,
+                            content: element.find('.simditor-body')[0].innerHTML,
+                            title: scope.data.title,
+                            category: scope.data.category
+                        });
+                    }
+                    timerError=$timeout(function(){scope.error='';},1500);
                 }
+                $rootScope.$on('publish',function(event){
+                    scope.submit(1);
+                });
+                $rootScope.$on('update',function(event){
+                    scope.submit(0);
+                });
                 window.scrollTo(0, 0);
+                scope.$on('$destroy',function(event){
+                    $timeout.cancel(timerSuccess);
+                    $timeout.cancel(timerError);
+                });
             }
         }
     }])
@@ -384,7 +412,8 @@ angular.module('app.directive', [])
                 });
                 //如果用户登录则展开头像
                 scope.$watch('$rootScope.user', function (newValue, oldValue) {
-                    if (!$rootScope.user) {
+                    console.log(newValue)
+                    if (!$rootScope.user || !$rootScope.user._id) {
                         element.find('.head').css('left', '493px').css('width', '80px');
                         element.find('.head-circle').css('display', 'block');
                         element.find('.head-panel').css('display', 'none');
@@ -473,13 +502,15 @@ angular.module('app.directive', [])
 /**
  * 右边工具栏
  */
-    .directive('rightSideToolBar', ['$rootScope','getSpecificArticle', function ($rootScope,getSpecificArticle) {
+    .directive('rightSideToolBar', ['$rootScope','getSpecificArticle','PublishOrUpdate', function ($rootScope,getSpecificArticle,PublishOrUpdate) {
         return {
             restrict: 'AE',
             scope: {},
             template: '<ul class="right-side-bar" id="rightSideBar">' +
-                        '<li id="previousArticle" class="toolbar-pre-no-hover"></li>' +
-                        '<li id="nextArticle" class="toolbar-next-no-hover"></li>' +
+                        '<li id="previousArticle" class="toolbar-no-hover"></li>' +
+                        '<li id="nextArticle" class="toolbar-no-hover"></li>' +
+                        '<li id="publish" class="toolbar-no-hover"></li>'+
+                        '<li id="update" class="toolbar-no-hover"></li>'+
                         '<li id="goToTop" class="toolbar-top-no-hover"></li>' +
                       '</ul>',
             link: function (scope, element, attrs) {
@@ -500,31 +531,45 @@ angular.module('app.directive', [])
                 }, function () {
                     element.find("#goToTop").removeClass("toolbar-top-hover glyphicon glyphicon-chevron-up").addClass("toolbar-top-no-hover");
                 });
+                //控制上一篇和下一篇按钮的显隐
                 $rootScope.$on('turnPage',function(event,data){
-                    console.log(data.end)
                     if(data.end==-1){
-                        console.log('-1 here')
                         element.find("#nextArticle").fadeOut(200);
                     }else if(data.end==1){
-                        console.log('1 here')
                         element.find("#previousArticle").fadeOut(200);
                     }
+                });
+                //新建文章
+                element.find("#publish").click(function(){
+                    PublishOrUpdate.publish();
+                }).hover(function () {
+                    element.find(this).addClass("toolbar-hover glyphicon glyphicon-floppy-disk").removeClass("toolbar-no-hover");
+                }, function () {
+                    element.find(this).removeClass("toolbar-hover glyphicon glyphicon-floppy-disk").addClass("toolbar-no-hover");
+                });
+                //更新文章
+                element.find("#update").click(function(){
+                    PublishOrUpdate.update();
+                }).hover(function () {
+                    element.find(this).addClass("toolbar-hover glyphicon glyphicon-retweet").removeClass("toolbar-no-hover");
+                }, function () {
+                    element.find(this).removeClass("toolbar-hover glyphicon glyphicon-retweet").addClass("toolbar-no-hover");
                 });
                 //上一篇
                 element.find("#previousArticle").click(function(){
                     getSpecificArticle(true);
                 }).hover(function () {
-                    element.find(this).addClass("toolbar-pre-hover glyphicon glyphicon-chevron-left").removeClass("toolbar-pre-no-hover");
+                    element.find(this).addClass("toolbar-hover glyphicon glyphicon-chevron-left").removeClass("toolbar-no-hover");
                 }, function () {
-                    element.find(this).removeClass("toolbar-pre-hover glyphicon glyphicon-chevron-left").addClass("toolbar-pre-no-hover");
+                    element.find(this).removeClass("toolbar-hover glyphicon glyphicon-chevron-left").addClass("toolbar-no-hover");
                 });
                 //下一篇
                 element.find("#nextArticle").click(function(){
                     getSpecificArticle(false);
                 }).hover(function () {
-                    element.find(this).addClass("toolbar-next-hover glyphicon glyphicon-chevron-right").removeClass("toolbar-next-no-hover");
+                    element.find(this).addClass("toolbar-hover glyphicon glyphicon-chevron-right").removeClass("toolbar-no-hover");
                 }, function () {
-                    element.find(this).removeClass("toolbar-next-hover glyphicon glyphicon-chevron-right").addClass("toolbar-next-no-hover");
+                    element.find(this).removeClass("toolbar-hover glyphicon glyphicon-chevron-right").addClass("toolbar-no-hover");
                 });
                 //监视当前路由是否为文章详情页的路由
                 if ($rootScope.$state.is('app.articles.article_detail')) {
@@ -532,11 +577,31 @@ angular.module('app.directive', [])
                 } else {
                     element.find("#previousArticle,#nextArticle").fadeOut(200);
                 }
+                if ($rootScope.$state.is('app.articles.edit') && $rootScope.$stateParams.id==-1) {//新建文章
+                    element.find("#publish").fadeIn(100);
+                } else {
+                    element.find("#publish").fadeOut(200);
+                }
+                if($rootScope.$state.is('app.articles.edit') && $rootScope.$stateParams.id.length==24){
+                    element.find("#update").fadeIn(100);
+                }else{
+                    element.find("#update").fadeOut(100);
+                }
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
                     if ($rootScope.$state.is('app.articles.article_detail')) {
                         element.find("#previousArticle,#nextArticle").fadeIn(100);
                     } else {
                         element.find("#previousArticle,#nextArticle").fadeOut(200);
+                    }
+                    if ($rootScope.$state.is('app.articles.edit') && $rootScope.$stateParams.id==-1) {//新建文章
+                        element.find("#publish").fadeIn(100);
+                    } else {
+                        element.find("#publish").fadeOut(200);
+                    }
+                    if($rootScope.$state.is('app.articles.edit') && $rootScope.$stateParams.id.length==24){
+                        element.find("#update").fadeIn(100);
+                    }else{
+                        element.find("#update").fadeOut(100);
                     }
                 });
             }

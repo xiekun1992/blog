@@ -65,7 +65,7 @@ angular.module('app',[
 	})
 	// 登录后的路由
 	.state('app.articles.edit',{
-		url:'/edit/{id}',
+		url:'/edit/{page}/{position}/{id}',
 		templateUrl:'tpls/edit.html',
 		controller:'editCtrl',
 		resolve:['getCurrentUser','$rootScope',function(getCurrentUser,$rootScope){

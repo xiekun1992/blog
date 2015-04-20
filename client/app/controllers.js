@@ -11,7 +11,7 @@ angular.module('app.controller', [])
                     .success(function(data,status,headers,config){
                         $scope.logout=data;
                         if(200==data.status){
-                            $rootScope.$state.go('app.articles.article_list');
+                            $rootScope.$state.go('app.articles.article_list',{page:1});
                         }
                     }).error(function(){});
 			}
@@ -40,10 +40,10 @@ angular.module('app.controller', [])
 		$http.get('/user/password/token?key='+$rootScope.$state.params.token)
 		.success(function(data){
 			if(200!=data.status){
-				$rootScope.$state.go('app.articles.article_list');
+				$rootScope.$state.go('app.articles.article_list',{page:1});
 			}
 		}).error(function(){
-			$rootScope.$state.go('app.articles.article_list');
+			$rootScope.$state.go('app.articles.article_list',{page:1});
 		});
 		//重置为新密码
         var jumpCounter;
@@ -73,7 +73,7 @@ angular.module('app.controller', [])
 		}
         $scope.jumpToIndex=function(){
             clearInterval(jumpCounter);
-            $rootScope.$state.go('app.articles.article_list');
+            $rootScope.$state.go('app.articles.article_list',{page:1});
         }
 	}])
 	//文章的总结构
@@ -90,7 +90,7 @@ angular.module('app.controller', [])
 		$scope.categoryLink = function(category) {
 			$scope.request = '/article_list?category=' + category;
 			$rootScope.execSearch = true;
-			$rootScope.$state.go('app.articles.article_list');
+			$rootScope.$state.go('app.articles.article_list',{page:1});
 		}
 	}])
 	//右侧文章列表
@@ -98,9 +98,10 @@ angular.module('app.controller', [])
         function($scope, $rootScope, $http,articleRest,articleFavor) {
 		$scope.articles=[];
 		$scope.request = '/article_list?';
-        $scope.currentPage=$rootScope.$stateParams.page || 1;
+        $scope.currentPage=parseInt($rootScope.$stateParams.page) || 1;
 		$scope.noResult;
-		$scope.execSearch = true;
+		$scope.execSearch = true;//启动分页搜索
+
 
         //喜欢文章
         $scope.favor=function(obj){
@@ -110,7 +111,7 @@ angular.module('app.controller', [])
         }
         //修改文章
 		$scope.edit=function(id){
-			$rootScope.$state.go('app.articles.edit',{id:id});
+			$rootScope.$state.go('app.articles.edit',{id:id,'page':$rootScope.$stateParams.page,position:0});
 		}
         //删除文章
 		$scope.delete=function(id){
@@ -149,7 +150,7 @@ angular.module('app.controller', [])
         }
         //修改文章
         $scope.edit=function(id){
-            $rootScope.$state.go('app.articles.edit',{id:id});
+            $rootScope.$state.go('app.articles.edit',{id:id,'page':$rootScope.$stateParams.page,position:0});
         }
         //删除文章
         $scope.delete=function(id){
@@ -175,13 +176,13 @@ angular.module('app.controller', [])
     //编辑文章
 	.controller('editCtrl', ['$scope', 'articleRest','$rootScope', 
 		function($scope, articleRest,$rootScope) {
-		$scope.op=1;//1:发表，0:更新
-//		$scope.data={title:'',category:'',content:''};
+        $scope.welcome='写点东西吧';
+        $scope.data={};
 		$scope.category = ['Angular', 'Node', 'MongoDB'];
-        $scope.result=false;
+        $scope.result=false;//true:ajax请求响应成功
 		//发布文章
-		$scope.operate = function(content, title, category) {
-			if($scope.op){//新建文章
+		$scope.operate = function(op,content, title, category) {//op 1:发表，0:更新
+			if(op){//新建文章
 				if (content && title) {
 					articleRest.save({
 						'title': title,
@@ -191,6 +192,7 @@ angular.module('app.controller', [])
 					}, function(data) {
 						if(200==data.status){
 							$scope.result=true;
+                            $scope.data={};
 							window.scrollTo(0,0);
 						}
 					});
@@ -203,20 +205,26 @@ angular.module('app.controller', [])
 					'category': category
 				},function(data){
 					if(200==data.status){
-						$rootScope.$state.go('app.articles.article_list');
+						$rootScope.$state.go('app.articles.article_list',{page:1});
                         $scope.result=true;
+                        $scope.data={};
 					}
 			    });
 			}
 			
 		}
 		//传入的id不为空则获取文章
-		if($rootScope.$stateParams.id){
+		if($rootScope.$stateParams.id && $rootScope.$stateParams.id.length==24){
 			$scope.op=0;
 			articleRest.get({'id':$rootScope.$stateParams.id,'flip':0,position:$rootScope.$stateParams.position},function(data){
 				if(200==data.status){
 					$scope.data=data.message;
+                    $scope.welcome='正在修改已有文章';
 				}
 			});
 		}
+        //返回到文章列表页
+        $scope.back=function(){
+            $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page});
+        }
 	}]);

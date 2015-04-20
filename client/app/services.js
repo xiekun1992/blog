@@ -63,4 +63,14 @@ angular.module('app.service', ['ngResource'])
                 return defer.promise;
             }
         }
+    }])
+    .service('PublishOrUpdate',['$rootScope',function($rootScope){
+        return {
+            publish:function(){
+                $rootScope.$emit('publish');
+            },
+            update:function(){
+                $rootScope.$emit('update');
+            }
+        }
     }]);

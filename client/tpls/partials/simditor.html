@@ -1,8 +1,8 @@
 <span class="alert alert-danger editor-span" ng-show="error">{{error}}</span>
 <span class="alert alert-success editor-span" ng-show="success">{{success}}</span>
-<input type="text" id="title" ng-model="data.title" autofocus="true" class="editor-title" placeholder="在这里输入标题">
+<input type="text" id="title" autofocus="true" class="editor-title" placeholder="在这里输入标题">
 <select class="editor-category" ng-model="data.category">
-	<option value="" selected disabled>请选择分类</option>
-	<option value="{{c}}" ng-repeat="c in category track by $index">{{c}}</option>
+    <option value="" selected disabled>请选择分类</option>
+    <option value="{{c}}" ng-repeat="c in category track by $index">{{c}}</option>
 </select>
-<textarea id="editor" ></textarea>
+<textarea id="editor"></textarea>

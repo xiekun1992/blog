@@ -259,7 +259,15 @@ angular.module('app.directive', [])
             link: function (scope, element, attrs) {
                 var editor = new Simditor({
                     textarea: element.find('#editor'),
-                    toolbarFloat: true
+                    toolbarFloat: true,
+                    defaultImage:'/images/default.jpg',
+                    upload:{
+                        url:'/article/img_upload',
+                        params:null,
+                        fileKey:'upload_file',
+                        connectionCount:3,
+                        leaveConfirm:'正在上传文件，请勿离开'
+                    }
                 })
                 //编辑文章传入文章内容
                 scope.$watch('data.content', function (newValue, oldValue) {
@@ -267,11 +275,16 @@ angular.module('app.directive', [])
                         element.find('.simditor-body')[0].innerHTML = newValue;
                     }
                 });
+                scope.$watch('data.title', function (newValue, oldValue) {
+                    if (newValue && newValue.length > 0) {
+                        element.find('#title')[0].value = newValue;
+                    }
+                });
                 //用户在发表或更新成功后置空内容
                 var timerSuccess;
                 scope.$watch('result', function (newValue, oldValue) {
                     if (newValue) {
-                        element.find('.simditor-body')[0].innerHTML = '';
+                        element.find('.simditor-body')[0].innerHTML = element.find('#title')[0].value='';
                         scope.data.title = scope.data.category = null;
                         scope.success='文章发表成功';
                         timerSuccess=$timeout(function(){scope.success='';},1500);
@@ -279,32 +292,29 @@ angular.module('app.directive', [])
                     }
                 });
                 var timerError;
-                scope.submit = function (op) {
+                this.submit = function (op) {
                     scope.$apply(function(){scope.error=''});
-                    if(!scope.data.title || !scope.data.title.trim()){
+                    if(!element.find('#title')[0].value || !element.find('#title')[0].value.trim()){
                         scope.$apply(function(){scope.error='标题不能为空'});
                     }else if(!scope.data.category || !scope.data.category.trim()){
                         scope.$apply(function(){scope.error='分类不能为空'});
                     }else if(element.find('.simditor-body')[0].innerHTML=='<p><br></p>' || !element.find('.simditor-body')[0].innerHTML.trim()){
                         scope.$apply(function(){scope.error='内容不能为空'});
                     }else{
-                        console.log(scope.data)
-                        console.log(element.find('.simditor-body')[0].innerHTML)
-                        scope.$apply(function(){scope.error=''});
-                        scope.operate({
+                        !scope.error && scope.operate({
                             op:op,
                             content: element.find('.simditor-body')[0].innerHTML,
-                            title: scope.data.title,
+                            title: element.find('#title')[0].value,
                             category: scope.data.category
                         });
                     }
                     timerError=$timeout(function(){scope.error='';},1500);
                 }
                 $rootScope.$on('publish',function(event){
-                    scope.submit(1);
+                    this.submit(1);
                 });
                 $rootScope.$on('update',function(event){
-                    scope.submit(0);
+                    this.submit(0);
                 });
                 window.scrollTo(0, 0);
                 scope.$on('$destroy',function(event){

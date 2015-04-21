@@ -1,6 +1,18 @@
 var Article=require('./model/article');
+var cryptoJs=require('../public/javascripts/cryptoJs');
 var express = require('express');
+var fs=require('fs');
+var path=require('path');
 var parse=require('url').parse;
+var formidable=require('formidable');
+var os=require('os');
+var ifaces=os.networkInterfaces();
+var ip;
+Object.keys(ifaces).forEach(function(ifname){
+    if(ifname=="本地连接"){
+        ip=ifaces[ifname][1].address;
+    }
+});
 var router = express.Router();
 
 router.get('/', function(req, res) {
@@ -212,6 +224,46 @@ router.get('/search',function(req,res,next){
 			res.json(results);
 		});
 	});
+});
+
+function isFormData(req){
+    var type=req.headers['content-type'] || '';
+    return 0==type.indexOf('multipart/form-data');
+}
+var imageArray=['image/bmp','image/png','image/gif','image/jpeg'];
+router.post('/article/img_upload',function(req,res){
+    var serverIP=req.headers.origin;
+    if(!isFormData(req)){
+        res.json({status:400,success:false,message:'Bad Request',file_path:''});
+        return ;
+    }
+    var form=new formidable.IncomingForm();
+    form.encoding='utf-8';//设置form的域的编码
+    form.hash='md5';//生成文件hash
+    form.parse(req,function(err,fields,files){
+        //写到存储器上
+        console.log(fields)//获取文件名
+        console.log(files)//上传的内容
+        for(var i=0;i<imageArray.length;i++){
+            if(files.upload_file.type==imageArray[i]){
+                var append=imageArray[i].split('/');
+                var date=new Date();
+                var originPath=files.upload_file.path;
+                var newPath='/images/'+files.upload_file.hash+date.getTime()+'.'+append[1];
+                var readStream=fs.createReadStream(originPath);
+                var writeStream=fs.createWriteStream('./public'+newPath);
+                readStream.pipe(writeStream);
+                readStream.on('close',function(){
+                    fs.unlink(originPath);
+                });
+                res.json({success:true,msg:'上传成功',file_path:serverIP+newPath});
+                break;
+            }
+        }
+        if(i>=imageArray.length){
+            res.json({status:400,success:false,message:'Bad Request',file_path:''});
+        }
+    });
 });
 
 module.exports=router;

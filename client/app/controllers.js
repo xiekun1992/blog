@@ -116,14 +116,19 @@ angular.module('app.controller', [])
         //删除文章
 		$scope.delete=function(id){
 			articleRest.remove({'id':id},function(data){
-				if(200==data.status){
+                if(200==data.status){
                     angular.forEach($scope.articles,function(a,key){
                         if(a._id==id){
                             $scope.articles.splice(key,1);
+                            if($scope.articles.length<=0){
+                                $scope.request = '/article_list?';
+                                $scope.currentPage=parseInt($rootScope.$stateParams.page) || 1;
+                                $scope.execSearch = true;
+                            }
                             return;
                         }
                     });
-				}
+                }
 			});
 		}
 	}])
@@ -227,4 +232,12 @@ angular.module('app.controller', [])
         $scope.back=function(){
             $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page});
         }
-	}]);
+	}])
+    .controller('trashCanCtrl',['$scope','$http',function($scope,$http){
+        $scope.articleUseless=[];
+//        $http.get('/trash_can').success(function(data,status,headers,config){
+//            if(200==data.status){
+//                $scope.articleUseless=data;
+//            }
+//        });
+    }]);

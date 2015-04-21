@@ -280,9 +280,12 @@ ul.articles-left-list li {
     cursor: pointer;
     color: #888;
 }
-
+img{
+    max-width:100%;
+}
 .user-setting {
-    /*border-top: 1px solid #686A74;*/
+    margin-top:10px;
+
 }
 
 .article {

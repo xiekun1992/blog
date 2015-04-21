@@ -13,9 +13,11 @@
                 <!--<li><a ng-click="categoryLink('MongoDB')"><i class="glyphicon glyphicon-folder-close"></i>MongoDB</a>-->
                 <!--</li>-->
             </ul>
-            <div class="user-setting">
-                <!-- to be expanded -->
-            </div>
+        </div>
+        <div class="articles-left user-setting" ng-controller="trashCanCtrl">
+            <ul class="articles-left-list">
+                <li ng-repeat="a in articleUseless track by $index">{{a.title}}</li>
+            </ul>
         </div>
     </div>
     <div class="col-10">

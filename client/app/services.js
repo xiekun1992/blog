@@ -71,6 +71,7 @@ angular.module('app.service', ['ngResource'])
             },
             update:function(){
                 $rootScope.$emit('update');
+                console.log('update')
             }
         }
     }]);

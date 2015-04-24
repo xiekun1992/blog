@@ -1,23 +1,26 @@
-    <ul class="page" ng-if="list.length>0">
-        <li ng-click="selectPage(1)"
-               ng-class="{disabled:currentPage==1}">首页
-        </li>
-        <li ng-click="previousPage(currentPage-1)"
-               ng-class="{disabled:currentPage<=1 && start<=1}">前页
-        </li>
-       <!--  <li>
-            <a href ng-click="previousStage()" ng-hide="start<=1">...</a>
-        </li> -->
-        <li ng-repeat="page in pages track by $index"
-            ng-if="page+start>=start && page+start<start+paginationLength && page+start<=maxPage" ng-class="{active:currentPage==page+start}" ng-click="selectPage(page+start)">{{page+start}}
-        </li>
-       <!--  <li>
-            <a href ng-click="nextStage()" ng-hide="nextStageHide()">...</a>
-        </li> -->
-        <li ng-click="nextPage(currentPage+1)"
-               ng-class="{disabled:currentPage==maxPage}">后页
-        </li>
-        <li ng-click="selectPage(maxPage)"
-               ng-class="{disabled:currentPage==maxPage}">末页
-        </li>
-    </ul>
+<ul class="pagination" ng-if="list.length>0">
+    <li ng-click="selectPage(1)" ng-class="{disabled:currentPage==1}">
+        <a href="javascript:void(0)">首页</a>
+    </li>
+    <li ng-click="previousPage(currentPage-1)" ng-class="{disabled:currentPage<=1 && start<=1}">
+        <a href="javascript:void(0)">前页</a>
+    </li>
+    <li>
+        <a href ng-click="previousStage()" ng-hide="start<=1">...</a>
+    </li>
+    <li ng-repeat="page in pages track by $index"
+        ng-if="page+start>=start && page+start<start+paginationLength && page+start<=maxPage" ng-class="{active:currentPage==page+start}" ng-click="selectPage(page+start)">
+        <a href="javascript:void(0)">{{page+start}}</a>
+    </li>
+    <li>
+        <a href ng-click="nextStage()" ng-hide="nextStageHide()">...</a>
+    </li>
+    <li ng-click="nextPage(currentPage+1)"
+           ng-class="{disabled:currentPage==maxPage}">
+        <a href="javascript:void(0)">后页</a>
+    </li>
+    <li ng-click="selectPage(maxPage)"
+           ng-class="{disabled:currentPage==maxPage}">
+        <a href="javascript:void(0)">末页</a>
+    </li>
+</ul>

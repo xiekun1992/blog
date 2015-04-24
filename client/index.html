@@ -2,36 +2,40 @@
 <html lang="zh-CN" ng-app="app">
 <head>
 	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>ordinary's blog</title>
 	<link rel="icon" href="images/favicon.ico">
 	<link rel="stylesheet" type="text/css" href="bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="javascripts/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="javascripts/simditor/styles/simditor.css">
+	<link rel="stylesheet" href="javascripts/simditor/extend/simditor-emoji.css">
 	<link rel="stylesheet" href="stylesheets/app.css">
 	<link rel="stylesheet" href="stylesheets/article.css">
 	<link rel="stylesheet" href="stylesheets/edit.css">
 	<link rel="stylesheet" href="stylesheets/user.css">
 </head>
 <body>
-<!-- class="{{$root.animation}}" -->
-    <!--<right-side-tool-bar></right-side-tool-bar>-->
 	<div ui-view ></div>
-
+    <!--js库和js插件-->
 	<script type="text/javascript" src="jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="javascripts/emoji-list-with-image.js"></script>
-	<script type="text/javascript" src="javascripts/emoji.js"></script>
-	<script type="text/javascript" src="javascripts/punycode.min.js"></script>
+	<script type="text/javascript" src="bootstrap/dist/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="javascripts/simditor/scripts/module.min.js"></script>
 	<script type="text/javascript" src="javascripts/simditor/scripts/hotkeys.min.js"></script>
 	<script type="text/javascript" src="javascripts/simditor/scripts/uploader.min.js"></script>
 	<script type="text/javascript" src="javascripts/simditor/scripts/simditor.min.js"></script>
+	<script type="text/javascript" src="javascripts/simditor/extend/simditor-autosave.js"></script>
+	<script type="text/javascript" src="javascripts/simditor/extend/simditor-emoji.js"></script>
 	<script type="text/javascript" src="javascripts/md5.js"></script>
 	<script type="text/javascript" src="moment/moment.js"></script>
-
+    <script type="text/javascript" src="javascripts/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="javascripts/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="utf-8"></script>
+    <!--angularJS-->
 	<script type="text/javascript" src="angular/angular.min.js"></script>
 	<script type="text/javascript" src="angular-ui-router/release/angular-ui-router.min.js"></script>
 	<script type="text/javascript" src="angular-animate/angular-animate.min.js"></script>
 	<script type="text/javascript" src="angular-resource/angular-resource.min.js"></script>
 	<script type="text/javascript" src="angular-sanitize/angular-sanitize.min.js"></script>
+	<script type="text/javascript" src="angular-cookies/angular-cookies.min.js"></script>
 	<script type="text/javascript" src="app/app.js"></script>
 	<script type="text/javascript" src="app/controllers.js"></script>
 	<script type="text/javascript" src="app/directives.js"></script>

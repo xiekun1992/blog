@@ -1,5 +1,86 @@
 <right-side-tool-bar></right-side-tool-bar>
-<div class="articles-body" ng-controller="loginCtrl">
-    <login-interface login="login" logout="logout" response="response" forget-pwd="forgetPwd()" sign-in="signIn()" sign-out="signOut()" username="username" password="password"></login-interface>
-    <div ui-view></div>
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+        <div class="navbar-header ">
+            <a class="navbar-brand" href="javascript:void(0)">Ooo.Blog</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+        </div>
+        <div id="navbar-collapse" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="javascript:void(0)" ui-sref="app.articles.article_list({page:1})"><i class="glyphicon glyphicon-list-alt"></i>所有文章</a></li>
+                <li ng-if="$root.user"><a href="javascript:void(0)" ui-sref="app.articles.edit({id:-1,page:1,position:0})"><i class="glyphicon glyphicon-leaf"></i>写文章</a></li>
+                <li ng-if="$root.user"><a href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i>回收站</a></li>
+                <!--<li class="dropdown">-->
+                    <!--<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
+                        <!--<i class="glyphicon glyphicon-th-list"></i>文章分类<span class="caret"></span>-->
+                    <!--</a>-->
+                    <!--<ul class="dropdown-menu" role="menu">-->
+                        <!--<li><a href="javascript:void(0)" ng-click="categoryLink('AngularJS')">AngularJs</a></li>-->
+                        <!--<li><a href="javascript:void(0)" ng-click="categoryLink('NodeJS')">NodeJs</a></li>-->
+                        <!--<li><a href="javascript:void(0)" ng-click="categoryLink('MongoDB')">MongoDB</a></li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+            </ul>
+            <ul class="navbar-right navbar-nav nav">
+                <a ng-if="$root.user" class="navbar-brand xk-navbar-brand " href="javascript:void(0)" ng-click="signOut()" data-toggle="tooltip" data-placement="bottom" title="退出">
+                        <img ng-src="images/head.jpg" class="head-circle img-responsive"></a>
+
+                <a ng-if="!$root.user" class="navbar-brand xk-navbar-login " data-toggle="modal" data-target="#loginModal">登录</a>
+            </ul>
+            <!--<form class="navbar-form navbar-right">-->
+            <!--<div class="input-group">-->
+            <!--<div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>-->
+            <!--<input type="search" class="form-control" placeholder="请输入要搜索的关键词">-->
+            <!--</div>-->
+
+            <!--</form>-->
+        </div>
+    </div>
+</nav>
+<div ui-view class="container"></div>
+
+<!--登录模态框-->
+<div class="modal fade" id="loginModal" tabindex="1000" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog xk-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="loginModalLabel" style="text-align: center">用户登录</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form-signin" name="form">
+                    <div class="input-group">
+                        <span class="input-group-addon xk-input-group-addon1"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" ng-model="username" autofocus id="inputUsername" class="form-control" placeholder="用户名" maxlength="20" required/>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon xk-input-group-addon2"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input type="{{pwd}}" ng-model="password" id="inputPassword" class="form-control" placeholder="密码" maxlength="20" required/>
+                        <span class="glyphicon {{eyeIcon}}" title="{{mention}}" ng-click="eye()"></span>
+                    </div>
+                    <div class="checkbox col-lg-12 col-md-12">
+                        <label class="col-lg-5 col-md-5">
+                            <input type="checkbox" value="remember-me" ng-model="autoLogin"/> 自动登录
+                        </label>
+                        <a href="javascript:void(0)" class="col-lg-4 col-md-4 col-lg-offset-3 col-md-offset-3" ng-click="forgetPwd()">找回密码</a>
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="signIn()" ng-disabled="form.$invalid">登录</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <span class="{{error}} error-place">{{errorInfo}}</span>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+    $('#loginModal').on('shown.bs.modal', function () {
+        $('#inputUsername').focus()
+    })
+</script>

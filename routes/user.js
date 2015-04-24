@@ -101,6 +101,7 @@ router.get('/reset_password',function(req,res){
 		}
 	});
 });
+//获取当前用户信息
 router.get('/current_user',function(req,res){
 	if(req.session.user){
 		res.json({status:200,message:req.session.user});
@@ -108,6 +109,7 @@ router.get('/current_user',function(req,res){
 		res.json({status:401,message:'no user login'});
 	}
 });
+//退出登录---清空自动登录的标识
 router.get('/logout',function(req,res){
 	var query=parse(req.url,true).query;
 	console.log(query)
@@ -115,43 +117,85 @@ router.get('/logout',function(req,res){
 	//query session
 	if(req.session.user._id==query.id){
 		req.session.user=null;
-		res.json({status:200,message:'logout success'});
-	}else{
+        User.findOneAndUpdate({_id:query.id},{auto_login:null},function(err,result){
+            if(err){
+                console.log(err);
+                res.json({status:500,message:'Internal Error!'});
+            }else if(result){
+                res.json({status:200,message:'logout success'});
+            }
+        });
+    }else{
 		res.json({status:403,message:'forbidden'});
 	}
 });
+//登录
 router.post('/login', function(req, res) {
-	console.log(req.session);
-	var md5=crypto.createHash('md5');
-	md5.update(req.body.params.password);
-	User.findOne({
-		username:req.body.params.username,
-		password:md5.digest('hex')
-	},function(err,result){
-		if(err){
-			console.log(err);
-		}else if(result){
-            var tmp=result.last_login_time;
-			result.last_login_time=new Date();
-			result.save(function(err,user){
-				if(user){
-                    result.last_login_time=tmp;
-                    result.key=result.key_generate_time=result.password='';
-					//write session
-					if(!req.session.user){
-						req.session.user=result;
-		  				res.json({status:200,message:result});
-					}else if(req.session.user._id==user._id){
-		  				res.json({status:200,message:'User Already Online'});
-					}
-				}else{
-					res.json({status:500,message:'Internal Error!'});
-				}
-			});
-		}else{
-			res.json({status:401,message:'Username or Password Error!'});
-		}
-	});
+	console.log(req.body.params);
+    if(req.body.params.cookie){//存在cookie则自动登录
+        User.findOne({auto_login:req.body.params.cookie},function(err,result){
+            if(err){
+                console.log(err);
+                res.json({status:500,message:'Internal Error!'});
+            }else if(result){
+                var tmp=result.last_login_time;
+                result.last_login_time=new Date();
+                result.save(function(err,user){
+                    if(user){
+                        result.last_login_time=tmp;
+                        result.key=result.key_generate_time=result.password='';
+                        //write session
+                        if(!req.session.user){
+                            req.session.user=result;
+                            res.json({status:200,message:result});
+                        }else if(req.session.user._id==user._id){
+                            res.json({status:200,message:result});
+                        }
+                    }else{
+                        res.json({status:500,message:'Internal Error!'});
+                    }
+                });
+            }else{
+                res.json({status:401,message:'Username or Password Error!'});
+            }
+        });
+    }else{//不存在cookie则普通登录
+        var md5=crypto.createHash('md5');
+        md5.update(req.body.params.password);
+        User.findOne({
+            username:req.body.params.username,
+            password:md5.digest('hex')
+        },function(err,result){
+            if(err){
+                console.log(err);
+                res.json({status:500,message:'Internal Error!'});
+            }else if(result){
+                var tmp=result.last_login_time;
+                result.last_login_time=new Date();
+                if(req.body.params.auto) {
+                    result.auto_login = crypto.createHash('md5').update(result.last_login_time + result.username).digest('hex');
+                }
+                result.save(function(err,user){
+                    if(user){
+                        result.last_login_time=tmp;
+                        result.key=result.key_generate_time=result.password='';
+                        //write session
+                        if(!req.session.user){
+                            req.session.user=result;
+                            res.json({status:200,message:result});
+                        }else if(req.session.user._id==user._id){
+                            res.json({status:200,message:'User Already Online'});
+                        }
+                    }else{
+                        res.json({status:500,message:'Internal Error!'});
+                    }
+                });
+            }else{
+                res.json({status:401,message:'Username or Password Error!'});
+            }
+        });
+    }
+
 });
 
 module.exports = router;

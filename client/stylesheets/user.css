@@ -1,47 +1,3 @@
-.passwordReset{
-	background-color: #fff;
-	/*height: 300px;*/
-}
-.passwordReset>div{
-	width: 300px;
-	margin: auto;
-	padding-top: 20px;
-	padding-bottom: 100px;
-}
-.passwordReset form input{
-	width: 100%;
-	margin-bottom: 10px;
-	padding: 1px 12px 1px 30px;
-	border-radius: 40px;
-	border: 1px solid #999;
-	outline: none;
-	height: 30px;
-}
-.passwordReset form button[type='submit'],.passwordReset form button[type='submit']:focus{
-	width: 100%;
-	border-radius: 40px;
-	outline: none;
-}
-.passwordReset div.glyphicon-lock:first-child {
-	position: absolute;
-	top: 156px;
-	left: 391px;
-	color: #000;
-}
-.passwordReset form{
-}
-.lock{
-	position: relative;
-}
-.icon-lock:before{
-	content: "\e033";
-	font-family: 'Glyphicons Halflings';
-	top: 5px;
-	left: 12px;
-	position: absolute;
-	color: #000;
-	font-style: normal;
-}
 .passwordResetMention{
 	width: 100%;
 	height: 70px;
@@ -52,11 +8,6 @@
 	float: left;
 margin: auto;
 width: 100%;
-}
-.passwordReset>h3{
-	margin: auto;
-padding-top: 10px;
-text-align: center;
 }
 .jump-to-index{
     padding: 17px;

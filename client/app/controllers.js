@@ -1,34 +1,79 @@
 angular.module('app.controller', [])
-	.controller('loginCtrl', ['$scope', '$rootScope', '$http',
-		function($scope, $rootScope, $http) {
+	.controller('loginCtrl', ['$scope', '$rootScope', '$http','$cookieStore','$timeout',
+		function($scope, $rootScope, $http, $cookieStore, $timeout) {
 			$scope.username;
 			$scope.password;
+            $scope.autoLogin=true;
+            $scope.errorInfo="";
+            $scope.error = false;
             $scope.key;
             $rootScope.animation = "articles";
             $scope.response=$scope.login=$scope.logout=false;
 			$scope.signOut=function(){
+
 				$http.get('/user/logout',{params:{id:$rootScope.user._id}})
                     .success(function(data,status,headers,config){
-                        $scope.logout=data;
                         if(200==data.status){
                             $rootScope.$state.go('app.articles.article_list',{page:1});
+                            $cookieStore.remove("ordinary'blog");
+                            $rootScope.user=null;
                         }
                     }).error(function(){});
 			}
-			$scope.signIn = function() {
-				$http.post('/user/login', {params: {username: $scope.username,password: hex_md5($scope.password)}})
+			$scope.signIn = function(arg) {
+                var config={username: $scope.username,password: $scope.password && hex_md5($scope.password)};
+                if(arg){//cookie存在则自动登录
+                    config.cookie=arg;
+                }else if($scope.autoLogin){//无cookie则检查是否需要自动登录
+                    config.auto=true;
+                }
+                console.log(config)
+				$http.post('/user/login', {params: config})
 					.success(function(data, status, headers, config) {
-                        $scope.login=data;
                         if (200 == data.status) {
 							$rootScope.user = data.message;
-						}
+                            angular.element("#loginModal").modal('hide');
+                            $scope.password=null;
+                            if(data.message.auto_login) {
+                                $cookieStore.put("ordinary'blog", data.message.auto_login);
+                            }
+						}else{
+                            $scope.errorInfo = data.message;
+                            $scope.error = 'blog-error';
+                            $timeout(function(){
+                                $scope.errorInfo=null;
+                            },1500);
+                        }
 					});
 			}
+            var k=$cookieStore.get("ordinary'blog");
+            if(k){
+                $scope.signIn(k);
+            }
 			$scope.forgetPwd=function(){
 				$http.get('/user/reset_password').success(function(data){
-                    $scope.response=data;
+                    $scope.errorInfo = data.message;
+                    $scope.error = (data.status == 200 ? "blog-success" : "blog-error");
+                    $timeout(function(){
+                        $scope.errorInfo=null;
+                    },1500);
 				});
 			}
+            //控制密码显隐
+            $scope.pwd = "password";
+            $scope.eyeIcon = "glyphicon-eye-open";
+            $scope.mention = "显示密码";
+            $scope.eye = function () {
+                if ($scope.pwd == "password") {
+                    $scope.pwd = "text"
+                    $scope.eyeIcon = "glyphicon-eye-close";
+                    $scope.mention = "隐藏密码";
+                } else {
+                    $scope.pwd = "password"
+                    $scope.eyeIcon = "glyphicon-eye-open";
+                    $scope.mention = "显示密码";
+                }
+            }
 		}
 	])
     //密码重置
@@ -75,6 +120,9 @@ angular.module('app.controller', [])
             clearInterval(jumpCounter);
             $rootScope.$state.go('app.articles.article_list',{page:1});
         }
+        $scope.$on('$destroy',function(event){
+            clearInterval(jumpCounter);
+        });
 	}])
 	//文章的总结构
 	.controller('articlesCtrl', ['$scope', '$rootScope', '$http', '$location', '$timeout', function($scope, $rootScope, $http, $location, $timeout) {
@@ -219,14 +267,18 @@ angular.module('app.controller', [])
 			
 		}
 		//传入的id不为空则获取文章
-		if($rootScope.$stateParams.id && $rootScope.$stateParams.id.length==24){
-			$scope.op=0;
-			articleRest.get({'id':$rootScope.$stateParams.id,'flip':0,position:$rootScope.$stateParams.position},function(data){
-				if(200==data.status){
-					$scope.data=data.message;
-                    $scope.welcome='正在修改已有文章';
-				}
-			});
+		if($rootScope.$stateParams.id){
+            if($rootScope.$stateParams.id.length==24) {
+                $scope.op = 0;
+                articleRest.get({'id': $rootScope.$stateParams.id, 'flip': 0, position: $rootScope.$stateParams.position}, function (data) {
+                    if (200 == data.status) {
+                        $scope.data = data.message;
+                        $scope.welcome = '正在修改已有文章';
+                    }
+                });
+            }else if($rootScope.$stateParams.id==-1){
+                $scope.data.content='<p><br></p>';
+            }
 		}
         //返回到文章列表页
         $scope.back=function(){

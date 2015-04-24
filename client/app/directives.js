@@ -261,6 +261,16 @@ angular.module('app.directive', [])
                     textarea: element.find('#editor'),
                     toolbarFloat: true,
                     defaultImage:'/images/default.jpg',
+                    pasteImage:true,
+                    autosave:'editor-content',
+                    toolbar:[
+                        'title','bold','italic','underline','strikethrough','color','|',
+                        'ol','ul','blockquote','code','table','link','image','|',
+                        'hr','indent','outdent','source','emoji'
+                    ],
+                    emoji:{
+                      imagePath:'images/emoji/'
+                    },
                     upload:{
                         url:'/article/img_upload',
                         params:null,
@@ -325,191 +335,6 @@ angular.module('app.directive', [])
         }
     }])
 /**
- * 登录界面
- */
-    .directive('loginInterface', ['$timeout', '$rootScope', function ($timeout, $rootScope) {
-        return {
-            restrict: 'AE',
-            scope: {
-                login: '=',
-                logout: '=',
-                response: '=',
-                signIn: '&',
-                signOut: '&',
-                forgetPwd: '&',
-                username: '=',
-                password: '='
-            },
-            templateUrl: 'tpls/partials/login.html',
-            link: function (scope, element, attrs) {
-                scope.error = "blog-error";
-                scope.errorInfo;
-                //登录操作后返回的数据，涉及到使用提示信息
-                scope.$watch('login', function (newValue, oldValue) {
-                    if (200 == newValue.status) {
-                        scope.return();
-                        scope.username = "";
-                        scope.password = "";
-                        clearInterval($rootScope.head2Interval);
-                        $timeout(function () {
-                            var leftPosition = 493;
-                            var rightPosition = 80;
-                            $rootScope.head1Interval = setInterval(function () {
-                                if (leftPosition >= 360) {
-                                    leftPosition -= 3;
-                                }
-                                if (rightPosition <= 285) {
-                                    rightPosition += 6;
-                                } else {
-                                    element.find('.head-circle').css('display', 'inline-block');
-                                    element.find('.head-panel').css('display', 'inline-block');
-                                    return;
-                                }
-                                element.find('.head').css('left', leftPosition + 'px').css('width', rightPosition + 'px');
-                            }, 20);
-                        }, 1000);
-                    } else {
-                        scope.errorInfo = newValue.message;
-                        scope.error = "blog-error";
-                        $timeout(function () {
-                            scope.errorInfo = "";
-                        }, 2000);
-                    }
-//                    scope.login=false;
-                });
-                //退出操作后返回的数据，涉及到使用提示信息
-                scope.$watch('logout', function (newValue, oldValue) {
-                    if (200 == newValue.status) {
-                        clearInterval($rootScope.head1Interval);
-                        $timeout(function () {
-                            var leftPosition = 388;//358px
-                            var rightPosition = 290;//290px
-                            element.find('.head-panel').css('display', 'none');
-                            element.find('.head-circle').css('display', 'block');
-                            $rootScope.user = null;
-                            $rootScope.head2Interval = setInterval(function () {
-                                if (leftPosition < 493) {
-                                    leftPosition += 3;
-                                } else {
-                                    leftPosition = 493;
-                                }
-                                if (rightPosition > 80) {
-                                    rightPosition -= 6;
-                                } else {
-                                    rightPosition = 80;
-                                    return;
-                                }
-                                element.find('.head').css('left', leftPosition + 'px').css('width', rightPosition + 'px');
-                            }, 20);
-                        }, 1000);
-                    } else {
-                        scope.errorInfo = newValue.message;
-                        scope.error = "blog-error";
-                        $timeout(function () {
-                            scope.errorInfo = "";
-                        }, 2000);
-                    }
-                });
-                //监视密码重置链接的返回值
-                scope.$watch('response', function (newValue, oldValue) {
-                    if (newValue) {
-                        scope.errorInfo = scope.response.message;
-                        scope.error = (scope.response.status == 200 ? "blog-success" : "blog-error");
-                        $timeout(function () {
-                            scope.errorInfo = "";
-                        }, 2000);
-                    }
-                });
-                //如果用户登录则展开头像
-                scope.$watch('$rootScope.user', function (newValue, oldValue) {
-                    console.log(newValue)
-                    if (!$rootScope.user || !$rootScope.user._id) {
-                        element.find('.head').css('left', '493px').css('width', '80px');
-                        element.find('.head-circle').css('display', 'block');
-                        element.find('.head-panel').css('display', 'none');
-                    } else {
-                        element.find('.head').css('left', '388px').css('width', '290px');
-                        element.find('.head-circle').css('display', 'inline-block');
-                        element.find('.head-panel').css('display', 'inline-block');
-                    }
-                });
-                //控制密码显隐
-                scope.pwd = "password";
-                scope.eyeIcon = "glyphicon-eye-open";
-                scope.mention = "显示密码";
-                scope.eye = function () {
-                    if (scope.pwd == "password") {
-                        scope.pwd = "text"
-                        scope.eyeIcon = "glyphicon-eye-close";
-                        scope.mention = "隐藏密码";
-                    } else {
-                        scope.pwd = "password"
-                        scope.eyeIcon = "glyphicon-eye-open";
-                        scope.mention = "显示密码";
-                    }
-                }
-                scope.turnToLogin=false;
-                var isPasswordPage=false;//当处于重置密码页时，控制当前页不可登录
-                //让头像翻转到登录框
-                scope.transform = function () {
-                    if(isPasswordPage)return;
-                    scope.turnToLogin=true;
-                    scope.turnToHead=false;
-                    if ($rootScope.user)
-                        return;
-                    var start = 0;
-                    var end = 180;
-                    clearInterval($rootScope.returnInterval);
-                    $rootScope.loginInterval = setInterval(function () {
-                        if (end == start + 1) {
-                            element.find('.login-gui').css('-webkit-transform', 'rotateX(180deg)');
-                            return;
-                        }
-                        if (start > 10) {
-                            element.find('.login-gui li:first-child div').css('display', 'none');
-                            element.find('.login-gui li:last-child').css('display', 'inline-block');
-                        }
-                        var speed = Math.round((end - start) * 0.3);
-                        element.find('.login-gui').css('-webkit-transform', 'rotateX(' + (start + speed) + 'deg)');
-                        start += speed;
-                    }, 100);
-                }
-                scope.turnToHead=false;
-                //让登录框翻转到头像
-                scope.return = function () {
-                    scope.turnToLogin=false;
-                    scope.turnToHead=true;
-                    clearInterval($rootScope.loginInterval);
-                    var start = 180;
-                    var end = 360;
-                    $rootScope.returnInterval = setInterval(function () {
-                        if (end == start + 1) {
-                            element.find('.login-gui').css('-webkit-transform', 'rotateX(360deg)');
-                            return;
-                        }
-                        if (start > 270) {
-                            element.find('.login-gui li:first-child div').css('display', 'inline-block');
-                            element.find('.login-gui li:last-child').css('display', 'none');
-                        }
-                        var speed = Math.round((end - start) * 0.3);
-                        element.find('.login-gui').css('-webkit-transform', 'rotateX(' + (start + speed) + 'deg)');
-                        start += speed;
-                    }, 100);
-                }
-                $rootScope.$on('$stateChangeSuccess',function(){
-                    if($rootScope.$state.is('app.user.password')){
-                        isPasswordPage=true;
-                        if(!scope.turnToHead){
-                            scope.return();
-                        }
-                    }else{
-                        isPasswordPage=false;
-                    }
-                });
-            }
-        };
-    }])
-/**
  * 右边工具栏
  */
     .directive('rightSideToolBar', ['$rootScope','getSpecificArticle','PublishOrUpdate', function ($rootScope,getSpecificArticle,PublishOrUpdate) {
@@ -524,6 +349,13 @@ angular.module('app.directive', [])
                         '<li id="goToTop" class="toolbar-top-no-hover"></li>' +
                       '</ul>',
             link: function (scope, element, attrs) {
+                window.onresize=function(){
+                    var h=angular.element(window).height();
+                    var w=angular.element(window).width();
+                    console.log('height= '+h);
+                    console.log('width= '+w);
+//                    element.find("#rightSideBar").css('top',h*0.45+'px').css('left',w*0.55+'px');
+                }
                 angular.element(window).scroll(function () {
                     var s = angular.element(window).scrollTop();
                     if (s > this.minHeight) {
@@ -561,9 +393,9 @@ angular.module('app.directive', [])
                 element.find("#update").click(function(){
                     PublishOrUpdate.update();
                 }).hover(function () {
-                    element.find(this).addClass("toolbar-hover glyphicon glyphicon-retweet").removeClass("toolbar-no-hover");
+                    element.find(this).addClass("toolbar-hover glyphicon glyphicon-refresh").removeClass("toolbar-no-hover");
                 }, function () {
-                    element.find(this).removeClass("toolbar-hover glyphicon glyphicon-retweet").addClass("toolbar-no-hover");
+                    element.find(this).removeClass("toolbar-hover glyphicon glyphicon-refresh").addClass("toolbar-no-hover");
                 });
                 //上一篇
                 element.find("#previousArticle").click(function(){

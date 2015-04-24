@@ -2,6 +2,7 @@ angular.module('app',[
 	'ui.router',
 	'ngAnimate',
 	'ngSanitize',
+    'ngCookies',
 	'app.controller',
 	'app.directive',
 	'app.service',
@@ -13,7 +14,6 @@ angular.module('app',[
 }])
 .config(['$stateProvider','$urlRouterProvider','$httpProvider',
 	function($stateProvider,$urlRouterProvider,$httpProvider){
-		// $httpProvider.responseInterceptors.push('htmlInterceptor');
 
 	$urlRouterProvider
 	.otherwise('/app/articles/article_list/1');
@@ -22,7 +22,8 @@ angular.module('app',[
 	.state('app',{
 		abstract:true,
 		url:'/app',
-		templateUrl:'tpls/app.html'
+		templateUrl:'tpls/app.html',
+        controller:'loginCtrl'
 	})
 	.state('app.articles',{
 		abstract:true,

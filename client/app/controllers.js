@@ -138,7 +138,7 @@ angular.module('app.controller', [])
         //搜索
         $scope.key;
         $scope.search = function() {
-            $rootScope.$state.go('app.articles.article_list', {keyword: $scope.key,category:'all'});
+            $rootScope.$state.go('app.articles.article_list', {page:1,keyword: encodeURIComponent($scope.key),category:'all'});
 		}
         //文章人气排行
         $http.get('/article_hot').success(function(data){
@@ -152,13 +152,13 @@ angular.module('app.controller', [])
         function($scope, $rootScope, $http,articleRest,articleFavor) {
 		$scope.articles=[];
         var c=$rootScope.$stateParams.category || 'all';
-		$scope.request = '/article_list?category='+c+'&keyword='+$rootScope.$state.params.keyword;
+		$scope.request = '/article_list?category='+c+'&keyword='+encodeURIComponent($rootScope.$state.params.keyword);
         $scope.currentPage=parseInt($rootScope.$stateParams.page) || 1;
 		$scope.noResult;
 		$scope.execSearch = true;//启动分页搜索
 
         $scope.detail=function(id,index){
-            $rootScope.$state.go("app.articles.article_detail",{page:$scope.currentPage,id:id,position:index+1,category:c});
+            $rootScope.$state.go("app.articles.article_detail",{page:$scope.currentPage,id:id,position:index+1,category:c,keyword:encodeURIComponent($rootScope.$stateParams.keyword)});
         }
         //喜欢文章
         $scope.favor=function(obj){
@@ -202,7 +202,7 @@ angular.module('app.controller', [])
 		});
         //返回到文章列表页
         $scope.back=function(){
-            $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page,category:$rootScope.$stateParams.category});
+            $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page,category:$rootScope.$stateParams.category,keyword:encodeURIComponent($rootScope.$stateParams.keyword)});
         }
         //喜欢文章
         $scope.favor=function(obj){

@@ -360,7 +360,7 @@ angular.module('app.directive', [])
                     element.find("#update").fadeOut(100);
                 }
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-                    if ($rootScope.$state.is('app.articles.article_detail')) {
+                    if ($rootScope.$state.is('app.articles.article_detail') && !$rootScope.$stateParams.keyword) {//文章上下翻
                         element.find("#previousArticle,#nextArticle").fadeIn(100);
                     } else {
                         element.find("#previousArticle,#nextArticle").fadeOut(200);
@@ -370,7 +370,7 @@ angular.module('app.directive', [])
                     } else {
                         element.find("#publish").fadeOut(200);
                     }
-                    if($rootScope.$state.is('app.articles.edit') && $rootScope.$stateParams.id.length==24){
+                    if($rootScope.$state.is('app.articles.edit') && $rootScope.$stateParams.id.length==24){//更新文章
                         element.find("#update").fadeIn(100);
                     }else{
                         element.find("#update").fadeOut(100);

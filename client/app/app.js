@@ -51,7 +51,7 @@ angular.module('app',[
 		controller:'articleListCtrl'
 	})
 	.state('app.articles.article_detail',{
-		url:'/article_detail/{page}/{position}/{id}/{category}',
+		url:'/article_detail/{page}/{position}/{id}/{category}/{keyword}',
 		templateUrl:'tpls/article_detail.html',
 		controller:'articleDetailCtrl',
 		resolve:['getCurrentUser',function(getCurrentUser){

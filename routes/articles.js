@@ -162,10 +162,25 @@ router.delete('/article_op/:id/:position',function(req,res){
 //搜索
 function search(keyword,p,res){
     //搜索关键字存在则添加搜索域，否则默认为无
-    var p=p || 1;//页码默认为1，每页6条
-    var reg=new RegExp(keyword,'ig');
-    var q;
-    if(keyword.length<=20){
+    if(keyword.length<=20 && keyword){
+        var p=p || 1;//页码默认为1，每页6条
+        keyword=decodeURIComponent(keyword);
+//        console.log(keyword)
+        var symbols=['$','@','!','#','%','^','&','*','(',')','-'];
+        for(var i=0;i<symbols.length;i++){
+            var index=keyword.indexOf(symbols[i]);
+//            console.log(index);
+            if(index!=-1){
+                var arr=keyword.split('');
+                arr.splice(index,0,'\\');
+                keyword=arr.join('');
+                break;
+            }
+        }
+//        console.log(keyword)
+        var reg=new RegExp(keyword,'ig');
+        var q;
+
         q={delete:0,title:reg};
         Article.find(q).skip((p-1)*10).limit(10).exec(function(err,results){
             err && console.log(err);
@@ -177,13 +192,9 @@ function search(keyword,p,res){
                     var t=results[i].title.match(reg);
                     for(var j=0;t && j<t.length;j++){
                         results[i].title=results[i].title.replace(t[j],'<###########'+t[j]+'###########>');
-//                        results[i].category=results[i].category.replace(t[j],'<###########'+t[j]+'###########>');
                     }
-//                    console.log(results[i].category)
                     results[i].title=results[i].title.replace(repStart,'<mark>');
                     results[i].title=results[i].title.replace(repEnd,'</mark>');
-//                    results[i].category=results[i].category.replace(repStart,'<mark>');
-//                    results[i].category=results[i].category.replace(repEnd,'</mark>');
                 }
             }
             Article.count(q,function(err,result){

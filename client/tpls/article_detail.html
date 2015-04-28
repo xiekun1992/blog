@@ -9,8 +9,8 @@
             </div>
             <header>
                 <h3>{{article.title}}</h3>
-                <span>文章分类：{{article.category}}</span>
-                <span>发表时间：{{article.create_time | dateFormat}}</span>
+                <span>文章分类：{{article.category}}</span>&nbsp;&nbsp;
+                <span>发表时间：{{article.create_time | dateFormat}}</span>&nbsp;&nbsp;
                 <span title="赞一个" class="article-favor" ng-click="favor(article)"><i class="glyphicon glyphicon-thumbs-up"></i> {{article.favor}}</span>
             </header>
         </div>

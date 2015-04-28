@@ -1,13 +1,13 @@
 angular.module('app.controller', [])
-	.controller('loginCtrl', ['$scope', '$rootScope', '$http','$cookieStore','$timeout',
-		function($scope, $rootScope, $http, $cookieStore, $timeout) {
+    //用户操作
+	.controller('loginCtrl', ['$scope', '$rootScope', '$http','$cookieStore','$timeout','categoryRest',
+		function($scope, $rootScope, $http, $cookieStore, $timeout,categoryRest) {
 			$scope.username;
 			$scope.password;
             $scope.autoLogin=true;
             $scope.errorInfo="";
             $scope.error = false;
-            $scope.key;
-            $rootScope.animation = "articles";
+            $scope.category=[];
             $scope.response=$scope.login=$scope.logout=false;
 			$scope.signOut=function(){
 
@@ -74,6 +74,15 @@ angular.module('app.controller', [])
                     $scope.mention = "显示密码";
                 }
             }
+            //文章分类链接
+            $scope.categoryLink = function(category) {
+                $rootScope.$state.go('app.articles.article_list',{'page':1,'category':category});
+            }
+            categoryRest.get(function(data){
+                if(200==data.status){
+                    $scope.category=data.message;
+                }
+            });
 		}
 	])
     //密码重置
@@ -126,31 +135,31 @@ angular.module('app.controller', [])
 	}])
 	//文章的总结构
 	.controller('articlesCtrl', ['$scope', '$rootScope', '$http', '$location', '$timeout', function($scope, $rootScope, $http, $location, $timeout) {
-		$scope.search = function(event) {
-			if (event.keyCode == 13) {
-				$rootScope.$state.go('app.articles.search', {
-					keyword: $scope.key,
-					p: 1
-				});
-			}
+        //搜索
+        $scope.key;
+        $scope.search = function() {
+            $rootScope.$state.go('app.articles.article_list', {keyword: $scope.key,category:'all'});
 		}
-		//文章分类链接
-		$scope.categoryLink = function(category) {
-			$scope.request = '/article_list?category=' + category;
-			$rootScope.execSearch = true;
-			$rootScope.$state.go('app.articles.article_list',{page:1});
-		}
+        //文章人气排行
+        $http.get('/article_hot').success(function(data){
+            if(200==data.status){
+                $scope.articleHot=data.message;
+            }
+        });
 	}])
 	//右侧文章列表
 	.controller('articleListCtrl', ['$scope', '$rootScope', '$http','articleRest','articleFavor',
         function($scope, $rootScope, $http,articleRest,articleFavor) {
 		$scope.articles=[];
-		$scope.request = '/article_list?';
+        var c=$rootScope.$stateParams.category || 'all';
+		$scope.request = '/article_list?category='+c+'&keyword='+$rootScope.$state.params.keyword;
         $scope.currentPage=parseInt($rootScope.$stateParams.page) || 1;
 		$scope.noResult;
 		$scope.execSearch = true;//启动分页搜索
 
-
+        $scope.detail=function(id,index){
+            $rootScope.$state.go("app.articles.article_detail",{page:$scope.currentPage,id:id,position:index+1,category:c});
+        }
         //喜欢文章
         $scope.favor=function(obj){
             articleFavor(obj._id).then(function(){
@@ -193,7 +202,7 @@ angular.module('app.controller', [])
 		});
         //返回到文章列表页
         $scope.back=function(){
-            $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page});
+            $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page,category:$rootScope.$stateParams.category});
         }
         //喜欢文章
         $scope.favor=function(obj){
@@ -207,7 +216,7 @@ angular.module('app.controller', [])
         }
         //删除文章
         $scope.delete=function(id){
-            articleRest.remove({'id':id},function(data){
+            articleRest.remove({'id':id,'position':0},function(data){
                 if(200==data.status){
                     angular.forEach($scope.articles,function(a,key){
                         if(a._id==id){
@@ -220,18 +229,17 @@ angular.module('app.controller', [])
             });
         }
 	}])
-    //搜索
-	.controller('searchCtrl', ['$scope', '$rootScope','$http', function($scope, $rootScope,$http) {
-		$scope.searchResults;
-		$scope.request='/search?keyword=' + $rootScope.$state.params.keyword+ '&p=' + $rootScope.$state.params.p;
-		$scope.execSearch=true;
-	}])
     //编辑文章
-	.controller('editCtrl', ['$scope', 'articleRest','$rootScope', 
-		function($scope, articleRest,$rootScope) {
+	.controller('editCtrl', ['$scope', 'articleRest','$rootScope','categoryRest',
+		function($scope, articleRest,$rootScope,categoryRest) {
         $scope.welcome='写点东西吧';
         $scope.data={};
 		$scope.category = ['Angular', 'Node', 'MongoDB'];
+        categoryRest.get(function(data){
+            if(200==data.status){
+                $scope.category=data.message;
+            }
+        });
         $scope.result=false;//true:ajax请求响应成功
 		//发布文章
 		$scope.operate = function(op,content, title, category) {//op 1:发表，0:更新
@@ -284,12 +292,62 @@ angular.module('app.controller', [])
         $scope.back=function(){
             $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page});
         }
+        $scope.createCategory=function(c){
+            if(c){
+                categoryRest.put({name:c},function(data){
+                    if(200==data.status){
+                        $scope.category.push(c);
+                        $scope.putCategory=true;
+                    }
+                });
+            }
+        }
 	}])
-    .controller('trashCanCtrl',['$scope','$http',function($scope,$http){
+    //文章垃圾箱
+    .controller('trashCanCtrl',['$scope','$http','articleRest','$rootScope',function($scope,$http,articleRest,$rootScope){
         $scope.articleUseless=[];
-//        $http.get('/trash_can').success(function(data,status,headers,config){
-//            if(200==data.status){
-//                $scope.articleUseless=data;
-//            }
-//        });
+        var p=1;
+        $http.get('/article_trash',{params:{p:p}}).success(function(data,status,headers,config){
+            if(200==data.status){
+                $scope.articleUseless=data.message;
+            }
+        });
+        $scope.article={};
+        $scope.acquire=function(id){
+            articleRest.get({'id':id,'flip':0,'position':0},function(data){
+                if(200==data.status){
+                    $scope.article=data.message;
+                    angular.element("#trashModal").modal('show');
+                }
+            });
+        }
+        $scope.undo=function(id){
+            articleRest.post({
+                'id':id,
+                'delete':0
+            },function(data){
+                if(200==data.status){
+                    angular.element("#trashModal").modal('hide');
+                    angular.forEach($scope.articleUseless,function(a,key){
+                        if(a._id==id){
+                            $scope.articleUseless.splice(key,1);
+                            return;
+                        }
+                    });
+                }
+            });
+        }
+        $scope.remove=function(id){
+            articleRest.remove({'id':id,'position':-1},function(data){
+                if(200==data.status){
+                    angular.element("#trashModal").modal('hide');
+                    angular.forEach($scope.articleUseless,function(a,key){
+                        if(a._id==id){
+                            $scope.articleUseless.splice(key,1);
+                            return;
+                        }
+                    });
+                }
+            });
+        }
     }]);

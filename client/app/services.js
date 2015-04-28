@@ -6,6 +6,9 @@ angular.module('app.service', ['ngResource'])
             {post: {method: 'POST', isArray: false}, save: {method: 'PUT', isArray: false}}
         );
     }])
+    .service('categoryRest',['$resource',function($resource){
+        return $resource('/category/:name',{name:'@name'},{put:{method:'PUT',isArray:false}});
+    }])
     .service('articleFavor', ['$http','$q',function ($http,$q) {
         var deferred=$q.defer();
         return function(id,value){

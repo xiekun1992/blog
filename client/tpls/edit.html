@@ -4,6 +4,8 @@
             <a href="javascript:void(0)" ng-click="back()"><i class="glyphicon glyphicon-share-alt icon-flip"></i>返回</a>
             <h3 class="editor-header">{{welcome}}</h3>
         </div>
-        <text-editor class="list-group-item-body" op="op" data="data" category="category" result="result" operate="operate(op,content,title,category)"></text-editor>
+        <text-editor class="list-group-item-body" op="op" data="data" category="category"
+                     result="result" operate="operate(op,content,title,category)" create-category="createCategory(c)" put-category="putCategory">
+        </text-editor>
     </div>
 </div>

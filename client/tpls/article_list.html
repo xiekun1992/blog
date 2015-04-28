@@ -1,12 +1,12 @@
-<div class="articles-right list-group">
+<div ng-if="articles.length>0" class="articles-right list-group">
     <div class="article list-group-item" ng-repeat="a in articles track by $index">
         <header class="list-group-item-heading">
-            <a ui-sref="app.articles.article_detail({page:currentPage,id:a._id,position:$index+1})" title="{{a.title}}"><h4>{{a.title}}</h4></a>
+            <a href="javascript:void(0)" ng-click="detail(a._id,$index)" title="{{a.title}}" ng-bind-html="a.title | htmlConverter"><h4></h4></a>
             <!--<a href="javascript:void(0)" ng-if="$root.user" class="hide-link" ng-click="edit(a._id)" title="编辑此文章"><i class="glyphicon glyphicon-edit"></i>编辑</a>-->
             <!--<a href="javascript:void(0)" ng-if="$root.user" class="hide-link" ng-click="delete(a._id)" title="删除此文章"><i class="glyphicon glyphicon-remove-circle"></i>删除</a>-->
         </header>
         <footer class="list-group-item-text">
-            <span>文章分类：{{a.category}}</span>
+            文章分类：<span ng-bind-html="a.category | htmlConverter"></span>
             <span>发表时间：{{a.create_time | dateFormat}}</span>
             <span title="赞一个" class="article-favor" ng-click="favor(a)"><i class="glyphicon glyphicon-thumbs-up"></i> {{a.favor}}</span>
         </footer>
@@ -14,4 +14,7 @@
 </div>
 <div class="articles-bottom">
     <div page list="articles" request="request" no-result="noResult" exec-search="execSearch" current-page="currentPage"></div>
+</div>
+<div ng-if="articles.length==0" class=" text-center">
+    <p class="label label-danger">此文章分类列表中无数据</p>
 </div>

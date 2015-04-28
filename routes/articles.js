@@ -14,14 +14,45 @@ Object.keys(ifaces).forEach(function(ifname){
     }
 });
 var router = express.Router();
-
+//首页
 router.get('/', function(req, res) {
   res.sendFile('client/index.html');
+});
+//文章垃圾箱
+router.get('/article_trash',function(req,res){
+    var query=parse(req.url,true).query;
+    if(query.p){
+        Article.find({'delete':1}).sort('-create_time').select('title').exec(function(err,results){
+            if(err){
+                console.log(err);
+                res.send({status:500,message:'Internal Error'});
+            }else if(results.length>0){
+                res.send({status:200,message:results});
+            }else{
+                res.send({status:404,message:'暂无数据'});
+            }
+        });
+    }else{
+        res.send({status:404,message:'缺少参数'});
+    }
+});
+//文章点赞数排行
+router.get('/article_hot',function(req,res){
+    Article.find().sort('-favor').where('favor').gt(0).limit(9).select('_id title favor').exec(function(err,result){
+        if(err){
+            console.log(err);
+            res.send({status:500,message:'Internal Error'});
+        }else if(result.length>0){
+            res.send({status:200,message:result});
+        }else{
+            res.send({status:404,message:'暂无数据'});
+        }
+    });
 });
 //喜欢文章------限制点赞频率未做
 router.get('/article_favor',function(req,res){
     var query=parse(req.url,true).query;
-    console.log(query)
+//    console.log(query)
     if(query.id){
         Article.findOne({_id:query.id},function(err,article){
             if(article){
@@ -43,7 +74,7 @@ router.get('/article_favor',function(req,res){
 });
 //新建文章
 router.put('/article_op',function(req,res){
-	console.log(req.body);
+//	console.log(req.body);
 	var article=new Article();
 	article.title=req.body.title;
 	article.content=req.body.content;
@@ -51,7 +82,7 @@ router.put('/article_op',function(req,res){
 	article.category=req.body.category;
 	article.save(function(err,result){
 		err && console.log(err);
-		console.log(result)
+//		console.log(result)
 		if(result){
 			res.send({status:200,message:'Save Success'});
 		}else{
@@ -59,12 +90,23 @@ router.put('/article_op',function(req,res){
 		}
 	});
 });
-//更新文章
+//更新文章    文章撤销删除
 router.post('/article_op/:id',function(req,res){
-	console.log(req.body);
+//	console.log(req.body);
 	if(!req.body.id){
 		res.json({status:400,message:'Parameters Error'});
-	}else{
+	}else if(req.body.delete==0){
+        Article.findOneAndUpdate({_id:req.body.id},{delete:req.body.delete},function(err,result){
+            if(err){
+                console.log(err);
+                res.send({status:500,message:'Internal Error'});
+            }else if(result){
+                res.json({status:200,message:'Update Success'});
+            }else{
+                res.json({status:400,message:'Fail to Update'});
+            }
+        });
+    }else if(req.body.title && req.body.content && req.body.category){
 		Article.findOne({_id:req.body.id},function(err,result){
 			err && console.log(err);
 			result.title=req.body.title;
@@ -75,24 +117,87 @@ router.post('/article_op/:id',function(req,res){
 				res.json({status:200,message:'Update Success'});
 			});
 		})
-		
-	}
+	}else{
+        res.json({status:400,message:'Parameters Can Not Be Null'});
+    }
 });
-//删除文章
-router.delete('/article_op/:id',function(req,res){
-	var id=req.url.substr(12);
-	Article.findOneAndUpdate({_id:id},{delete:1},function(err,result){//删除文章只是将标识位置为1
-		if(result){
-			res.json({status:200,message:'Remove Success'});
-		}else{
-			res.json({status:400,message:'Fail to Remove'});
-		}
-	});
+//删除文章    标记删除和彻底删除
+router.delete('/article_op/:id/:position',function(req,res){
+    var reg=new RegExp('\/[0-9,a-z]+\/','ig');
+    var str1=reg.exec(req.url);
+//    console.log(str1)
+    var reg2=new RegExp('[0-9,a-z]+','ig');
+    var id=reg2.exec(str1[0])[0];
+//    console.log(id)
+//    console.log(typeof id)
+    var removeFlag;
+    var reg3=new RegExp('\/-1','g');
+    if(reg3.test(req.url)){//完全删除
+        console.log('remove from database')
+        Article.remove({_id:id},function(err,result){
+            if(err){
+                console.log(err);
+                res.send({status:500,message:'Internal Error'});
+            }else if(result){
+                res.json({status:200,message:'Remove Success'});
+            }else{
+                res.json({status:400,message:'Fail to Remove'});
+            }
+        });
+    }else{
+        Article.findOneAndUpdate({_id:id},{delete:1},function(err,result){//删除文章只是将标识位置为1
+            if(err){
+                console.log(err);
+                res.send({status:500,message:'Internal Error'});
+            }else if(result){
+                res.json({status:200,message:'Remove Success'});
+            }else{
+                res.json({status:400,message:'Fail to Remove'});
+            }
+        });
+
+    }
 });
+
+//搜索
+function search(keyword,p,res){
+    //搜索关键字存在则添加搜索域，否则默认为无
+    var p=p || 1;//页码默认为1，每页6条
+    var reg=new RegExp(keyword,'ig');
+    var q;
+    if(keyword.length<=20){
+        q={delete:0,title:reg};
+        Article.find(q).skip((p-1)*10).limit(10).exec(function(err,results){
+            err && console.log(err);
+            //关键字存在则对搜索的结果中的关键字标亮
+            var repStart=new RegExp('<###########','g');
+            var repEnd=new RegExp('###########>','g');
+            if(keyword){
+                for(var i=0;i<results.length;i++){
+                    var t=results[i].title.match(reg);
+                    for(var j=0;t && j<t.length;j++){
+                        results[i].title=results[i].title.replace(t[j],'<###########'+t[j]+'###########>');
+//                        results[i].category=results[i].category.replace(t[j],'<###########'+t[j]+'###########>');
+                    }
+//                    console.log(results[i].category)
+                    results[i].title=results[i].title.replace(repStart,'<mark>');
+                    results[i].title=results[i].title.replace(repEnd,'</mark>');
+//                    results[i].category=results[i].category.replace(repStart,'<mark>');
+//                    results[i].category=results[i].category.replace(repEnd,'</mark>');
+                }
+            }
+            Article.count(q,function(err,result){
+                err && console.log(err);
+                res.setHeader('count',result);
+                res.json(results);
+            });
+        });
+    }
+}
 //分页获取所有文章
 router.get('/article_list',function(req,res,next){
-	// console.log(parse(req.url,true).query);
 	var query=parse(req.url,true).query;
+    console.log(query)
 	var p=query.p || 1;
 	var condition={'delete':0};
 	if(query.category && query.category!='all'){
@@ -101,19 +206,24 @@ router.get('/article_list',function(req,res,next){
 		condition={'delete':0};
 	}
 	// console.log(condition);
-	Article.find(condition,'title create_time category favor').sort('-create_time').where('delete').equals(0).skip((p-1)*10).limit(10).exec(function(err,results){
-		err && console.log(err);
-		Article.count(condition,function(err,result){
-			err && console.log(err);
-			res.setHeader('count',result);
-			res.json(results);
-		});
-	});
+    if(!query.keyword){
+        Article.find(condition,'title create_time category favor').sort('-create_time').where('delete').equals(0).skip((p-1)*10).limit(10).exec(function(err,results){
+            err && console.log(err);
+            Article.count(condition,function(err,result){
+                err && console.log(err);
+                res.setHeader('count',result);
+                res.json(results);
+            });
+        });
+    }else{
+        search(query.keyword,query.p,res);
+    }
+
 });
 //根据id获取具体文章
 router.get('/article_op/:id/:flip/:position',function(req,res){
-	console.log(req.params.id);
-	console.log(req.params.flip);
+//	console.log(req.params.id);
+//	console.log(req.params.flip);
 	if(req.params.id && req.params.id.length==24){
 		Article.findOne({'_id':req.params.id},function(err,result){
 			if(err){
@@ -186,46 +296,8 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
 		res.json({status:400,message:'Require id'});
 	}
 });
-//搜索接口keyword,p
-router.get('/search',function(req,res,next){
-	console.log(parse(req.url,true).query);
-	var query=parse(req.url,true).query;
-	var reg=new RegExp(query.keyword,'ig');
-	var q;
-	//搜索关键字存在则添加搜索域，否则默认为无
-	if(query.keyword.length<=10){
-		q={$or:[{title:reg},{content:reg}]};
-	}else{
-		q={};
-	}
-	var p=query.p || 1;//页码默认为1，每页6条
-	Article.find(q).skip((p-1)*10).limit(10).exec(function(err,results){
-		err && console.log(err);
-		
-		//关键字存在则对搜索的结果中的关键字标亮
-		var repStart=new RegExp('<###########','g');
-		var repEnd=new RegExp('###########>','g');
-		if(query.keyword){
-			for(var i=0;i<results.length;i++){
-				var t=results[i].title.match(reg);
-				for(var j=0;t && j<t.length;j++){
-					results[i].title=results[i].title.replace(t[j],'<###########'+t[j]+'###########>');
-					results[i].content=results[i].content.replace(t[j],'<###########'+t[j]+'###########>');
-				}
-				results[i].title=results[i].title.replace(repStart,'<mark>');
-				results[i].title=results[i].title.replace(repEnd,'</mark>');
-				results[i].content=results[i].content.replace(repStart,'<mark>');
-				results[i].content=results[i].content.replace(repEnd,'</mark>');
-			}
-		}
-		Article.count(q,function(err,result){
-			err && console.log(err);
-			res.setHeader('count',result);
-			res.json(results);
-		});
-	});
-});
 
+//simditor上传图片
 function isFormData(req){
     var type=req.headers['content-type'] || '';
     return 0==type.indexOf('multipart/form-data');
@@ -242,8 +314,8 @@ router.post('/article/img_upload',function(req,res){
     form.hash='md5';//生成文件hash
     form.parse(req,function(err,fields,files){
         //写到存储器上
-        console.log(fields)//获取文件名
-        console.log(files)//上传的内容
+//        console.log(fields)//获取文件名
+//        console.log(files)//上传的内容
         for(var i=0;i<imageArray.length;i++){
             if(files.upload_file.type==imageArray[i]){
                 var append=imageArray[i].split('/');

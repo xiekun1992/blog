@@ -1,8 +1,22 @@
 <span class="alert alert-danger editor-span" ng-show="error">{{error}}</span>
 <span class="alert alert-success editor-span" ng-show="success">{{success}}</span>
-<input type="text" id="title" autofocus="true" class="editor-title" placeholder="在这里输入标题">
-<select class="editor-category" ng-model="data.category">
-    <option value="" selected disabled>请选择分类</option>
-    <option value="{{c}}" ng-repeat="c in category track by $index">{{c}}</option>
-</select>
-<textarea id="editor"></textarea>
+<!--<form class="">-->
+    <div class="form-group">
+        <input type="text" id="title" autofocus="true" class=" form-control" placeholder="在这里输入标题">
+    </div>
+    <div class="form-group">
+        <select class=" form-control" ng-model="data.category">
+            <option value="" selected disabled>请选择分类</option>
+            <option value="{{c}}" ng-repeat="c in category track by $index">{{c}}</option>
+        </select>
+    </div>
+    <form name="f" ng-submit="createCategory({c:newCategory})">
+        <div class="form-group input-group">
+            <input type="text" class="form-control" placeholder="请输入新分类" ng-model="newCategory" required/>
+            <span class=" input-group-btn"><button type="submit" class="btn btn-default" ng-disabled="f.$invalid">创建分类</button></span>
+        </div>
+    </form>
+    <div class="form-group">
+        <textarea id="editor" class="form-control"></textarea>
+    </div>
+<!--</form>-->

@@ -10,6 +10,7 @@ var routes = require('./routes/index');
 var users = require('./routes/user');
 var articles=require('./routes/articles');
 var search=require('./routes/search');
+var categories=require('./routes/categories');
 
 var Article=require('./routes/model/article');
 var User=require('./routes/model/user');
@@ -82,6 +83,7 @@ app.use(express.static(path.join(__dirname, 'node_modules')));
 // app.use('/',search);
 app.use('/', articles);
 app.use('/user', users);
+app.use('/category',categories);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

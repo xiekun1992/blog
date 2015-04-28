@@ -1,84 +1,4 @@
 angular.module('app.directive', [])
-    .directive('emoji', ['$timeout', function ($timeout) {
-        return {
-            scope: {
-
-            },
-            transclude: true,
-            templateUrl: 'tpls/partials/emoji.html',
-            link: function (scope, element, attrs) {
-                //示例生成emoji图片输入
-                scope.emojiData = [];
-                scope.show = false;
-                scope.changeShow = function () {
-                    element.find("ul.emoji-pak").css('opacity', 0).css('display', 'none');
-                    $timeout(function () {
-                        element.find("ul.emoji-pak").css('display', '').css('opacity', 1);
-                    }, 100);
-                }
-                var emos = getEmojiList()[0]; //此处按需是否生成所有emoji
-                for (var j = 0; j < emos.length; j++) {
-                    var emo = emos[j];
-                    var data = 'data:image/png;base64,' + emo[2];
-                    scope.emojiData.push({
-                        'data': data,
-                        'emo': emo[1]
-                    });
-                }
-
-                function fillContent(obj) {
-                    var img = obj.src;
-                    var text = document.getElementById('text');
-                    console.log(obj.outerHTML)
-                    var tmp = decode(obj.outerHTML);
-                    text.innerHTML += parse(tmp);
-                    // text.focus();
-                }
-
-                //反解析（web上，图片数据转为emoji字符编码存储）
-                function decode(htmlStr) {
-                    //todo 正则替换性能更优？unicode16='1f603'
-                    if (typeof ioNull == 'undefined') {
-                        return '';
-                    }
-                    var tempStr = htmlStr,
-                        unis = '',
-                        $imgs = $('<div>').append(htmlStr).find('img');
-                    $.each($imgs, function (i, o) {
-                        var $img = $(o);
-                        var unicode16 = '0x' + $img.attr('unicode16'); //十六进制
-                        unicode16 = ioNull.emoji.decodeChar(unicode16);
-                        // unis += unicode16;
-                        tempStr = tempStr.replace($('<div>').append($img).html(), unicode16);
-                    });
-                    // console.log(unis)
-                    return tempStr;
-                }
-
-                //解析存储的emoji表情
-                function parse(arg) {
-                    if (typeof ioNull != 'undefined') {
-                        return ioNull.emoji.parse(arg);
-                    }
-                    return '';
-                }
-            }
-        }
-    }])
-    .directive('alink', [function () {
-        return {
-            scope: {
-
-            },
-            transclude: true,
-            templateUrl: 'tpls/partials/alink.html',
-            link: function (scope, element, attrs) {
-                scope.showInput = function (event) {
-                    element.find(event.currentTarget).siblings('div').toggleClass('show-input');
-                }
-            }
-        }
-    }])
 /**
  * 分页器
  * @param {scope} list ajax返回的当前页的数据
@@ -253,10 +173,13 @@ angular.module('app.directive', [])
                 data: '=',
                 operate: '&',
                 category: '=',
-                result: '='
+                result: '=',
+                createCategory:'&',
+                putCategory:'='
             },
             templateUrl: 'tpls/partials/simditor.html',
             link: function (scope, element, attrs) {
+                scope.newCategory=null;
                 var editor = new Simditor({
                     textarea: element.find('#editor'),
                     toolbarFloat: true,
@@ -279,6 +202,13 @@ angular.module('app.directive', [])
                         leaveConfirm:'正在上传文件，请勿离开'
                     }
                 })
+                //添加分类成功清除文本内容
+                scope.$watch('putCategory',function(newValue,oldValue){
+                    if(newValue){
+                        scope.newCategory=null;
+                        scope.putCategory=false;
+                    }
+                });
                 //编辑文章传入文章内容
                 scope.$watch('data.content', function (newValue, oldValue) {
                     if (newValue && newValue.length > 0) {
@@ -342,18 +272,18 @@ angular.module('app.directive', [])
             restrict: 'AE',
             scope: {},
             template: '<ul class="right-side-bar" id="rightSideBar">' +
-                        '<li id="previousArticle" class="toolbar-no-hover"></li>' +
-                        '<li id="nextArticle" class="toolbar-no-hover"></li>' +
-                        '<li id="publish" class="toolbar-no-hover"></li>'+
-                        '<li id="update" class="toolbar-no-hover"></li>'+
-                        '<li id="goToTop" class="toolbar-top-no-hover"></li>' +
+                        '<li id="previousArticle" class="toolbar-no-hover label label-primary"></li>' +
+                        '<li id="nextArticle" class="toolbar-no-hover label label-primary"></li>' +
+                        '<li id="publish" class="toolbar-no-hover label label-primary"></li>'+
+                        '<li id="update" class="toolbar-no-hover label label-primary"></li>'+
+                        '<li id="goToTop" class="toolbar-top-no-hover label label-primary"></li>' +
                       '</ul>',
             link: function (scope, element, attrs) {
                 window.onresize=function(){
                     var h=angular.element(window).height();
                     var w=angular.element(window).width();
-                    console.log('height= '+h);
-                    console.log('width= '+w);
+//                    console.log('height= '+h);
+//                    console.log('width= '+w);
 //                    element.find("#rightSideBar").css('top',h*0.45+'px').css('left',w*0.55+'px');
                 }
                 angular.element(window).scroll(function () {

@@ -1,6 +1,17 @@
 <div class="col-lg-3">
-    <!--<div class="articles-left">-->
-        <!--<div class="search"><i class="glyphicon glyphicon-search"></i><input type="text" placeholder="请输入要搜索的关键词" ng-model="key" ng-keydown="search($event)"></div>-->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            搜索文章
+        </div>
+        <div class="panel-body">
+            <form class="navbar-form navbar-right" ng-submit="search()" name="searchForm" style="margin: 0;padding: 0;width: 100%;">
+                <div class="input-group" style="width: 100%">
+                    <input type="search" class="form-control input-sm" maxlength="20" placeholder="最多20个字符" ng-model="key" required>
+                    <span class="input-group-btn"><button type="submit" class="btn btn-default btn-sm" ng-disabled="searchForm.$invalid">搜索</button></span>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             当前日期
@@ -20,40 +31,11 @@
             人气排行
         </div>
         <div class="panel-body">
-            <ul>
-                <li><a href="javascript:void(0)">AngularJs</a></li>
-                <li><a href="javascript:void(0)">AngularJs</a></li>
-                <li><a href="javascript:void(0)">AngularJs</a></li>
-                <li><a href="javascript:void(0)">AngularJs</a></li>
-                <li><a href="javascript:void(0)">AngularJs</a></li>
-                <li><a href="javascript:void(0)">AngularJs</a></li>
-                <li><a href="javascript:void(0)">AngularJs</a></li>
-                <li><a href="javascript:void(0)">AngularJs</a></li>
-                <li><a href="javascript:void(0)">AngularJs</a></li>
-            </ul>
+            <ol class="article-hot">
+                <li ng-repeat="a in articleHot track by $index"><a ui-sref="app.articles.article_detail({page:1,position:0,id:a._id})"><i>{{$index+1}}</i><span>{{a.title}}</span></a></li>
+            </ol>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            文章时间分布
-        </div>
-        <div class="panel-body">
-            <ul>
-                <li><a href="javascript:void(0)">AngularJs -- 2015/04/22</a></li>
-                <li><a href="javascript:void(0)">AngularJs -- 2015/04/22</a></li>
-                <li><a href="javascript:void(0)">AngularJs -- 2015/04/22</a></li>
-                <li><a href="javascript:void(0)">AngularJs -- 2015/04/22</a></li>
-                <li><a href="javascript:void(0)">AngularJs -- 2015/04/22</a></li>
-                <li><a href="javascript:void(0)">AngularJs -- 2015/04/22</a></li>
-            </ul>
-        </div>
-    </div>
-    <!--</div>-->
-    <!--<div class="articles-left user-setting" ng-controller="trashCanCtrl">-->
-        <!--<ul class="articles-left-list">-->
-            <!--<li ng-repeat="a in articleUseless track by $index">{{a.title}}</li>-->
-        <!--</ul>-->
-    <!--</div>-->
 </div>
 <div ui-view class="col-lg-9"></div>
 

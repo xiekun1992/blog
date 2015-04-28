@@ -87,7 +87,6 @@ mark {
     display: none;
 }
 .blog-error {
-    /*-webkit-animation:scaleUp 3 ease-in;*/
     display: block;
     text-align: center;
     /*width: 320px;*/
@@ -98,7 +97,6 @@ mark {
 }
 
 .blog-success {
-    /*-webkit-animation:scaleUp 3 ease-in;*/
     display: block;
     text-align: center;
     /*width: 320px;*/
@@ -121,12 +119,6 @@ mark {
     cursor: pointer;
 }
 
-
-
-.articles-body {
-    -webkit-perspective: 1000px;
-}
-
 .articles-left {
     padding-top: 20px;
     background-color: rgba(255, 255, 255, 1);
@@ -136,7 +128,7 @@ mark {
 .articles-right a:hover {
     display: inline-block;
     color: #000;
-    font: 16px;
+    font-size: 18px;
 }
 
 .articles-right a:nth-child(2):hover,
@@ -150,6 +142,29 @@ mark {
     margin-left: 20px;
     margin-top: 10px;
     color: #888;
+}
+.article-hot{
+    padding-left: 0px;
+    margin-bottom: 0px;
+    list-style: none;
+}
+ol.article-hot li a{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    text-decoration: blink;
+}
+ol.article-hot li a i{
+    margin-right: 10px;
+    background-color: #bbb;
+    padding: 0 5px;
+    font-style: normal;
+    color: #fff;
+    border-radius: 2px;
+}
+ol.article-hot li:nth-child(1) a i,ol.article-hot li:nth-child(2) a i,ol.article-hot li:nth-child(3) a i {
+    background-color: rgb(200, 15, 15);
 }
 
 .head {
@@ -225,10 +240,6 @@ ul.articles-left-list li {
 img{
     max-width:100%;
 }
-.user-setting {
-    margin-top:10px;
-
-}
 
 .article {
     padding: 20px;
@@ -236,27 +247,6 @@ img{
 
 .article footer > span {
     margin-right: 40px;
-}
-
-.search {
-    border: 1px solid #ccc;
-    border-radius: 40px;
-    width: 221px;
-    padding: 0 15px;
-    margin: auto;
-    background: #fff;
-}
-
-.search i {
-    color: #aaa;
-}
-
-.search input {
-    border: 0;
-    height: 25px;
-    margin-left: 5px;
-    width: 170px;
-    outline: none;
 }
 
 .article:hover {
@@ -294,7 +284,7 @@ a.hide-link {
 .articles-bottom {
     text-align: center;
 }
-/*article_details文章详情页样式*/
+/*************article_details文章详情页样式**************/
 
 .article_details {
     padding: 0 20px 40px 20px;
@@ -352,17 +342,17 @@ a.hide-link {
     margin: auto;
 }
 
-/*右边工具栏*/
+/****************右边工具栏******************/
 ul.right-side-bar{
     list-style: none;
     margin: 0;
     padding: 0;
-    background-color: rgb(73, 145, 207);
+    /*background-color: rgb(73, 145, 207);*/
 }
 ul.right-side-bar li{
     display: inline-block;
     /*height: 40px;*/
-    background-color: rgb(73, 145, 207);
+    /*background-color: rgb(73, 145, 207);*/
 }
 
 #rightSideBar {
@@ -393,8 +383,8 @@ ul.right-side-bar li{
     content: '发表文章';
 }
 .toolbar-hover{
-    font-size: 23px;
-    color: #fff;
+    font-size: 14px;
+    /*color: #fff;*/
     padding: 8px 0px;
     width: 100%;
     margin-top: -1px;
@@ -425,8 +415,8 @@ ul.right-side-bar li{
 
 /*鼠标进入的反馈效果*/
 #goToTop.toolbar-top-hover {
-    font-size: 23px;
-    color: #fff;
+    font-size: 16px;
+    /*color: #fff;*/
     padding: 8px 0px;
     width: 100%;
     margin-top: -1px;
@@ -435,7 +425,7 @@ ul.right-side-bar li{
     content: '返回顶部';
 }
 #goToTop.toolbar-top-no-hover {
-    background: rgb(73, 145, 207);
+    /*background: rgb(73, 145, 207);*/
     color: #fff;
     padding: 10px 6px;
 }

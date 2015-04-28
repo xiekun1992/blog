@@ -1,0 +1,41 @@
+<!--文章垃圾箱模态框-->
+<div class="modal fade" id="trashModal" tabindex="-1" role="dialog" aria-labelledby="articleTrashCan" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="Close" aria-hidden="true" class="close" type="button" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{article.title}}</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    文章分类:&nbsp;&nbsp;{{article.category}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    创建时间:&nbsp;&nbsp;{{article.create_time | dateFormat}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    点赞数:&nbsp;&nbsp;{{article.favor}}&nbsp;&nbsp;&nbsp;&nbsp;
+                </p>
+                <p ng-bind-html="article.content | htmlConverter"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+                <button class="btn btn-success" type="button" ng-click="undo(article._id)">撤销删除</button>
+                <div class="btn-group">
+                    <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
+                        永久删除文章<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0)" ng-click="remove(article._id)">确认删除</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-if="articleUseless.length>0" class="articles-right list-group">
+    <div class="article list-group-item" ng-repeat="a in articleUseless track by $index">
+        <header class="list-group-item-heading">
+            <a href="javascript:void(0)" title="{{a.title}}" ng-click="acquire(a._id)"><h4>{{a.title}}</h4></a>
+        </header>
+    </div>
+</div>
+<div ng-if="articleUseless.length==0" class=" text-center">
+    <p class="label label-danger">回收站中无数据</p>
+</div>

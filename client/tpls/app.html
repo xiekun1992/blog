@@ -13,19 +13,17 @@
         </div>
         <div id="navbar-collapse" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="javascript:void(0)" ui-sref="app.articles.article_list({page:1})"><i class="glyphicon glyphicon-list-alt"></i>所有文章</a></li>
+                <li><a href="javascript:void(0)" ui-sref="app.articles.article_list({page:1,category:'all',keyword:''})"><i class="glyphicon glyphicon-list-alt"></i>所有文章</a></li>
                 <li ng-if="$root.user"><a href="javascript:void(0)" ui-sref="app.articles.edit({id:-1,page:1,position:0})"><i class="glyphicon glyphicon-leaf"></i>写文章</a></li>
-                <li ng-if="$root.user"><a href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i>回收站</a></li>
-                <!--<li class="dropdown">-->
-                    <!--<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
-                        <!--<i class="glyphicon glyphicon-th-list"></i>文章分类<span class="caret"></span>-->
-                    <!--</a>-->
-                    <!--<ul class="dropdown-menu" role="menu">-->
-                        <!--<li><a href="javascript:void(0)" ng-click="categoryLink('AngularJS')">AngularJs</a></li>-->
-                        <!--<li><a href="javascript:void(0)" ng-click="categoryLink('NodeJS')">NodeJs</a></li>-->
-                        <!--<li><a href="javascript:void(0)" ng-click="categoryLink('MongoDB')">MongoDB</a></li>-->
-                    <!--</ul>-->
-                <!--</li>-->
+                <li ng-if="$root.user"><a href="javascript:void(0)" ui-sref="app.articles.article_trash"><i class="glyphicon glyphicon-trash"></i>回收站</a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <i class="glyphicon glyphicon-th-list"></i>文章分类<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0)" ng-click="categoryLink(c)" ng-repeat="c in category track by $index">{{c}}</a></li>
+                    </ul>
+                </li>
             </ul>
             <ul class="navbar-right navbar-nav nav">
                 <a ng-if="$root.user" class="navbar-brand xk-navbar-brand " href="javascript:void(0)" ng-click="signOut()" data-toggle="tooltip" data-placement="bottom" title="退出">
@@ -33,13 +31,6 @@
 
                 <a ng-if="!$root.user" class="navbar-brand xk-navbar-login " data-toggle="modal" data-target="#loginModal">登录</a>
             </ul>
-            <!--<form class="navbar-form navbar-right">-->
-            <!--<div class="input-group">-->
-            <!--<div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>-->
-            <!--<input type="search" class="form-control" placeholder="请输入要搜索的关键词">-->
-            <!--</div>-->
-
-            <!--</form>-->
         </div>
     </div>
 </nav>
@@ -79,6 +70,7 @@
         </div>
     </div>
 </div>
+
 <script>
     $('#loginModal').on('shown.bs.modal', function () {
         $('#inputUsername').focus()

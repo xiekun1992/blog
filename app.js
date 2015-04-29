@@ -14,19 +14,26 @@ var search=require('./routes/search');
 var Article=require('./routes/model/article');
 var User=require('./routes/model/user');
 var crypto=require('crypto');
-// var md5=crypto.createHash('md5');
-// md5.update('8b8ea141884e1de88a2d9255055a3666');
-// var pwd=md5.digest();
-// var user=new User({
-//     username:'xiekun',
-//     password:pwd,
-//     create_time:new Date(),
-//     last_login_time:new Date()
-// });
-// user.save(function(err,result){
-//     err && console.log(err);
-//     console.log(result)
-// });
+var md5=crypto.createHash('MD5');
+md5.update('8b8ea141884e1de88a2d9255055a3666');//xiekun
+var pwd=md5.digest('hex');
+User.findOne({username:'xiekun'},function(err,result){
+    if(err){
+        console.log('初始用户设置失败')
+        console.log(err);
+    }else if(!result){
+        var user=new User({
+            username:'xiekun',
+            password:pwd,
+            create_time:new Date(),
+            last_login_time:new Date()
+        });
+        user.save(function(err,result){
+            err && console.log(err);
+            console.log(result)
+        });
+    }
+});
 
 // var fs=require('fs');
 

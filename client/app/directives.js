@@ -263,9 +263,11 @@ angular.module('app.directive', [])
                 }
                 $rootScope.$on('publish',function(event){
                     this.submit(1);
+                    event.stopPropagation();
                 });
                 $rootScope.$on('update',function(event){
                     this.submit(0);
+                    event.stopPropagation();
                 });
                 window.scrollTo(0, 0);
                 scope.$on('$destroy',function(event){

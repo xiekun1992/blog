@@ -29,6 +29,7 @@ a.xk-navbar-login{
 .glyphicon {
     font-size: 12px;
     padding-right: 2px;
+    padding-left: 2px;
 }
 div.modal-header,div.modal-footer{
     border: 0;

@@ -161,37 +161,60 @@ router.delete('/article_op/:id/:position',function(req,res){
 
 //搜索
 function search(keyword,p,res){
-    //搜索关键字存在则添加搜索域，否则默认为无
-    if(keyword.length<=20 && keyword){
+    keyword=decodeURIComponent(keyword);
+    if(keyword.indexOf('#')>=0 || keyword.indexOf('(')>=0 || keyword.indexOf(')')>=0 || keyword.indexOf('\\')>=0){
+        res.json({status:400,message:'拒绝服务，请勿输入#、（、）、\\等不合法字符'});
+    }else if(keyword.length<=20 && keyword){
         var p=p || 1;//页码默认为1，每页6条
-        keyword=decodeURIComponent(keyword);
+
 //        console.log(keyword)
-        var symbols=['$','@','!','#','%','^','&','*','(',')','-'];
+        var symbols=['$','@','!','#','%','^','&','*','(',')','-','+','.',',','/',':',';','~','`','?','<','>','[',']','{','}','_','=','|'];
         for(var i=0;i<symbols.length;i++){
             var index=keyword.indexOf(symbols[i]);
-//            console.log(index);
             if(index!=-1){
                 var arr=keyword.split('');
                 arr.splice(index,0,'\\');
                 keyword=arr.join('');
-                break;
             }
         }
-//        console.log(keyword)
-        var reg=new RegExp(keyword,'ig');
+        var reg=new RegExp(keyword+'+','ig');
+        console.log(reg)
         var q;
 
         q={delete:0,title:reg};
         Article.find(q).skip((p-1)*10).limit(10).exec(function(err,results){
             err && console.log(err);
             //关键字存在则对搜索的结果中的关键字标亮
-            var repStart=new RegExp('<###########','g');
-            var repEnd=new RegExp('###########>','g');
+            var repStart=new RegExp('<###########+','g');
+            var repEnd=new RegExp('###########>+','g');
             if(keyword){
                 for(var i=0;i<results.length;i++){
-                    var t=results[i].title.match(reg);
+                    var t1=results[i].title.match(reg);//匹配出当前标题中符合的字符
+                    //利用对象对数组去重
+                    var tmp={};
+                    for(var k=0;k< t1.length;k++){
+                        tmp[t1[k]]=t1[k];
+                    }
+                    var t=[];
+                    for (var obj in tmp) {
+                        t.push(tmp[obj]);
+                    }
+//                    console.log(t)
+
+                    var tmp_t;
                     for(var j=0;t && j<t.length;j++){
-                        results[i].title=results[i].title.replace(t[j],'<###########'+t[j]+'###########>');
+                        tmp_t=t[j];//保存转义前的正则匹配内容
+                        for(var k=0;k<symbols.length;k++){//对正则匹配到的结果转义其中的特殊字符
+                            var index=t[j].indexOf(symbols[k]);
+                            if(index!=-1){
+                                var arr=t[j].split('');
+                                arr.splice(index,0,'\\');
+                                t[j]=arr.join('');//保存为转义后的字符串
+                            }
+                        }
+//                        console.log(t[j])
+                        results[i].title=results[i].title.replace(new RegExp(t[j]+'+','g'),'<###########'+tmp_t+'###########>');
+//                        console.log(results[i].title)
                     }
                     results[i].title=results[i].title.replace(repStart,'<mark>');
                     results[i].title=results[i].title.replace(repEnd,'</mark>');
@@ -200,7 +223,7 @@ function search(keyword,p,res){
             Article.count(q,function(err,result){
                 err && console.log(err);
                 res.setHeader('count',result);
-                res.json(results);
+                res.json({status:200,message:results});
             });
         });
     }
@@ -223,7 +246,7 @@ router.get('/article_list',function(req,res,next){
             Article.count(condition,function(err,result){
                 err && console.log(err);
                 res.setHeader('count',result);
-                res.json(results);
+                res.json({status:200,message:results});
             });
         });
     }else{

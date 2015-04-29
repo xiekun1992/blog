@@ -6,7 +6,7 @@
         <div class="panel-body">
             <form class="navbar-form navbar-right" ng-submit="search()" name="searchForm" style="margin: 0;padding: 0;width: 100%;">
                 <div class="input-group" style="width: 100%">
-                    <input type="search" class="form-control input-sm" maxlength="20" placeholder="最多20个字符" ng-model="key" required>
+                    <input type="search" class="form-control input-sm" ng-pattern="/[^\#\(\)\\]+/" maxlength="20" placeholder="最多20个字符" ng-model="key" required>
                     <span class="input-group-btn"><button type="submit" class="btn btn-default btn-sm" ng-disabled="searchForm.$invalid">搜索</button></span>
                 </div>
             </form>
@@ -32,7 +32,7 @@
         </div>
         <div class="panel-body">
             <ol class="article-hot">
-                <li ng-repeat="a in articleHot track by $index"><a ui-sref="app.articles.article_detail({page:1,position:0,id:a._id})"><i>{{$index+1}}</i><span>{{a.title}}</span></a></li>
+                <li ng-repeat="a in articleHot track by $index"><a ui-sref="app.articles.article_detail({page:1,position:0,id:a._id,category:'all',keyword:''})"><i>{{$index+1}}</i><span>{{a.title}}</span></a></li>
             </ol>
         </div>
     </div>

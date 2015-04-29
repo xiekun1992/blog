@@ -39,12 +39,16 @@ angular.module('app.directive', [])
                     }
                     $http.get(url, {})
                         .success(function (data, status, headers, config) {
-                            scope.list = data;
-                            //返回的数据条数除以10上取整来确定最大页数
-                            scope.maxPage = Math.ceil(headers('count') / 10) || 1;
-                            scope.noResult = "";
-                            //回到页面最上方
-                            window.scrollTo(0, 0);
+                            if(200==data.status){
+                                scope.list = data.message;
+                                //返回的数据条数除以10上取整来确定最大页数
+                                scope.maxPage = Math.ceil(headers('count') / 10) || 1;
+                                scope.noResult = "";
+                                //回到页面最上方
+                                window.scrollTo(0, 0);
+                            }else{
+                                scope.noResult=data.message;
+                            }
                         })
                         .error(function (data) {
                             scope.list = [];
@@ -220,6 +224,13 @@ angular.module('app.directive', [])
                         element.find('#title')[0].value = newValue;
                     }
                 });
+                scope.$watch('category',function(newValue,oldValue){
+                    for(var i=0;i<=newValue.length;i++){
+                        if(scope.data.category==newValue[i]){
+                            scope.data.category=newValue[i];
+                        }
+                    }
+                });
                 //用户在发表或更新成功后置空内容
                 var timerSuccess;
                 scope.$watch('result', function (newValue, oldValue) {
@@ -360,7 +371,7 @@ angular.module('app.directive', [])
                     element.find("#update").fadeOut(100);
                 }
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-                    if ($rootScope.$state.is('app.articles.article_detail') && !$rootScope.$stateParams.keyword) {//文章上下翻
+                    if ($rootScope.$state.is('app.articles.article_detail') && !$rootScope.$stateParams.keyword && $rootScope.$stateParams.category=='all') {//文章上下翻
                         element.find("#previousArticle,#nextArticle").fadeIn(100);
                     } else {
                         element.find("#previousArticle,#nextArticle").fadeOut(200);

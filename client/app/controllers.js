@@ -76,7 +76,7 @@ angular.module('app.controller', [])
             }
             //文章分类链接
             $scope.categoryLink = function(category) {
-                $rootScope.$state.go('app.articles.article_list',{'page':1,'category':category});
+                $rootScope.$state.go('app.articles.article_list',{'page':1,'category':category,'keyword':''});
             }
             categoryRest.get(function(data){
                 if(200==data.status){

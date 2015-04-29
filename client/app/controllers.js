@@ -224,7 +224,7 @@ angular.module('app.controller', [])
                             return;
                         }
                     });
-                    $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page});
+                    $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page,category:'all',keyword:''});
                 }
             });
         }
@@ -290,7 +290,7 @@ angular.module('app.controller', [])
 		}
         //返回到文章列表页
         $scope.back=function(){
-            $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page});
+            $rootScope.$state.go('app.articles.article_list',{page:$rootScope.$stateParams.page,category:'all',keyword:''});
         }
         $scope.createCategory=function(c){
             if(c){

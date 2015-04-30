@@ -70,11 +70,10 @@ angular.module('app.service', ['ngResource'])
     .service('PublishOrUpdate',['$rootScope',function($rootScope){
         return {
             publish:function(){
-                $rootScope.$emit('publish');
+                $rootScope.$broadcast('publish');
             },
             update:function(){
-                $rootScope.$emit('update');
-                console.log('update')
+                $rootScope.$broadcast('update');
             }
         }
     }]);

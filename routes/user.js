@@ -63,7 +63,7 @@ router.get('/password/token/',function(req,res){
 //发送重置密码邮件
 router.get('/reset_password',function(req,res){
 	var transporter=nodemailer.createTransport({
-		service:'QQ',
+		service:'qq',
 		auth:{
 			user:data.user,
 			pass:data.pass
@@ -75,8 +75,8 @@ router.get('/reset_password',function(req,res){
 	var key=md5.digest('hex').toUpperCase();
 	var url="http://localhost:3000/#/app/user/password/"+key;
 	var mailOptions={
-		from:'ordinary\'blog <840914927@qq.com>',
-		to:'xiekun@int-yt.com',
+		from:'ordinary\'blog <'+data.user+'>',
+		to:'2195619068@qq.com',
 		subject:'您的个人博客发送的密码重置链接',
 		html:"<p>来自您的个人博客发来的密码重置链接。如果不是您本人的操作，请忽略本次邮件，否则请点击下列文字进入重置密码页面</p><a href='"+url+"' >"+url+"</a>"
 	};
@@ -103,6 +103,8 @@ router.get('/reset_password',function(req,res){
 });
 //获取当前用户信息
 router.get('/current_user',function(req,res){
+    console.log('当前用户');
+    console.log(req.session.user);
 	if(req.session.user){
 		res.json({status:200,message:req.session.user});
 	}else{
@@ -147,6 +149,8 @@ router.post('/login', function(req, res) {
                         //write session
                         if(!req.session.user){
                             req.session.user=result;
+                            console.log('自动登录');
+                            console.log(req.session.user);
                             res.json({status:200,message:result});
                         }else if(req.session.user._id==user._id){
                             res.json({status:200,message:result});

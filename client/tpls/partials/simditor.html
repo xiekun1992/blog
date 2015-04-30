@@ -5,9 +5,9 @@
         <input type="text" id="title" autofocus="true" class=" form-control" placeholder="在这里输入标题">
     </div>
     <div class="form-group">
-        <select class=" form-control" ng-model="data.category">
+        <select class=" form-control" ng-options="c for c in category" ng-model="data.category">
             <option value="" selected disabled>请选择分类</option>
-            <option value="{{c}}" ng-repeat="c in category track by $index">{{c}}</option>
+            <!--<option value="{{c}}">{{c}}</option>-->
         </select>
     </div>
     <form name="f" ng-submit="createCategory({c:newCategory})">

@@ -224,13 +224,22 @@ angular.module('app.directive', [])
                         element.find('#title')[0].value = newValue;
                     }
                 });
-                scope.$watch('category',function(newValue,oldValue){
-                    for(var i=0;i<=newValue.length;i++){
-                        if(scope.data.category==newValue[i]){
-                            scope.data.category=newValue[i];
-                        }
-                    }
-                });
+//                scope.$watch('category',function(newValue,oldValue){
+//                    for(var i=0;i<newValue.length;i++){
+//                        if(scope.data.category==newValue[i]){
+//                            scope.data.category=newValue[i];
+//                            break;
+//                        }
+//                    }
+//                });
+//                scope.$watch('data.category',function(newValue,oldValue){
+//                    for(var i=0;i<scope.category.length;i++){
+//                        if(newValue==scope.category[i]){
+//                            scope.data.category=scope.category[i];
+//                            break;
+//                        }
+//                    }
+//                });
                 //用户在发表或更新成功后置空内容
                 var timerSuccess;
                 scope.$watch('result', function (newValue, oldValue) {
@@ -261,13 +270,13 @@ angular.module('app.directive', [])
                     }
                     timerError=$timeout(function(){scope.error='';},1500);
                 }
-                $rootScope.$on('publish',function(event){
+                scope.$on('publish',function(event){
                     this.submit(1);
-                    event.stopPropagation();
+//                    event.stopPropagation();
                 });
-                $rootScope.$on('update',function(event){
+                scope.$on('update',function(event){
                     this.submit(0);
-                    event.stopPropagation();
+//                    event.stopPropagation();
                 });
                 window.scrollTo(0, 0);
                 scope.$on('$destroy',function(event){

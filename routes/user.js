@@ -62,8 +62,11 @@ router.get('/password/token/',function(req,res){
 });
 //发送重置密码邮件
 router.get('/reset_password',function(req,res){
-	var transporter=nodemailer.createTransport({
-		service:'qq',
+	var transporter=nodemailer.createTransport('SMTP',{
+//		service:'qq',
+        host:'smtp.qq.com',
+        secureConnection:true,
+        port:465,
 		auth:{
 			user:data.user,
 			pass:data.pass

@@ -81,7 +81,7 @@ router.get('/reset_password',function(req,res){
 		from:'ordinary\'blog <'+data.user+'>',
 		to:'2195619068@qq.com',
 		subject:'您的个人博客发送的密码重置链接',
-		html:"<p>来自您的个人博客发来的密码重置链接。如果不是您本人的操作，请忽略本次邮件，否则请点击下列文字进入重置密码页面</p><a href='"+url+"' >"+url+"</a>"
+		html:'<div style="border:1px solid #2FA3EA;width:50%;border-radius:4px;margin:auto"><div style="font-size:18px;background-color: #2FA3EA;color:#fff;padding:5px 10px">来自您的个人博客的邮件</div><div style="height:200px;padding:40px"><p>来自您的个人博客发来的密码重置链接。如果不是您本人的操作，请忽略本次邮件，否则请点击下列文字进入重置密码页面</p><a href='+url+' target="_blank">'+url+'</a><p><a href="http://localhost:3000" target="_blank">点击这里，前往博客主页</a></p></div></div>'
 	};
 	transporter.sendMail(mailOptions,function(err,info){
 		if(err){

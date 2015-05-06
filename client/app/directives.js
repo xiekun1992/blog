@@ -37,24 +37,29 @@ angular.module('app.directive', [])
                     } else {
                         url = scope.request + '&p=' + scope.currentPage;
                     }
-                    $http.get(url, {})
-                        .success(function (data, status, headers, config) {
-                            if(200==data.status){
-                                scope.list = data.message;
-                                //返回的数据条数除以10上取整来确定最大页数
-                                scope.maxPage = Math.ceil(headers('count') / 10) || 1;
-                                scope.noResult = "";
-                                //回到页面最上方
-                                window.scrollTo(0, 0);
-                            }else{
-                                scope.noResult=data.message;
-                            }
-                        })
-                        .error(function (data) {
-                            scope.list = [];
-                            scope.maxPage = 1;
-                            scope.noResult = "暂无数据";
-                        });
+                    angular.element('#loading').css('display','block');
+//                    setTimeout(function(){
+                        $http.get(url, {})
+                            .success(function (data, status, headers, config) {
+                                angular.element('#loading').css('display','none');
+                                if(200==data.status){
+                                    scope.list = data.message;
+                                    //返回的数据条数除以10上取整来确定最大页数
+                                    scope.maxPage = Math.ceil(headers('count') / 10) || 1;
+                                    scope.noResult=(scope.list.length>0?"":"暂无数据");
+                                    //回到页面最上方
+                                    window.scrollTo(0, 0);
+                                }else{
+                                    scope.noResult=data.message;
+                                }
+                            })
+                            .error(function (data) {
+                                scope.list = [];
+                                scope.maxPage = 1;
+                                scope.noResult = "暂无数据";
+                            });
+//                    },2000);
+
                 }
                 // scope.search();
                 //根据当前的页数，计算当前所在一级的起始页

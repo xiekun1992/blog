@@ -433,3 +433,14 @@ ul.right-side-bar li{
 .editor-style img[data-emoji], .simditor .simditor-body img[data-emoji]{
     padding: 0;
 }
+
+#loading{
+    background-image: url('/images/loading.gif');
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+     float: right;
+    /* margin: auto; */
+    background-size: 27px;
+    padding: 0;
+}

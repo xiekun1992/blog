@@ -435,7 +435,7 @@ ul.right-side-bar li{
 }
 
 #loading{
-    background-image: url('/images/loading.gif');
+    background-image: url('/client/images/loading.gif');
     width: 30px;
     height: 30px;
     background-repeat: no-repeat;

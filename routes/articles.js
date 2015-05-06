@@ -263,12 +263,12 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
 			if(err){
                 console.log(err);
             }else if(result){//根据_id找到文章
-                var first_id,last_id,end=0;
+                var first_id='',last_id='',end=0;
                 Article.find({'delete':0}).sort('create_time').select('_id').exec(function(err,allA){
                     if(err){
                         console.log(err);
                         res.send({status:500,message:'Internal Error'});
-                    }else{
+                    }else if(allA.length>=2){
                         first_id=allA[0]._id;
                         last_id=allA[allA.length-1]._id;
                     }
@@ -285,6 +285,9 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                                     end=1;
                                 }else{
                                     end=0;
+                                }
+                                if(allA.length==1){
+                                    end=-2;
                                 }
                                 res.json({status:200,message:preA,position:parseInt(req.params.position)+1,end:end});
                             }else{
@@ -305,6 +308,9 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                                 }else{
                                     end=0;
                                 }
+                                if(allA.length==1){
+                                    end=-2;
+                                }
                                 res.json({status:200,message:nextA,position:parseInt(req.params.position)-1,end:end});
                             }else{
                                 res.json({status:404,message:'Article Not Found'});
@@ -317,6 +323,9 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                             end=1;
                         }else{
                             end=0;
+                        }
+                        if(allA.length==1){
+                            end=-2;
                         }
                         res.json({status:200,message:result,end:end});
                     }

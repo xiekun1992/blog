@@ -331,6 +331,9 @@ angular.module('app.directive', [])
                         element.find("#nextArticle").fadeOut(200);
                     }else if(data.end==1){
                         element.find("#previousArticle").fadeOut(200);
+                    }else if(data.end==-2){
+                        element.find("#nextArticle").fadeOut(0);
+                        element.find("#previousArticle").fadeOut(0);
                     }
                 });
                 //新建文章

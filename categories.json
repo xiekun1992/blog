@@ -1,0 +1,9 @@
+{ "_id" : { "$oid" : "553f2e630a99897c09212f58" }, "name" : "Javascript", "__v" : 0 }
+{ "_id" : { "$oid" : "553f3059c03b299c1327272d" }, "name" : "AngularJS", "__v" : 0 }
+{ "_id" : { "$oid" : "553f3061c03b299c1327272e" }, "name" : "NodeJS", "__v" : 0 }
+{ "_id" : { "$oid" : "553f306dc03b299c1327272f" }, "name" : "MongoDB", "__v" : 0 }
+{ "_id" : { "$oid" : "553f3602fb72e1d418c6a3fb" }, "name" : "Css", "__v" : 0 }
+{ "_id" : { "$oid" : "553f3720a31b2c8019abc29b" }, "name" : "HTML", "__v" : 0 }
+{ "_id" : { "$oid" : "553f3820c19546a8181d61bf" }, "name" : "Bootstrap", "__v" : 0 }
+{ "_id" : { "$oid" : "55403bc1f683c4f014801630" }, "name" : "Ionic", "__v" : 0 }
+{ "_id" : { "$oid" : "55418564d17bf79c0c658bd5" }, "name" : "WebStorm", "__v" : 0 }

@@ -13,3 +13,4 @@
 db.articles.ensureIndex({create_time:1});
 db.articles.ensureIndex({create_time:-1});
 db.categories.ensureIndex({name:1},{unique:true});
+ 

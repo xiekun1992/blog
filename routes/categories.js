@@ -10,7 +10,7 @@ router.get('/',function(req,res){
     Category.find().select('-_id name').exec(function(err,results){
         if(err){
             console.log(err);
-            res.send({status:500,message:'Internal Error'});
+            res.send({status:500,message:'服务器内部错误'});
         }else{
             console.log(results)
             var result=[];
@@ -28,15 +28,15 @@ router.put('/:name',function(req,res){
         c.save(function (err, result) {
             if (err) {
                 console.log(err);
-                res.send({status: 500, message: 'Internal Error'});
+                res.send({status: 500, message: '服务器内部错误'});
             } else if(result) {
-                res.send({status: 200, message: 'Save Success'});
+                res.send({status: 200, message: '保存成功'});
             } else {
-                res.send({status: 400, message: 'Fail to Save'});
+                res.send({status: 10201, message: '保存失败'});
             }
         });
     }else{
-        res.send({status: 404, message: 'Require Name'});
+        res.send({status: 10202, message: '缺少参数 name'});
     }
 });
 

@@ -25,15 +25,15 @@ router.get('/article_trash',function(req,res){
         Article.find({'delete':1}).sort('-create_time').select('title').exec(function(err,results){
             if(err){
                 console.log(err);
-                res.send({status:500,message:'Internal Error'});
+                res.send({status:500,message:'服务器内部错误'});
             }else if(results.length>0){
                 res.send({status:200,message:results});
             }else{
-                res.send({status:404,message:'暂无数据'});
+                res.send({status:10301,message:'暂无数据'});
             }
         });
     }else{
-        res.send({status:404,message:'缺少参数'});
+        res.send({status:10302,message:'缺少参数'});
     }
 });
 //文章点赞数排行
@@ -41,11 +41,11 @@ router.get('/article_hot',function(req,res){
     Article.find().sort('-favor').where('favor').gt(0).limit(9).select('_id title favor').exec(function(err,result){
         if(err){
             console.log(err);
-            res.send({status:500,message:'Internal Error'});
+            res.send({status:500,message:'服务器内部错误'});
         }else if(result.length>0){
             res.send({status:200,message:result});
         }else{
-            res.send({status:404,message:'暂无数据'});
+            res.send({status:10301,message:'暂无数据'});
         }
     });
 });
@@ -61,15 +61,15 @@ router.get('/article_favor',function(req,res){
                     if(err){
                         console.log(err);
                     }else{
-                        res.json({status:200,message:'Favor Success'});
+                        res.json({status:200,message:'点赞成功'});
                     }
                 });
             }else{
-                res.json({status:400,message:'Article Not Found'});
+                res.json({status:10303,message:'文章未找到'});
             }
         });
     }else{
-        res.json({status:400,message:'id Required'});
+        res.json({status:10304,message:'缺少参数 id'});
     }
 });
 //新建文章
@@ -84,9 +84,9 @@ router.put('/article_op',function(req,res){
 		err && console.log(err);
 //		console.log(result)
 		if(result){
-			res.send({status:200,message:'Save Success'});
+			res.send({status:200,message:'保存成功'});
 		}else{
-			res.send({status:500,message:'Internal Error'});
+			res.send({status:500,message:'服务器内部错误'});
 		}
 	});
 });
@@ -94,16 +94,16 @@ router.put('/article_op',function(req,res){
 router.post('/article_op/:id',function(req,res){
 //	console.log(req.body);
 	if(!req.body.id){
-		res.json({status:400,message:'Parameters Error'});
+		res.json({status:10304,message:'缺少参数 id'});
 	}else if(req.body.delete==0){
         Article.findOneAndUpdate({_id:req.body.id},{delete:req.body.delete},function(err,result){
             if(err){
                 console.log(err);
-                res.send({status:500,message:'Internal Error'});
+                res.send({status:500,message:'服务器内部错误'});
             }else if(result){
-                res.json({status:200,message:'Update Success'});
+                res.json({status:200,message:'更新成功'});
             }else{
-                res.json({status:400,message:'Fail to Update'});
+                res.json({status:10305,message:'更新失败'});
             }
         });
     }else if(req.body.title && req.body.content && req.body.category){
@@ -114,11 +114,11 @@ router.post('/article_op/:id',function(req,res){
 			result.category=req.body.category;
 			result.save(function(err,result){
 				err && console.log(err);
-				res.json({status:200,message:'Update Success'});
+				res.json({status:200,message:'更新成功'});
 			});
 		})
 	}else{
-        res.json({status:400,message:'Parameters Can Not Be Null'});
+        res.json({status:10306,message:'参数不能为空'});
     }
 });
 //删除文章    标记删除和彻底删除
@@ -137,22 +137,22 @@ router.delete('/article_op/:id/:position',function(req,res){
         Article.remove({_id:id},function(err,result){
             if(err){
                 console.log(err);
-                res.send({status:500,message:'Internal Error'});
+                res.send({status:500,message:'服务器内部错误'});
             }else if(result){
-                res.json({status:200,message:'Remove Success'});
+                res.json({status:200,message:'删除成功'});
             }else{
-                res.json({status:400,message:'Fail to Remove'});
+                res.json({status:10307,message:'删除失败'});
             }
         });
     }else{
         Article.findOneAndUpdate({_id:id},{delete:1},function(err,result){//删除文章只是将标识位置为1
             if(err){
                 console.log(err);
-                res.send({status:500,message:'Internal Error'});
+                res.send({status:500,message:'服务器内部错误'});
             }else if(result){
-                res.json({status:200,message:'Remove Success'});
+                res.json({status:200,message:'删除成功'});
             }else{
-                res.json({status:400,message:'Fail to Remove'});
+                res.json({status:10307,message:'删除失败'});
             }
         });
 
@@ -163,7 +163,7 @@ router.delete('/article_op/:id/:position',function(req,res){
 function search(keyword,p,res){
     keyword=decodeURIComponent(keyword);
     if(keyword.indexOf('#')>=0 || keyword.indexOf('(')>=0 || keyword.indexOf(')')>=0 || keyword.indexOf('\\')>=0){
-        res.json({status:400,message:'拒绝服务，请勿输入#、（、）、\\等不合法字符'});
+        res.json({status:10308,message:'拒绝服务，请勿输入#、（、）、\\等不合法字符'});
     }else if(keyword.length<=20 && keyword){
         var p=p || 1;//页码默认为1，每页6条
 
@@ -267,7 +267,7 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                 Article.find({'delete':0}).sort('create_time').select('_id').exec(function(err,allA){
                     if(err){
                         console.log(err);
-                        res.send({status:500,message:'Internal Error'});
+                        res.send({status:500,message:'服务器内部错误'});
                     }else if(allA.length>=2){
                         first_id=allA[0]._id;
                         last_id=allA[allA.length-1]._id;
@@ -277,7 +277,7 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                         Article.find({'delete':0}).where('create_time').sort('-create_time').lt(result.create_time).limit(1).select('_id').exec(function(err,preA){
                             if(err){
                                 console.log(err);
-                                res.send({status:500,message:'Internal Error'});
+                                res.send({status:500,message:'服务器内部错误'});
                             }else if(preA.length>0){
                                 if(preA._id==first_id.toString()){
                                     end=-1;
@@ -291,7 +291,7 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                                 }
                                 res.json({status:200,message:preA,position:parseInt(req.params.position)+1,end:end});
                             }else{
-                                res.json({status:404,message:'Article Not Found'});
+                                res.json({status:10303,message:'文章未找到'});
                             }
                         });
                     }else if(req.params.flip==-1){
@@ -299,7 +299,7 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                         Article.find({'delete':0}).where('create_time').sort('create_time').gt(result.create_time).limit(1).select('_id').exec(function(err,nextA){
                             if(err){
                                 console.log(err);
-                                res.send({status:500,message:'Internal Error'});
+                                res.send({status:500,message:'服务器内部错误'});
                             }else if(nextA.length>0){
                                 if(nextA[0]._id==first_id.toString()){
                                     end=-1;
@@ -313,7 +313,7 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                                 }
                                 res.json({status:200,message:nextA,position:parseInt(req.params.position)-1,end:end});
                             }else{
-                                res.json({status:404,message:'Article Not Found'});
+                                res.json({status:10303,message:'文章未找到'});
                             }
                         });
                     }else{//查选定id的文章
@@ -332,11 +332,11 @@ router.get('/article_op/:id/:flip/:position',function(req,res){
                 });
 
             }else{//根据_id未找到文章
-                res.json({status:404,message:'Article Not Found'});
+                res.json({status:10303,message:'文章未找到'});
             }
 		});
 	}else{
-		res.json({status:400,message:'Require id'});
+		res.json({status:10304,message:'缺少参数 id'});
 	}
 });
 
@@ -349,7 +349,7 @@ var imageArray=['image/bmp','image/png','image/gif','image/jpeg'];
 router.post('/article/img_upload',function(req,res){
     var serverIP=req.headers.origin;
     if(!isFormData(req)){
-        res.json({status:400,success:false,message:'Bad Request',file_path:''});
+        res.json({status:10309,success:false,message:'不正确的请求',file_path:''});
         return ;
     }
     var form=new formidable.IncomingForm();
@@ -376,7 +376,7 @@ router.post('/article/img_upload',function(req,res){
             }
         }
         if(i>=imageArray.length){
-            res.json({status:400,success:false,message:'Bad Request',file_path:''});
+            res.json({status:10309,success:false,message:'不正确的请求',file_path:''});
         }
     });
 });

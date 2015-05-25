@@ -14,48 +14,48 @@ router.post('/password/new',function(req,res){
         User.findOne({key:req.body.params.key},function(err,user_key){//检查key值是否存在
             if(err){
                 console.log(err);
-                res.json({status:500,message:'Internal Error'});
+                res.json({status:500,message:'服务器内部错误'});
             }else if(user_key){
                 md5.update(req.body.params.p);
                 User.findOneAndUpdate({key:req.body.params.key},{key:'',password:md5.digest('hex')},function(err,user){
                     if(err){
                         console.log(err);
-                        res.json({status:500,message:'Internal Error'});
+                        res.json({status:500,message:'服务器内部错误'});
                     }else if(user){
                         console.log(user)
-                        res.json({status:200,message:'New Password Avalible Now'});
+                        res.json({status:200,message:'新密码已经可用'});
                     }else{
-                        res.json({status:400,message:'Fail to Modify Old Password'});
+                        res.json({status:10108,message:'修改密码失败'});
                     }
                 });
             }else{//key值不存在
-                res.json({status:400,message:'Token Is Out of Date'});
+                res.json({status:10107,message:'标识过期'});
             }
         });
 	}else{
-		res.json({status:400,message:'Fail to Modify Old Password'});
+		res.json({status:10108,message:'修改密码失败'});
 	}
 });
 //通过key的存在与否和过期时间检查key的有效性
 router.get('/password/token/',function(req,res){
 	var query=parse(req.url,true).query;
 	if(!query.key){
-		res.json({status:400,message:'Token not Exist'});
+		res.json({status:10106,message:'标识不存在'});
 	}else{
 		User.findOne({key:query.key},function(err,user){
 			if(err){
 				console.log(err);
-				res.json({status:500,message:'Internal Error'});
+				res.json({status:500,message:'服务器内部错误'});
 			}else if(user){
 				console.log(user);
 				var d=new Date();
 				if(d-user.key_generate_time>10*1000*60){
-					res.json({status:400,message:'Token Is Out of Date'});
+					res.json({status:10107,message:'标识过期'});
 				}else{
-					res.json({status:200,message:'Token Existed'});
+					res.json({status:200,message:'标识存在'});
 				}
 			}else{
-				res.json({status:400,message:'Token not Exist'});
+				res.json({status:10106,message:'标识不存在'});
 			}	
 		});
 	}
@@ -86,7 +86,7 @@ router.get('/reset_password',function(req,res){
 	transporter.sendMail(mailOptions,function(err,info){
 		if(err){
 			console.log(err)
-			res.json({status:500,message:'Mail Fail to Sent'});
+			res.json({status:10105,message:'邮件发送失败'});
 		}else{
 			console.log('Mail Sent Success: '+info.response)
 			User.findOne({username:'xiekun'},function(err,result){//多次发送邮件以最后一次成功的key为准
@@ -97,7 +97,7 @@ router.get('/reset_password',function(req,res){
 					result.key_generate_time=d;
 					result.save(function(err,r){
 						console.log(err);
-						res.json({status:200,message:'Mail Sent Success'});
+						res.json({status:200,message:'邮件发送成功'});
 					});
 				}
 			});
@@ -111,7 +111,7 @@ router.get('/current_user',function(req,res){
 	if(req.session.user){
 		res.json({status:200,message:req.session.user});
 	}else{
-		res.json({status:401,message:'no user login'});
+		res.json({status:10104,message:'无用户登录'});
 	}
 });
 //退出登录---清空自动登录的标识
@@ -125,13 +125,13 @@ router.get('/logout',function(req,res){
         User.findOneAndUpdate({_id:query.id},{auto_login:null},function(err,result){
             if(err){
                 console.log(err);
-                res.json({status:500,message:'Internal Error!'});
+                res.json({status:500,message:'服务器内部错误'});
             }else if(result){
-                res.json({status:200,message:'logout success'});
+                res.json({status:200,message:'登出成功'});
             }
         });
     }else{
-		res.json({status:403,message:'forbidden'});
+		res.json({status:10103,message:'缺少参数 id'});
 	}
 });
 //登录
@@ -141,7 +141,7 @@ router.post('/login', function(req, res) {
         User.findOne({auto_login:req.body.params.cookie},function(err,result){
             if(err){
                 console.log(err);
-                res.json({status:500,message:'Internal Error!'});
+                res.json({status:500,message:'服务器内部错误'});
             }else if(result){
                 var tmp=result.last_login_time;
                 result.last_login_time=new Date();
@@ -159,11 +159,11 @@ router.post('/login', function(req, res) {
                             res.json({status:200,message:result});
                         }
                     }else{
-                        res.json({status:500,message:'Internal Error!'});
+                        res.json({status:500,message:'服务器内部错误'});
                     }
                 });
             }else{
-                res.json({status:401,message:'Username or Password Error!'});
+                res.json({status:10101,message:'用户名或密码错误'});
             }
         });
     }else{//不存在cookie则普通登录
@@ -175,7 +175,7 @@ router.post('/login', function(req, res) {
         },function(err,result){
             if(err){
                 console.log(err);
-                res.json({status:500,message:'Internal Error!'});
+                res.json({status:500,message:'服务器内部错误'});
             }else if(result){
                 var tmp=result.last_login_time;
                 result.last_login_time=new Date();
@@ -191,14 +191,14 @@ router.post('/login', function(req, res) {
                             req.session.user=result;
                             res.json({status:200,message:result});
                         }else if(req.session.user._id==user._id){
-                            res.json({status:200,message:'User Already Online'});
+                            res.json({status:10102,message:'用户已在线'});
                         }
                     }else{
-                        res.json({status:500,message:'Internal Error!'});
+                        res.json({status:500,message:'服务器内部错误'});
                     }
                 });
             }else{
-                res.json({status:401,message:'Username or Password Error!'});
+                res.json({status:10101,message:'用户名或密码错误'});
             }
         });
     }

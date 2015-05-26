@@ -1,0 +1,108 @@
+2015-05-11 05:26:30.251 nodejs.SequelizeDatabaseErrorException: SequelizeDatabaseError: SQLITE_ERROR: no such table: module
+    at module.exports.Query.formatError (/home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:245:16)
+    at /home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:53:31
+    at replacement (/home/cnpmjs.org/node_modules/sqlite3/lib/trace.js:20:31)
+    at Statement.errBack (/home/cnpmjs.org/node_modules/sqlite3/lib/sqlite3.js:16:21)
+pid: 7555
+domainThrown: false
+Host: 23601d1fb920
+URL: /total
+Data: ""
+2015-05-11 05:26:30.251
+
+2015-05-11 05:26:48.970 nodejs.SequelizeDatabaseErrorException: SequelizeDatabaseError: SQLITE_ERROR: no such table: module
+    at module.exports.Query.formatError (/home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:245:16)
+    at /home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:53:31
+    at replacement (/home/cnpmjs.org/node_modules/sqlite3/lib/trace.js:20:31)
+    at Statement.errBack (/home/cnpmjs.org/node_modules/sqlite3/lib/sqlite3.js:16:21)
+pid: 7555
+domainThrown: false
+Host: 23601d1fb920
+URL: /total
+Data: ""
+2015-05-11 05:26:48.970
+
+2015-05-11 05:27:25.845 nodejs.SequelizeDatabaseErrorException: SequelizeDatabaseError: SQLITE_ERROR: no such table: tag
+    at module.exports.Query.formatError (/home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:245:16)
+    at /home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:53:31
+    at replacement (/home/cnpmjs.org/node_modules/sqlite3/lib/trace.js:20:31)
+    at Statement.errBack (/home/cnpmjs.org/node_modules/sqlite3/lib/sqlite3.js:16:21)
+pid: 7555
+domainThrown: false
+Host: 23601d1fb920
+URL: /browse/keyword/ape-algorithm
+Data: ""
+2015-05-11 05:27:25.845
+
+2015-05-11 05:27:30.128 nodejs.SequelizeDatabaseErrorException: SequelizeDatabaseError: SQLITE_ERROR: no such table: tag
+    at module.exports.Query.formatError (/home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:245:16)
+    at /home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:53:31
+    at replacement (/home/cnpmjs.org/node_modules/sqlite3/lib/trace.js:20:31)
+    at Statement.errBack (/home/cnpmjs.org/node_modules/sqlite3/lib/sqlite3.js:16:21)
+pid: 7555
+domainThrown: false
+Host: 23601d1fb920
+URL: /browse/keyword/ape-algorithm
+Data: ""
+2015-05-11 05:27:30.128
+
+2015-05-11 05:27:31.426 nodejs.SequelizeDatabaseErrorException: SequelizeDatabaseError: SQLITE_ERROR: no such table: tag
+    at module.exports.Query.formatError (/home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:245:16)
+    at /home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:53:31
+    at replacement (/home/cnpmjs.org/node_modules/sqlite3/lib/trace.js:20:31)
+    at Statement.errBack (/home/cnpmjs.org/node_modules/sqlite3/lib/sqlite3.js:16:21)
+pid: 7555
+domainThrown: false
+Host: 23601d1fb920
+URL: /browse/keyword/ape-algorithm
+Data: ""
+2015-05-11 05:27:31.426
+
+2015-05-11 05:27:31.902 nodejs.SequelizeDatabaseErrorException: SequelizeDatabaseError: SQLITE_ERROR: no such table: tag
+    at module.exports.Query.formatError (/home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:245:16)
+    at /home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:53:31
+    at replacement (/home/cnpmjs.org/node_modules/sqlite3/lib/trace.js:20:31)
+    at Statement.errBack (/home/cnpmjs.org/node_modules/sqlite3/lib/sqlite3.js:16:21)
+pid: 7555
+domainThrown: false
+Host: 23601d1fb920
+URL: /browse/keyword/ape-algorithm
+Data: ""
+2015-05-11 05:27:31.902
+
+2015-05-11 05:27:42.057 nodejs.SequelizeDatabaseErrorException: SequelizeDatabaseError: SQLITE_ERROR: no such table: module
+    at module.exports.Query.formatError (/home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:245:16)
+    at /home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:53:31
+    at replacement (/home/cnpmjs.org/node_modules/sqlite3/lib/trace.js:20:31)
+    at Statement.errBack (/home/cnpmjs.org/node_modules/sqlite3/lib/sqlite3.js:16:21)
+pid: 7555
+domainThrown: false
+Host: 23601d1fb920
+URL: /total
+Data: ""
+2015-05-11 05:27:42.057
+
+2015-05-11 05:27:46.928 nodejs.SequelizeDatabaseErrorException: SequelizeDatabaseError: SQLITE_ERROR: no such table: module
+    at module.exports.Query.formatError (/home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:245:16)
+    at /home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:53:31
+    at replacement (/home/cnpmjs.org/node_modules/sqlite3/lib/trace.js:20:31)
+    at Statement.errBack (/home/cnpmjs.org/node_modules/sqlite3/lib/sqlite3.js:16:21)
+pid: 7555
+domainThrown: false
+Host: 23601d1fb920
+URL: /total
+Data: ""
+2015-05-11 05:27:46.928
+
+2015-05-11 05:27:50.051 nodejs.SequelizeDatabaseErrorException: SequelizeDatabaseError: SQLITE_ERROR: no such table: tag
+    at module.exports.Query.formatError (/home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:245:16)
+    at /home/cnpmjs.org/node_modules/sequelize/lib/dialects/sqlite/query.js:53:31
+    at replacement (/home/cnpmjs.org/node_modules/sqlite3/lib/trace.js:20:31)
+    at Statement.errBack (/home/cnpmjs.org/node_modules/sqlite3/lib/sqlite3.js:16:21)
+pid: 7555
+domainThrown: false
+Host: 23601d1fb920
+URL: /browse/keyword/ape-algorithm
+Data: ""
+2015-05-11 05:27:50.051
+

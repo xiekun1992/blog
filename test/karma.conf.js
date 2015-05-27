@@ -15,14 +15,17 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-    
-    '../../node_modules/angular/angular.js',
-    '../../node_modules/angular-mocks/angular-mocks.js',
-    '../../node_modules/angular-cookies/angular-cookies.js',
-    '../../node_modules/moment/moment.js',
-    '../../client/javascripts/md5.js',
-    '../../client/app/*.js',
-    '*.js'
+    '../node_modules/jquery/dist/jquery.js',
+    '../node_modules/angular/angular.js',
+    '../node_modules/angular-mocks/angular-mocks.js',
+    '../node_modules/angular-cookies/angular-cookies.js',
+    '../node_modules/angular-sanitize/angular-sanitize.js',
+    '../node_modules/angular-resource/angular-resource.js',
+    '../node_modules/angular-ui-router/release/angular-ui-router.js',
+    '../node_modules/moment/moment.js',
+    '../client/javascripts/md5.js',
+    '../client/app/*.js',
+    './unit/*.js'
     ],
 
 

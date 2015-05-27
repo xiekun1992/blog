@@ -1,4 +1,4 @@
-angular.module('app.directive', [])
+angular.module('app.directive', ['ui.router'])
 /**
  * 分页器
  * @param {scope} list ajax返回的当前页的数据

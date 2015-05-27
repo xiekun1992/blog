@@ -1,4 +1,4 @@
-angular.module('app.controller', [])
+angular.module('app.controller', ['ngCookies'])
     //用户操作
 	.controller('loginCtrl', ['$scope', '$rootScope', '$http','$cookieStore','$timeout','categoryRest',
 		function($scope, $rootScope, $http, $cookieStore, $timeout,categoryRest) {
@@ -27,7 +27,7 @@ angular.module('app.controller', [])
                 }else if($scope.autoLogin){//无cookie则检查是否需要自动登录
                     config.auto=true;
                 }
-                console.log(config)
+                // console.log(config)
 				$http.post('/user/login', {params: config})
 					.success(function(data, status, headers, config) {
                         if (200 == data.status) {

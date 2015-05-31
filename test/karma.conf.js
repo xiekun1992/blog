@@ -15,13 +15,15 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-    '../node_modules/jquery/dist/jquery.js',
-    '../node_modules/angular/angular.js',
-    '../node_modules/angular-*/angular-*.js',
-    '../node_modules/moment/moment.js',
-    '../client/javascripts/md5.js',
-    '../client/app/*.js',
-    './unit/*.js'
+        '../node_modules/jquery/dist/jquery.js',
+        '../node_modules/angular/angular.js',
+        '../node_modules/angular*/angular*.js',
+        '../node_modules/angular*/build/angular*.js',
+        '../node_modules/moment/moment.js',
+        '../client/javascripts/md5.js',
+        '../client/app/*.js',
+        './unit/*.js',
+        '../client/tpls/partials/*.html'
     ],
 
 
@@ -33,8 +35,11 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+        '../client/tpls/partials/*.html':['ng-html2js']
     },
-
+    ngHtml2JsPreprocessor:{
+        stripPrefix:''
+    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'

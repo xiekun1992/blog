@@ -3,7 +3,7 @@
 describe('service unit tests',function(){
 	beforeEach(module('app.service'));
 
-	var $rootScope,$httpBackend,$q,$resource,articleRest,getCurrentUser,PublishOrUpdate;
+	var $rootScope,$httpBackend,$q,$resource,articleRest,getCurrentUser,PublishOrUpdate,categoryRest;
 	
 	beforeEach(inject(function($injector,_$httpBackend_){
 		$httpBackend=_$httpBackend_;
@@ -12,6 +12,7 @@ describe('service unit tests',function(){
 		articleRest=$injector.get('articleRest');
 		getCurrentUser=$injector.get('getCurrentUser');
 		PublishOrUpdate=$injector.get('PublishOrUpdate');
+		categoryRest=$injector.get('categoryRest');
 	}));
 	describe('articleRest should work as expected',function(){
 		it('articleRest GET should work well',function(){
@@ -61,5 +62,21 @@ describe('service unit tests',function(){
 				expect($rootScope.user._id).toBe('5541c64366ef4de81ba4dc73');
 			});
 		});
+	});
+	describe('categoryRest should work as expected',function(){
+		it('get categories',function(){
+			$httpBackend.expect('GET','/category').respond(200,{status:200,message:[{'_id':1,'name':'AngularJS'},{'_id':2,'name':'Node.js'}]});
+			categoryRest.get({},function(data){
+				expect(data.message.length).toEqual(2);
+				expect(data.message[1].name).toEqual('Node.js');
+			});
+		});
+		it('put category',function(){
+			$httpBackend.expect('PUT','/category/MEAVN').respond(200,{status:200,message:'添加成功'});
+			categoryRest.put({name:'MEAVN'},function(data){
+				expect(data.message).toEqual('添加成功');
+				expect(data.status).toBe(200);
+			});
+		})
 	});
 });

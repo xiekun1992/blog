@@ -1,4 +1,4 @@
-angular.module('app.controller', ['ngCookies'])
+angular.module('app.controller',[])
     //用户操作
 	.controller('loginCtrl', ['$scope', '$rootScope', '$http','$cookieStore','$timeout','categoryRest',
 		function($scope, $rootScope, $http, $cookieStore, $timeout,categoryRest) {

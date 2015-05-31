@@ -17,4 +17,10 @@ describe('directive unit tests',function(){
         expect(element.html()).toEqual(
         	'<ul class="right-side-bar" id="rightSideBar">' +'<li id="previousArticle" class="toolbar-no-hover label label-primary"></li>' +'<li id="nextArticle" class="toolbar-no-hover label label-primary"></li>' +'<li id="publish" class="toolbar-no-hover label label-primary"></li>'+'<li id="update" class="toolbar-no-hover label label-primary"></li>'+'<li id="goToTop" class="toolbar-top-no-hover label label-primary"></li>' +'</ul>');
 	});
+	it('textEditor template should be ok',function(){
+
+	});
+	it('page template should be ok',function(){
+		
+	});
 });

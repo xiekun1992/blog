@@ -86,7 +86,10 @@ app.use(express.static(path.join(__dirname, 'node_modules')));
 //       res.sendFile('client/index.html');
 //     }
 // });
-// app.use('/',search);
+app.use('/app',function(req,res){
+    console.log(__dirname)
+    res.sendFile(__dirname+'/client/index.html');
+});
 app.use('/', articles);
 app.use('/user', users);
 app.use('/category',categories);

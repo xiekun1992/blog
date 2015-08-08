@@ -12,8 +12,9 @@ angular.module('app',[
 	$rootScope.$state=$state;
 	$rootScope.$stateParams=$stateParams;
 }])
-.config(['$stateProvider','$urlRouterProvider','$httpProvider',
-	function($stateProvider,$urlRouterProvider,$httpProvider){
+.config(['$stateProvider','$urlRouterProvider','$httpProvider','$locationProvider',
+	function($stateProvider,$urlRouterProvider,$httpProvider,$locationProvider){
+
 
 	$urlRouterProvider
 	.otherwise('/app/articles/article_list/1/all/');
@@ -90,4 +91,5 @@ angular.module('app',[
                 return ;
             }]
         });
+        $locationProvider.html5Mode(true);
 }]);

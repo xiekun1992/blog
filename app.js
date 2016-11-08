@@ -54,7 +54,8 @@ User.findOne({username:'xiekun'},function(err,result){
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/blog');
+mongoose.connect('mongodb://xiekun1992:xiekun4559610300@ds051543.mlab.com:51543/blog');
+// mongoose.connect('mongodb://localhost/blog');
 var db=mongoose.connection;
 db.on('error',console.error.bind(console,'connection error:'));
 db.on('open',function(){
